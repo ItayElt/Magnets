@@ -9,10 +9,11 @@ function Polaroid({
 }: {
   caption: string;
   src: string;
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'xs' | 'sm' | 'md' | 'lg';
   photoStyle?: 'normal' | 'vintage' | 'bw-vintage';
 }) {
   const dims = {
+    xs: { img: 'w-[100px]', pad: 'p-[4px] pb-[28px]', text: 'text-[9px]', bottom: 'bottom-1.5' },
     sm: { img: 'w-36', pad: 'p-[6px] pb-[36px]', text: 'text-[11px]', bottom: 'bottom-2.5' },
     md: { img: 'w-48', pad: 'p-[8px] pb-[48px]', text: 'text-[14px]', bottom: 'bottom-3.5' },
     lg: { img: 'w-64', pad: 'p-[10px] pb-[56px]', text: 'text-[16px]', bottom: 'bottom-4' },
@@ -174,32 +175,32 @@ export default function LandingPage() {
               </div>
             </div>
 
-            {/* Right — Three polaroids in a nice spread */}
-            <div className="relative h-[340px] sm:h-[400px] lg:h-[480px] animate-fade-up-delay-1">
-              {/* Polaroid 1 — left — Taj Mahal (vintage) */}
-              <div className="absolute left-[0%] top-[0%] animate-float-1 z-20" style={{ transform: 'rotate(-6deg)' }}>
+            {/* Right — Three polaroids in a dynamic scattered layout */}
+            <div className="relative animate-fade-up-delay-1 mx-auto" style={{ width: '320px', height: '340px' }}>
+              {/* Back-left — India vintage */}
+              <div className="absolute animate-float-1" style={{ transform: 'rotate(-7deg)', left: '0px', top: '30px' }}>
                 <Polaroid
-                  caption="India, Jan &apos;26"
+                  caption="India &apos;26"
                   src="/examples/taj-mahal.jpg"
                   size="sm"
                   photoStyle="vintage"
                 />
               </div>
 
-              {/* Polaroid 2 — center-right, slightly lower — formal night (black & white) */}
-              <div className="absolute right-[6%] top-[22%] animate-float-2 z-10" style={{ transform: 'rotate(4deg)' }}>
+              {/* Back-right, higher up — HBS Gala B&W */}
+              <div className="absolute animate-float-2" style={{ transform: 'rotate(5deg)', right: '0px', top: '0px' }}>
                 <Polaroid
-                  caption="Gala Night"
+                  caption="HBS Gala &apos;25"
                   src="/examples/formal-night.jpg"
                   size="sm"
                   photoStyle="bw-vintage"
                 />
               </div>
 
-              {/* Polaroid 3 — bottom-left, overlapping both — group party (original) */}
-              <div className="absolute left-[18%] sm:left-[22%] bottom-[0%] animate-float-3 z-30" style={{ transform: 'rotate(2deg)' }}>
+              {/* Front-center, overlapping both — Halloween original */}
+              <div className="absolute animate-float-3" style={{ transform: 'rotate(-1deg)', left: '50%', marginLeft: '-76px', bottom: '0px', zIndex: 30 }}>
                 <Polaroid
-                  caption="Halloween 2025"
+                  caption="Halloween &apos;25"
                   src="/examples/group-party.jpg"
                   size="sm"
                   photoStyle="normal"
