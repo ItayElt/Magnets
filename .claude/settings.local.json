@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx create-next-app@latest . --typescript --tailwind --app --src-dir --eslint --no-import-alias --use-npm)",
+      "Bash(npx create-next-app@latest memora-temp --typescript --tailwind --app --src-dir --eslint --no-import-alias --use-npm)",
+      "Bash(rm -rf memora-temp)",
+      "Bash(yes \"\")",
+      "Bash(npx create-next-app@latest memora-temp --typescript --tailwind --app --src-dir --eslint --no-import-alias --use-npm --turbopack)",
+      "Bash(npm cache:*)",
+      "Bash(npm install:*)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(npx tsc:*)",
+      "Bash(ssh -T git@github.com)",
+      "Bash(gh auth:*)",
+      "Read(//Users/itayeltahan/**)",
+      "Read(//Users/itayeltahan/.ssh/**)",
+      "Bash(brew install:*)",
+      "Read(//opt/homebrew/bin/**)",
+      "Read(//usr/local/bin/**)",
+      "Bash(curl -sL https://github.com/cli/cli/releases/download/v2.67.0/gh_2.67.0_macOS_arm64.zip -o /tmp/gh.zip)",
+      "Bash(unzip -o /tmp/gh.zip -d /tmp/gh)",
+      "Read(//tmp/**)",
+      "Bash(/tmp/gh/gh_2.67.0_macOS_arm64/bin/gh auth:*)"
+    ]
+  }
+}
