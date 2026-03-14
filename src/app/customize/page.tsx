@@ -14,7 +14,7 @@ import Button from '@/components/ui/Button';
 function getPhotoFilter(style: PhotoStyle): string {
   switch (style) {
     case 'vintage':
-      return 'saturate(0.7) contrast(0.9) brightness(1.06) sepia(0.18)';
+      return 'saturate(0.55) contrast(0.85) brightness(1.08) sepia(0.35)';
     case 'bw-vintage':
       return 'grayscale(1) contrast(1.1) brightness(1.02)';
     default:
@@ -56,15 +56,15 @@ function MagnetPreview({
           }}
         />
 
-        {/* Vintage style overlays */}
+        {/* Vintage style overlays — warm, faded, nostalgic film look */}
         {style === 'vintage' && (
           <>
-            <div className="absolute inset-0 bg-amber-800/[0.1] mix-blend-multiply" />
-            <div className="absolute inset-0 bg-gradient-to-br from-amber-100/20 via-transparent to-orange-100/15 mix-blend-screen" />
-            <div className="absolute inset-0 bg-gradient-to-tl from-transparent via-transparent to-orange-200/25 mix-blend-screen" />
-            <div className="absolute inset-0" style={{ boxShadow: 'inset 0 0 40px rgba(0,0,0,0.12)' }} />
+            <div className="absolute inset-0 bg-amber-900/[0.14] mix-blend-multiply" />
+            <div className="absolute inset-0 bg-gradient-to-br from-amber-200/30 via-transparent to-orange-200/20 mix-blend-screen" />
+            <div className="absolute inset-0 bg-gradient-to-tl from-transparent via-transparent to-orange-300/30 mix-blend-screen" />
+            <div className="absolute inset-0" style={{ boxShadow: 'inset 0 0 50px rgba(0,0,0,0.15)' }} />
             <div
-              className="absolute inset-0 opacity-[0.05] mix-blend-overlay"
+              className="absolute inset-0 opacity-[0.06] mix-blend-overlay"
               style={{
                 backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
               }}

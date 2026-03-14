@@ -1,20 +1,28 @@
 import Link from 'next/link';
 
-/* ─── Polaroid with real photo ────────────────────────────── */
+/* ─── Polaroid with real photo + optional style filter ───── */
 function Polaroid({
   caption,
   src,
   size = 'md',
+  photoStyle = 'normal',
 }: {
   caption: string;
   src: string;
   size?: 'sm' | 'md' | 'lg';
+  photoStyle?: 'normal' | 'vintage' | 'bw-vintage';
 }) {
   const dims = {
     sm: { img: 'w-36', pad: 'p-[6px] pb-[36px]', text: 'text-[11px]', bottom: 'bottom-2.5' },
     md: { img: 'w-48', pad: 'p-[8px] pb-[48px]', text: 'text-[14px]', bottom: 'bottom-3.5' },
     lg: { img: 'w-64', pad: 'p-[10px] pb-[56px]', text: 'text-[16px]', bottom: 'bottom-4' },
   }[size];
+
+  const filterMap = {
+    normal: 'none',
+    vintage: 'saturate(0.55) contrast(0.85) brightness(1.08) sepia(0.35)',
+    'bw-vintage': 'grayscale(1) contrast(1.1) brightness(1.02)',
+  };
 
   return (
     <div className={`${dims.pad} bg-white polaroid-shadow relative`} style={{ borderRadius: '3px' }}>
@@ -25,9 +33,31 @@ function Polaroid({
           alt={caption}
           className="w-full h-full object-cover"
           loading="eager"
+          style={{ filter: filterMap[photoStyle] }}
         />
-        {/* Subtle vintage overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/8 via-transparent to-amber-50/15 mix-blend-multiply" />
+        {/* Vintage overlays */}
+        {photoStyle === 'vintage' && (
+          <>
+            <div className="absolute inset-0 bg-amber-900/[0.14] mix-blend-multiply" />
+            <div className="absolute inset-0 bg-gradient-to-br from-amber-200/30 via-transparent to-orange-200/20 mix-blend-screen" />
+            <div className="absolute inset-0 bg-gradient-to-tl from-transparent via-transparent to-orange-300/30 mix-blend-screen" />
+            <div className="absolute inset-0" style={{ boxShadow: 'inset 0 0 50px rgba(0,0,0,0.15)' }} />
+            <div className="absolute inset-0 opacity-[0.06] mix-blend-overlay"
+              style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")` }}
+            />
+          </>
+        )}
+        {photoStyle === 'bw-vintage' && (
+          <>
+            <div className="absolute inset-0" style={{ boxShadow: 'inset 0 0 30px rgba(0,0,0,0.08)' }} />
+            <div className="absolute inset-0 opacity-[0.04] mix-blend-overlay"
+              style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")` }}
+            />
+          </>
+        )}
+        {photoStyle === 'normal' && (
+          <div className="absolute inset-0 bg-gradient-to-t from-black/8 via-transparent to-amber-50/15 mix-blend-multiply" />
+        )}
       </div>
       <p
         className={`absolute ${dims.bottom} left-0 right-0 text-center ${dims.text} text-stone-500 italic`}
@@ -144,32 +174,35 @@ export default function LandingPage() {
               </div>
             </div>
 
-            {/* Right — Floating polaroids with REAL photos */}
-            <div className="relative h-[400px] sm:h-[460px] lg:h-[500px] animate-fade-up-delay-1">
-              {/* Polaroid 1 — top-left, large — snowy hiking */}
-              <div className="absolute top-0 left-2 sm:left-6 animate-float-1 z-20">
+            {/* Right — Three polaroids in a nice spread */}
+            <div className="relative h-[340px] sm:h-[400px] lg:h-[480px] animate-fade-up-delay-1">
+              {/* Polaroid 1 — left — Taj Mahal (vintage) */}
+              <div className="absolute left-[0%] top-[0%] animate-float-1 z-20" style={{ transform: 'rotate(-6deg)' }}>
                 <Polaroid
-                  caption="Snow Hike, Dec '25"
-                  src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=500&h=375&fit=crop&q=80"
-                  size="lg"
+                  caption="India, Jan &apos;26"
+                  src="/examples/taj-mahal.jpg"
+                  size="sm"
+                  photoStyle="vintage"
                 />
               </div>
 
-              {/* Polaroid 2 — right, medium — beach sunset */}
-              <div className="absolute top-24 right-0 sm:right-4 animate-float-2 z-10">
+              {/* Polaroid 2 — center-right, slightly lower — formal night (black & white) */}
+              <div className="absolute right-[6%] top-[22%] animate-float-2 z-10" style={{ transform: 'rotate(4deg)' }}>
                 <Polaroid
-                  caption="Mom &amp; Dad"
-                  src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&h=300&fit=crop&q=80"
-                  size="md"
+                  caption="Gala Night"
+                  src="/examples/formal-night.jpg"
+                  size="sm"
+                  photoStyle="bw-vintage"
                 />
               </div>
 
-              {/* Polaroid 3 — bottom-left, medium — friends having fun */}
-              <div className="absolute bottom-0 left-14 sm:left-20 animate-float-3 z-30">
+              {/* Polaroid 3 — bottom-left, overlapping both — group party (original) */}
+              <div className="absolute left-[18%] sm:left-[22%] bottom-[0%] animate-float-3 z-30" style={{ transform: 'rotate(2deg)' }}>
                 <Polaroid
-                  caption="Moab 2025"
-                  src="https://images.unsplash.com/photo-1539635278303-d4002c07eae3?w=400&h=300&fit=crop&q=80"
-                  size="md"
+                  caption="Halloween 2025"
+                  src="/examples/group-party.jpg"
+                  size="sm"
+                  photoStyle="normal"
                 />
               </div>
             </div>
