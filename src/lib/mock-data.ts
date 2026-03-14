@@ -5,7 +5,7 @@ const cities = ['Boston', 'New York', 'Los Angeles', 'Chicago', 'Austin', 'Portl
 const states = ['MA', 'NY', 'CA', 'IL', 'TX', 'OR', 'CO', 'FL', 'WA', 'TN'];
 const streets = ['123 Oak St', '456 Maple Ave', '789 Pine Rd', '321 Elm Dr', '654 Cedar Ln', '987 Birch Way', '147 Walnut Ct', '258 Cherry Pl', '369 Spruce Blvd', '741 Willow St'];
 const captions = ['Best Day Ever!', 'Summer 2025', 'Family Reunion', 'NYC Trip', 'Love You!', '', '', 'Graduation Day', 'Beach Vibes', '', 'Friendsgiving', 'Birthday Bash'];
-const frames = ['minimal-polaroid', 'vintage-border', 'caption-frame'] as const;
+const frames = ['normal', 'vintage', 'bw-vintage'] as const;
 const statuses = ['processing', 'printed', 'shipped', 'delivered'] as const;
 
 function randomFrom<T>(arr: readonly T[]): T {
@@ -25,7 +25,7 @@ function generateMockOrders(count: number): CompletedOrder[] {
     const qty = [1, 1, 2, 3, 3, 5, 5, 7, 10][Math.floor(Math.random() * 9)];
     const isSelf = qty <= 2 && Math.random() > 0.3;
     const frame = randomFrom(frames);
-    const caption = frame === 'caption-frame' ? randomFrom(captions.filter(c => c)) : '';
+    const caption = Math.random() > 0.4 ? randomFrom(captions.filter(c => c)) : '';
     const unitPrice = qty >= 5 ? 4.49 : qty >= 3 ? 4.99 : 5.99;
 
     const idx = Math.floor(Math.random() * cities.length);

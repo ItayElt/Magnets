@@ -12,7 +12,10 @@ export interface Recipient {
   address: Address;
 }
 
-export type FrameStyle = 'minimal-polaroid' | 'vintage-border' | 'caption-frame';
+export type PhotoStyle = 'normal' | 'vintage' | 'bw-vintage';
+
+/** @deprecated Use PhotoStyle instead */
+export type FrameStyle = PhotoStyle;
 
 export type RecipientMode = 'self' | 'friends';
 

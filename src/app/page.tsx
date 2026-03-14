@@ -1,17 +1,13 @@
 import Link from 'next/link';
 
-/* ─── Polaroid Magnet Component ─────────────────────────────── */
+/* ─── Polaroid with real photo ────────────────────────────── */
 function Polaroid({
   caption,
-  from,
-  via,
-  to,
+  src,
   size = 'md',
 }: {
   caption: string;
-  from: string;
-  via: string;
-  to: string;
+  src: string;
   size?: 'sm' | 'md' | 'lg';
 }) {
   const dims = {
@@ -22,13 +18,17 @@ function Polaroid({
 
   return (
     <div className={`${dims.pad} bg-white polaroid-shadow relative`} style={{ borderRadius: '3px' }}>
-      {/* Photo area */}
-      <div className={`${dims.img} aspect-[4/3] rounded-[1px] overflow-hidden relative bg-gradient-to-br ${from} ${via} ${to}`}>
-        {/* Vintage photo overlay */}
+      <div className={`${dims.img} aspect-[4/3] rounded-[1px] overflow-hidden relative`}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={src}
+          alt={caption}
+          className="w-full h-full object-cover"
+          loading="eager"
+        />
+        {/* Subtle vintage overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/8 via-transparent to-amber-50/15 mix-blend-multiply" />
-        <div className="absolute inset-0 opacity-20 bg-gradient-to-br from-amber-100 to-transparent mix-blend-soft-light" />
       </div>
-      {/* Handwritten caption in EB Garamond */}
       <p
         className={`absolute ${dims.bottom} left-0 right-0 text-center ${dims.text} text-stone-500 italic`}
         style={{ fontFamily: 'var(--font-garamond), Georgia, serif' }}
@@ -68,13 +68,12 @@ export default function LandingPage() {
     <div className="min-h-screen bg-white overflow-hidden">
 
       {/* ════════════ NAVBAR ════════════ */}
-      <nav className="flex items-center justify-between px-6 md:px-10 py-4 max-w-7xl mx-auto">
+      <nav className="flex items-center justify-between px-6 md:px-10 py-4 max-w-7xl mx-auto relative z-50">
         <div className="flex items-center gap-8">
           <span className="font-[family-name:var(--font-playfair)] text-2xl font-bold text-stone-900 tracking-tight">
             Memora
           </span>
           <div className="hidden sm:flex items-center gap-6 text-sm text-stone-500">
-            <a href="#styles" className="hover:text-stone-900 transition-colors">Styles</a>
             <a href="#how-it-works" className="hover:text-stone-900 transition-colors">How it works</a>
             <a href="#pricing" className="hover:text-stone-900 transition-colors">Pricing</a>
           </div>
@@ -87,172 +86,98 @@ export default function LandingPage() {
         </Link>
       </nav>
 
-      {/* ════════════ HERO ════════════ */}
-      <section className="relative px-6 md:px-10 pt-16 sm:pt-24 pb-12 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-10 items-center">
+      {/* ════════════ HERO with colorful background ════════════ */}
+      <section className="relative overflow-hidden">
+        {/* Canva-inspired colorful gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-50 via-pink-50/60 to-amber-50/80" />
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-bl from-purple-200/40 via-pink-100/30 to-transparent rounded-full blur-3xl -translate-y-1/4 translate-x-1/4" />
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-amber-200/30 via-orange-100/20 to-transparent rounded-full blur-3xl translate-y-1/4 -translate-x-1/4" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-gradient-to-r from-violet-100/20 via-pink-100/20 to-amber-100/20 rounded-full blur-3xl" />
 
-          {/* Left — Copy */}
-          <div className="max-w-xl animate-fade-up">
-            <h1 className="font-[family-name:var(--font-playfair)] text-5xl sm:text-6xl lg:text-[4.25rem] font-bold text-stone-900 leading-[1.08] tracking-tight">
-              Turn your photos into real magnets
-            </h1>
+        <div className="relative px-6 md:px-10 pt-16 sm:pt-24 pb-16 max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-10 items-center">
 
-            <p
-              className="mt-5 text-xl sm:text-2xl text-[var(--color-brand)] leading-relaxed"
-              style={{ fontFamily: 'var(--font-caveat), cursive' }}
-            >
-              ...and send them to the people you love
-            </p>
+            {/* Left — Copy */}
+            <div className="max-w-xl animate-fade-up">
+              <h1 className="font-[family-name:var(--font-playfair)] text-5xl sm:text-6xl lg:text-[4.25rem] font-bold text-stone-900 leading-[1.08] tracking-tight">
+                Turn your photos into real magnets
+              </h1>
 
-            <p className="mt-5 text-base sm:text-lg text-stone-500 leading-relaxed max-w-md">
-              Upload a photo, pick a vintage frame, and we&apos;ll print &amp; ship beautiful custom magnets. Takes under 2 minutes.
-            </p>
-
-            <div className="mt-8 flex flex-col sm:flex-row items-start sm:items-center gap-4">
-              <Link
-                href="/upload"
-                className="inline-flex items-center justify-center px-8 py-4 text-base font-semibold bg-[var(--color-brand)] hover:bg-[var(--color-brand-dark)] text-white rounded-full shadow-lg shadow-purple-200/50 hover:shadow-xl hover:shadow-purple-300/50 transition-all duration-200 group"
+              <p
+                className="mt-5 text-xl sm:text-2xl text-[var(--color-brand)] leading-relaxed"
+                style={{ fontFamily: 'var(--font-caveat), cursive' }}
               >
-                Start creating
-                <svg className="ml-2 w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </Link>
-              <span className="text-sm text-stone-400">Free shipping &middot; No account needed</span>
-            </div>
+                ...and send them to the people you love
+              </p>
 
-            {/* Trust badges */}
-            <div className="mt-10 flex items-center gap-5 text-sm text-stone-400">
-              <div className="flex items-center gap-1.5">
-                <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>
-                Ships in 3–7 days
+              <p className="mt-5 text-base sm:text-lg text-stone-500 leading-relaxed max-w-md">
+                Upload a photo, pick a vintage frame, and we&apos;ll print &amp; ship beautiful custom magnets. Takes under 2 minutes.
+              </p>
+
+              <div className="mt-8 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                <Link
+                  href="/upload"
+                  className="inline-flex items-center justify-center px-8 py-4 text-base font-semibold bg-[var(--color-brand)] hover:bg-[var(--color-brand-dark)] text-white rounded-full shadow-lg shadow-purple-200/50 hover:shadow-xl hover:shadow-purple-300/50 transition-all duration-200 group"
+                >
+                  Start creating
+                  <svg className="ml-2 w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </Link>
+                <span className="text-sm text-stone-400">Free shipping &middot; No account needed</span>
               </div>
-              <div className="flex items-center gap-1.5">
-                <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>
-                From $4.49/ea
+
+              {/* Trust badges */}
+              <div className="mt-10 flex items-center gap-5 text-sm text-stone-400">
+                <div className="flex items-center gap-1.5">
+                  <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>
+                  Ships in 3–7 days
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>
+                  From $4.49/ea
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>
+                  USA made
+                </div>
               </div>
-              <div className="flex items-center gap-1.5">
-                <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>
-                USA made
-              </div>
-            </div>
-          </div>
-
-          {/* Right — Floating polaroids */}
-          <div className="relative h-[400px] sm:h-[460px] lg:h-[500px] animate-fade-up-delay-1">
-            {/* Decorative blobs */}
-            <div className="absolute top-10 right-10 w-72 h-72 bg-purple-100/30 rounded-full blur-3xl" />
-            <div className="absolute bottom-10 left-0 w-56 h-56 bg-amber-100/30 rounded-full blur-3xl" />
-
-            {/* Polaroid 1 — top-left, large */}
-            <div className="absolute top-0 left-2 sm:left-6 animate-float-1 z-20">
-              <Polaroid
-                caption="Snow Hike, Dec '25"
-                from="from-slate-300"
-                via="via-blue-200"
-                to="to-sky-300"
-                size="lg"
-              />
             </div>
 
-            {/* Polaroid 2 — right, medium */}
-            <div className="absolute top-24 right-0 sm:right-4 animate-float-2 z-10">
-              <Polaroid
-                caption="Mom &amp; Dad"
-                from="from-sky-200"
-                via="via-teal-200"
-                to="to-emerald-300"
-                size="md"
-              />
-            </div>
-
-            {/* Polaroid 3 — bottom-left, medium */}
-            <div className="absolute bottom-0 left-14 sm:left-20 animate-float-3 z-30">
-              <Polaroid
-                caption="Moab 2025"
-                from="from-orange-200"
-                via="via-amber-200"
-                to="to-rose-300"
-                size="md"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ════════════ COLORFUL GRADIENT DIVIDER (Canva vibe) ════════════ */}
-      <div className="h-1.5 bg-gradient-to-r from-purple-500 via-pink-400 via-50% to-amber-400" />
-
-      {/* ════════════ FRAME STYLES ════════════ */}
-      <section id="styles" className="px-6 md:px-10 py-24 bg-[#faf9f7] relative grain-overlay">
-        <div className="max-w-6xl mx-auto relative z-10">
-          <div className="text-center mb-16">
-            <p
-              className="text-lg text-[var(--color-brand)] mb-2"
-              style={{ fontFamily: 'var(--font-caveat), cursive' }}
-            >
-              pick your favorite
-            </p>
-            <h2 className="font-[family-name:var(--font-playfair)] text-3xl sm:text-4xl font-bold text-stone-900 tracking-tight">
-              Three timeless frame styles
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 sm:gap-8 max-w-4xl mx-auto">
-            {/* Style 1 — Vintage Polaroid */}
-            <div className="flex flex-col items-center group cursor-pointer">
-              <div className="transition-transform duration-300 group-hover:scale-105 group-hover:-rotate-2">
+            {/* Right — Floating polaroids with REAL photos */}
+            <div className="relative h-[400px] sm:h-[460px] lg:h-[500px] animate-fade-up-delay-1">
+              {/* Polaroid 1 — top-left, large — snowy hiking */}
+              <div className="absolute top-0 left-2 sm:left-6 animate-float-1 z-20">
                 <Polaroid
-                  caption="Summer 2025"
-                  from="from-amber-300"
-                  via="via-orange-200"
-                  to="to-rose-300"
+                  caption="Snow Hike, Dec '25"
+                  src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=500&h=375&fit=crop&q=80"
+                  size="lg"
+                />
+              </div>
+
+              {/* Polaroid 2 — right, medium — beach sunset */}
+              <div className="absolute top-24 right-0 sm:right-4 animate-float-2 z-10">
+                <Polaroid
+                  caption="Mom &amp; Dad"
+                  src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&h=300&fit=crop&q=80"
                   size="md"
                 />
               </div>
-              <h3 className="mt-6 text-lg font-bold text-stone-800">Vintage Polaroid</h3>
-              <p className="mt-1 text-sm text-stone-500 text-center">Classic instant film — thick bottom lip, aged feel</p>
-              <span
-                className="mt-2 text-[var(--color-brand)] text-sm"
-                style={{ fontFamily: 'var(--font-caveat), cursive' }}
-              >
-                most popular!
-              </span>
-            </div>
 
-            {/* Style 2 — Minimal Clean */}
-            <div className="flex flex-col items-center group cursor-pointer">
-              <div className="transition-transform duration-300 group-hover:scale-105 group-hover:rotate-1">
-                <div className="w-48 bg-white p-[5px] polaroid-shadow rounded-sm">
-                  <div className="aspect-[4/3] rounded-[1px] bg-gradient-to-br from-violet-300 via-purple-200 to-pink-300 relative overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/5 via-transparent to-white/10" />
-                  </div>
-                </div>
+              {/* Polaroid 3 — bottom-left, medium — friends having fun */}
+              <div className="absolute bottom-0 left-14 sm:left-20 animate-float-3 z-30">
+                <Polaroid
+                  caption="Moab 2025"
+                  src="https://images.unsplash.com/photo-1539635278303-d4002c07eae3?w=400&h=300&fit=crop&q=80"
+                  size="md"
+                />
               </div>
-              <h3 className="mt-6 text-lg font-bold text-stone-800">Minimal Clean</h3>
-              <p className="mt-1 text-sm text-stone-500 text-center">Sleek thin border — all about your photo</p>
-            </div>
-
-            {/* Style 3 — Caption Frame */}
-            <div className="flex flex-col items-center group cursor-pointer">
-              <div className="transition-transform duration-300 group-hover:scale-105 group-hover:-rotate-1">
-                <div className="w-48 bg-[#faf6ef] p-[7px] pb-[44px] polaroid-shadow relative" style={{ borderRadius: '3px', boxShadow: 'inset 0 0 0 1px rgba(180,160,130,0.15), 0 1px 3px rgba(0,0,0,0.08), 0 6px 24px rgba(0,0,0,0.10)' }}>
-                  <div className="aspect-[4/3] rounded-[1px] bg-gradient-to-br from-emerald-300 via-teal-200 to-cyan-300 relative overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-br from-amber-100/20 via-transparent to-orange-50/10" />
-                  </div>
-                  <p
-                    className="absolute bottom-3 left-0 right-0 text-center text-[13px] text-warm-600 italic"
-                    style={{ fontFamily: 'var(--font-garamond), Georgia, serif' }}
-                  >
-                    Family Reunion
-                  </p>
-                </div>
-              </div>
-              <h3 className="mt-6 text-lg font-bold text-stone-800">Caption Frame</h3>
-              <p className="mt-1 text-sm text-stone-500 text-center">Warm vintage border with your own text</p>
             </div>
           </div>
         </div>
+
+        {/* Colorful gradient divider at bottom of hero */}
+        <div className="h-1.5 bg-gradient-to-r from-purple-500 via-pink-400 via-50% to-amber-400" />
       </section>
 
       {/* ════════════ HOW IT WORKS ════════════ */}
@@ -308,7 +233,6 @@ export default function LandingPage() {
 
       {/* ════════════ PRICING ════════════ */}
       <section id="pricing" className="px-6 md:px-10 py-24 bg-gradient-to-br from-[var(--color-brand)] via-purple-600 to-purple-800 text-white relative overflow-hidden">
-        {/* Background decorative circles */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2" />
         <div className="absolute bottom-0 left-0 w-72 h-72 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/2" />
 

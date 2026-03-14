@@ -1,10 +1,13 @@
-import { FrameStyle } from './types';
+import { PhotoStyle } from './types';
 
-export const FRAMES: { id: FrameStyle; name: string; description: string }[] = [
-  { id: 'minimal-polaroid', name: 'Minimal Polaroid', description: 'Clean white border' },
-  { id: 'vintage-border', name: 'Vintage Border', description: 'Warm cream border' },
-  { id: 'caption-frame', name: 'Caption Frame', description: 'With text strip' },
+export const PHOTO_STYLES: { id: PhotoStyle; name: string; description: string; emoji: string }[] = [
+  { id: 'normal', name: 'Original', description: 'Your photo as-is', emoji: '📸' },
+  { id: 'vintage', name: 'Vintage Film', description: 'Warm, faded polaroid look', emoji: '🎞️' },
+  { id: 'bw-vintage', name: 'Black & White', description: 'Timeless monochrome', emoji: '🖤' },
 ];
+
+/** @deprecated Use PHOTO_STYLES */
+export const FRAMES = PHOTO_STYLES;
 
 export const PRICING_TIERS = [
   { minQty: 5, pricePerUnit: 4.49 },

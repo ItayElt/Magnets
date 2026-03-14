@@ -9,7 +9,7 @@ const initialState: OrderState = {
   croppedImage: null,
   cropArea: null,
   lowResolution: false,
-  selectedFrame: 'minimal-polaroid',
+  selectedFrame: 'normal',
   caption: '',
   mode: 'self',
   quantity: 1,
