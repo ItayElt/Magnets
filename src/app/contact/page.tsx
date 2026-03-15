@@ -56,40 +56,44 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--color-warm-50,#faf9f7)]">
-      {/* Nav */}
-      <nav className="bg-white border-b border-stone-200 px-6 py-4">
-        <div className="max-w-2xl mx-auto flex items-center justify-between">
-          <Link
-            href="/"
-            className="font-[family-name:var(--font-playfair)] text-xl font-bold text-stone-900"
-          >
-            Memora
-          </Link>
-          <Link
-            href="/"
-            className="text-sm text-stone-500 hover:text-stone-700 transition-colors"
-          >
-            &larr; Back to home
-          </Link>
-        </div>
+    <div className="min-h-screen bg-white">
+      {/* Nav — matches landing page style */}
+      <nav className="flex items-center justify-between px-6 md:px-10 py-4 max-w-7xl mx-auto">
+        <Link
+          href="/"
+          className="font-[family-name:var(--font-playfair)] text-2xl font-bold text-stone-900 tracking-tight"
+        >
+          Memora
+        </Link>
+        <Link
+          href="/"
+          className="text-sm text-stone-500 hover:text-stone-900 transition-colors"
+        >
+          &larr; Back to home
+        </Link>
       </nav>
 
       <main className="max-w-2xl mx-auto px-6 py-12">
         <div className="text-center mb-10">
           <h1 className="text-3xl font-bold text-stone-900 font-[family-name:var(--font-playfair)] mb-2">
-            Get in Touch
+            Support
           </h1>
-          <p className="text-stone-500">
-            Have a question or need help? We are here for you.
+          <p className="text-stone-500 mb-6">
+            Have a question or need help with your order?
           </p>
-          <p className="mt-3 text-sm text-stone-500">
-            Email us directly at{' '}
-            <a href="mailto:support@memoramagnet.shop" className="text-[var(--color-brand)] font-medium hover:underline">
-              support@memoramagnet.shop
-            </a>
-          </p>
+          <a
+            href="mailto:support@memoramagnet.shop"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-stone-100 hover:bg-stone-200 rounded-full text-sm font-medium text-stone-700 transition-colors"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+            </svg>
+            support@memoramagnet.shop
+          </a>
         </div>
+
+        {/* Contact Form */}
+        <h2 className="text-lg font-semibold text-stone-800 mb-4">Send us a message</h2>
 
         {submitted ? (
           <div className="bg-green-50 border border-green-200 rounded-2xl p-8 text-center">
@@ -112,8 +116,7 @@ export default function ContactPage() {
               Message Sent!
             </h2>
             <p className="text-green-600 text-sm">
-              Thank you for reaching out. We will get back to you within 24
-              hours.
+              Thank you for reaching out. We&apos;ll get back to you within 24 hours.
             </p>
           </div>
         ) : (
@@ -137,7 +140,7 @@ export default function ContactPage() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Your name"
-                className="w-full px-4 py-3 rounded-xl border border-stone-300 bg-white text-stone-900 placeholder:text-stone-400 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                className="w-full px-4 py-3 rounded-xl border border-stone-300 bg-white text-stone-900 placeholder:text-stone-400 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent"
               />
             </div>
 
@@ -151,7 +154,7 @@ export default function ContactPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="w-full px-4 py-3 rounded-xl border border-stone-300 bg-white text-stone-900 placeholder:text-stone-400 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                className="w-full px-4 py-3 rounded-xl border border-stone-300 bg-white text-stone-900 placeholder:text-stone-400 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent"
               />
             </div>
 
@@ -165,7 +168,7 @@ export default function ContactPage() {
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
                 placeholder="What is this about?"
-                className="w-full px-4 py-3 rounded-xl border border-stone-300 bg-white text-stone-900 placeholder:text-stone-400 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                className="w-full px-4 py-3 rounded-xl border border-stone-300 bg-white text-stone-900 placeholder:text-stone-400 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent"
               />
             </div>
 
@@ -179,14 +182,14 @@ export default function ContactPage() {
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder="Tell us how we can help..."
-                className="w-full px-4 py-3 rounded-xl border border-stone-300 bg-white text-stone-900 placeholder:text-stone-400 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent resize-none"
+                className="w-full px-4 py-3 rounded-xl border border-stone-300 bg-white text-stone-900 placeholder:text-stone-400 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent resize-none"
               />
             </div>
 
             <button
               type="submit"
               disabled={submitting}
-              className="w-full py-3 bg-amber-600 hover:bg-amber-700 text-white font-semibold rounded-xl transition-colors disabled:opacity-50 cursor-pointer"
+              className="w-full py-3 bg-[var(--color-brand)] hover:bg-[var(--color-brand-dark)] text-white font-semibold rounded-xl transition-colors disabled:opacity-50 cursor-pointer"
             >
               {submitting ? 'Sending...' : 'Send Message'}
             </button>
@@ -215,6 +218,15 @@ export default function ContactPage() {
           </div>
         </div>
       </main>
+
+      {/* Footer — matches landing page */}
+      <footer className="px-6 py-8 border-t border-stone-100">
+        <div className="max-w-6xl mx-auto text-center">
+          <p className="text-sm text-stone-400">
+            &copy; {new Date().getFullYear()} Memora &middot; USA shipping only
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }

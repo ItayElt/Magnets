@@ -375,19 +375,20 @@ export default function LandingPage() {
       </section>
 
       {/* ════════════ FOOTER ════════════ */}
-      <footer className="px-6 py-8 border-t border-stone-100">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <span className="font-[family-name:var(--font-playfair)] text-lg font-bold text-stone-800">
-            Memora
-          </span>
-          <div className="flex items-center gap-4 text-sm text-stone-400">
-            <Link href="/contact" className="hover:text-stone-600 transition-colors">Support</Link>
-            <span>&middot;</span>
-            <a href="mailto:support@memoramagnet.shop" className="hover:text-stone-600 transition-colors">support@memoramagnet.shop</a>
+      <footer className="px-6 py-10 border-t border-stone-100">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-col items-center gap-4">
+            <span className="font-[family-name:var(--font-playfair)] text-lg font-bold text-stone-800">
+              Memora
+            </span>
+            <div className="flex items-center gap-6 text-sm text-stone-400">
+              <Link href="/contact" className="hover:text-stone-600 transition-colors">Support</Link>
+              <a href="mailto:support@memoramagnet.shop" className="hover:text-stone-600 transition-colors">Contact</a>
+            </div>
+            <p className="text-xs text-stone-400">
+              &copy; {new Date().getFullYear()} Memora &middot; USA shipping only
+            </p>
           </div>
-          <p className="text-sm text-stone-400">
-            &copy; {new Date().getFullYear()} Memora &middot; USA shipping only
-          </p>
         </div>
       </footer>
     </div>
