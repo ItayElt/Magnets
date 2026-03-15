@@ -58,7 +58,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </Link>
             <button
               onClick={handleSignOut}
-              className="text-sm text-stone-400 hover:text-red-400 transition-colors font-[family-name:var(--font-dm-sans)]"
+              className="text-sm text-stone-400 hover:text-red-400 transition-colors font-[family-name:var(--font-inter)]"
             >
               Sign Out
             </button>
