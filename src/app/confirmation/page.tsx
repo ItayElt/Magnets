@@ -187,12 +187,12 @@ function ConfirmationContent() {
           A confirmation email has been sent to <strong>{orderEmail}</strong>
         </p>
 
-        <Link
-          href="/track"
-          className="inline-block text-sm text-amber-700 hover:text-amber-800 underline underline-offset-2 mb-6"
-        >
-          Track your order
-        </Link>
+        <div className="bg-stone-50 rounded-xl p-4 mb-6 text-sm text-stone-500">
+          Questions about your order? Contact us at{' '}
+          <a href="mailto:support@memoramagnet.shop" className="text-[var(--color-brand)] font-medium hover:underline">
+            support@memoramagnet.shop
+          </a>
+        </div>
 
         <div className="mt-2">
           <Button

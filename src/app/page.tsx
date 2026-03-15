@@ -107,6 +107,7 @@ export default function LandingPage() {
           <div className="hidden sm:flex items-center gap-6 text-sm text-stone-500">
             <a href="#how-it-works" className="hover:text-stone-900 transition-colors">How it works</a>
             <a href="#pricing" className="hover:text-stone-900 transition-colors">Pricing</a>
+            <Link href="/contact" className="hover:text-stone-900 transition-colors">Support</Link>
           </div>
         </div>
         <Link
@@ -176,35 +177,65 @@ export default function LandingPage() {
             </div>
 
             {/* Right — Three polaroids in a dynamic scattered layout */}
-            <div className="relative animate-fade-up-delay-1 mx-auto" style={{ width: '320px', height: '340px' }}>
+            <div className="relative animate-fade-up-delay-1 mx-auto w-[320px] h-[340px] lg:w-[440px] lg:h-[440px]">
               {/* Back-left — India vintage */}
               <div className="absolute animate-float-1" style={{ transform: 'rotate(-7deg)', left: '0px', top: '30px' }}>
-                <Polaroid
-                  caption="India &apos;26"
-                  src="/examples/taj-mahal.jpg"
-                  size="sm"
-                  photoStyle="vintage"
-                />
+                <div className="hidden lg:block">
+                  <Polaroid
+                    caption="India &apos;26"
+                    src="/examples/taj-mahal.jpg"
+                    size="md"
+                    photoStyle="vintage"
+                  />
+                </div>
+                <div className="lg:hidden">
+                  <Polaroid
+                    caption="India &apos;26"
+                    src="/examples/taj-mahal.jpg"
+                    size="sm"
+                    photoStyle="vintage"
+                  />
+                </div>
               </div>
 
               {/* Back-right, higher up — HBS Gala B&W */}
               <div className="absolute animate-float-2" style={{ transform: 'rotate(5deg)', right: '0px', top: '0px' }}>
-                <Polaroid
-                  caption="HBS Gala &apos;25"
-                  src="/examples/formal-night.jpg"
-                  size="sm"
-                  photoStyle="bw-vintage"
-                />
+                <div className="hidden lg:block">
+                  <Polaroid
+                    caption="HBS Gala &apos;25"
+                    src="/examples/formal-night.jpg"
+                    size="md"
+                    photoStyle="bw-vintage"
+                  />
+                </div>
+                <div className="lg:hidden">
+                  <Polaroid
+                    caption="HBS Gala &apos;25"
+                    src="/examples/formal-night.jpg"
+                    size="sm"
+                    photoStyle="bw-vintage"
+                  />
+                </div>
               </div>
 
               {/* Front-center, overlapping both — Halloween original */}
-              <div className="absolute animate-float-3" style={{ transform: 'rotate(-1deg)', left: '50%', marginLeft: '-76px', bottom: '0px', zIndex: 30 }}>
-                <Polaroid
-                  caption="Halloween &apos;25"
-                  src="/examples/group-party.jpg"
-                  size="sm"
-                  photoStyle="normal"
-                />
+              <div className="absolute animate-float-3 left-1/2 -translate-x-1/2 bottom-0" style={{ transform: 'rotate(-1deg) translateX(-50%)', zIndex: 30 }}>
+                <div className="hidden lg:block">
+                  <Polaroid
+                    caption="Halloween &apos;25"
+                    src="/examples/group-party.jpg"
+                    size="md"
+                    photoStyle="normal"
+                  />
+                </div>
+                <div className="lg:hidden">
+                  <Polaroid
+                    caption="Halloween &apos;25"
+                    src="/examples/group-party.jpg"
+                    size="sm"
+                    photoStyle="normal"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -349,12 +380,14 @@ export default function LandingPage() {
           <span className="font-[family-name:var(--font-playfair)] text-lg font-bold text-stone-800">
             Memora
           </span>
+          <div className="flex items-center gap-4 text-sm text-stone-400">
+            <Link href="/contact" className="hover:text-stone-600 transition-colors">Support</Link>
+            <span>&middot;</span>
+            <a href="mailto:support@memoramagnet.shop" className="hover:text-stone-600 transition-colors">support@memoramagnet.shop</a>
+          </div>
           <p className="text-sm text-stone-400">
             &copy; {new Date().getFullYear()} Memora &middot; USA shipping only
           </p>
-          <Link href="/admin" className="text-sm text-stone-400 hover:text-stone-600 transition-colors">
-            Admin
-          </Link>
         </div>
       </footer>
     </div>

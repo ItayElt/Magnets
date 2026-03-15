@@ -10,13 +10,14 @@ import { CompletedOrder, OrderStatus } from '@/lib/types';
 // Status config
 // ---------------------------------------------------------------------------
 
-const ALL_STATUSES: OrderStatus[] = [
+const ALL_STATUSES: (OrderStatus | 'refunded')[] = [
   'paid',
   'processing',
   'sent_to_print',
   'printed',
   'shipped',
   'delivered',
+  'refunded',
 ];
 
 const statusBadge: Record<string, string> = {
@@ -26,6 +27,7 @@ const statusBadge: Record<string, string> = {
   printed: 'bg-indigo-100 text-indigo-800',
   shipped: 'bg-purple-100 text-purple-800',
   delivered: 'bg-green-100 text-green-800',
+  refunded: 'bg-red-100 text-red-800',
 };
 
 function formatStatus(s: string) {
@@ -91,6 +93,8 @@ export default function OrderDetailPage() {
   const [updating, setUpdating] = useState(false);
   const [savingNotes, setSavingNotes] = useState(false);
   const [savingTracking, setSavingTracking] = useState(false);
+  const [refunding, setRefunding] = useState(false);
+  const [showRefundConfirm, setShowRefundConfirm] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
 
   // Mock fallback
@@ -220,6 +224,27 @@ export default function OrderDetailPage() {
       setMessage('Failed to save tracking number');
     } finally {
       setSavingTracking(false);
+    }
+  }
+
+  async function handleRefund() {
+    setRefunding(true);
+    setMessage(null);
+    try {
+      const res = await fetch(`/api/admin/orders/${orderId}/refund`, {
+        method: 'POST',
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Refund failed');
+      setOrder((prev) => prev ? { ...prev, status: 'refunded' } : prev);
+      setSelectedStatus('refunded');
+      setMessage(`Refund processed successfully (${data.refundId})`);
+      setShowRefundConfirm(false);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Failed to process refund';
+      setMessage(msg);
+    } finally {
+      setRefunding(false);
     }
   }
 
@@ -500,6 +525,49 @@ export default function OrderDetailPage() {
             </button>
           </div>
         </div>
+
+        {/* ── Refund ── */}
+        {viewData.status !== 'refunded' && (
+          <div className="bg-white rounded-2xl p-6 border border-stone-200">
+            <h2 className="font-semibold text-stone-800 mb-4">Refund Order</h2>
+            {showRefundConfirm ? (
+              <div>
+                <p className="text-sm text-stone-600 mb-4">
+                  Are you sure you want to refund <strong>${viewData.total_price.toFixed(2)}</strong> to the customer? This cannot be undone.
+                </p>
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => setShowRefundConfirm(false)}
+                    className="px-5 py-2.5 bg-stone-100 hover:bg-stone-200 text-stone-700 text-sm font-medium rounded-xl transition-colors cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleRefund}
+                    disabled={refunding}
+                    className="px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-xl transition-colors disabled:opacity-50 cursor-pointer"
+                  >
+                    {refunding ? 'Processing...' : 'Confirm Refund'}
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <button
+                onClick={() => setShowRefundConfirm(true)}
+                className="px-5 py-2.5 bg-red-50 hover:bg-red-100 text-red-700 text-sm font-medium rounded-xl border border-red-200 transition-colors cursor-pointer"
+              >
+                Issue Full Refund
+              </button>
+            )}
+          </div>
+        )}
+
+        {viewData.status === 'refunded' && (
+          <div className="bg-red-50 rounded-2xl p-6 border border-red-200">
+            <h2 className="font-semibold text-red-800 mb-2">Order Refunded</h2>
+            <p className="text-sm text-red-600">This order has been fully refunded.</p>
+          </div>
+        )}
 
         {/* ── Status History ── */}
         {viewData.status_log.length > 0 && (

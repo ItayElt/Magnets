@@ -83,6 +83,12 @@ export default function ContactPage() {
           <p className="text-stone-500">
             Have a question or need help? We are here for you.
           </p>
+          <p className="mt-3 text-sm text-stone-500">
+            Email us directly at{' '}
+            <a href="mailto:support@memoramagnet.shop" className="text-[var(--color-brand)] font-medium hover:underline">
+              support@memoramagnet.shop
+            </a>
+          </p>
         </div>
 
         {submitted ? (

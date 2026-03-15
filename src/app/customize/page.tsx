@@ -114,7 +114,7 @@ export default function CustomizePage() {
   return (
     <div className="min-h-screen">
       <nav className="flex items-center justify-between px-6 py-4 max-w-2xl mx-auto">
-        <button onClick={() => router.back()} className="text-stone-500 hover:text-stone-700 text-sm font-medium">
+        <button onClick={() => router.push('/crop')} className="text-stone-500 hover:text-stone-700 text-sm font-medium">
           ← Back
         </button>
         <span className="font-[family-name:var(--font-playfair)] text-xl font-bold text-stone-800">

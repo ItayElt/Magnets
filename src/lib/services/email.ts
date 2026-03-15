@@ -125,14 +125,16 @@ export async function sendOrderConfirmationEmail(
         <tr><td style="padding: 4px 0; color: #666;">Photo Style</td><td style="padding: 4px 0;">${order.photo_style}</td></tr>
         <tr><td style="padding: 4px 0; color: #666;">Total</td><td style="padding: 4px 0; font-weight: 600;">$${Number(order.total_price).toFixed(2)}</td></tr>
       </table>
-      <p style="margin-top: 24px;">
-        <a href="${APP_URL}/confirmation?order=${order.order_id}"
-           style="background: #78350f; color: #fff; padding: 12px 24px; border-radius: 8px; text-decoration: none; display: inline-block;">
-          View Order
-        </a>
-      </p>
-      <p style="margin-top: 32px; font-size: 13px; color: #999;">
-        If you have any questions, reply to this email or visit <a href="${APP_URL}">${APP_URL}</a>.
+      <div style="margin-top: 24px; background: #f5f0eb; padding: 16px 20px; border-radius: 8px;">
+        <p style="margin: 0 0 4px 0; font-size: 14px; font-weight: 600; color: #44403c;">Need help?</p>
+        <p style="margin: 0; font-size: 13px; color: #78716c;">
+          If you have any questions about your order, contact us at
+          <a href="mailto:support@memoramagnet.shop" style="color: #78350f; text-decoration: none; font-weight: 500;">support@memoramagnet.shop</a>
+          and we'll get back to you within 24 hours.
+        </p>
+      </div>
+      <p style="margin-top: 24px; font-size: 13px; color: #999; text-align: center;">
+        <a href="${APP_URL}" style="color: #78350f; text-decoration: none;">memoramagnet.shop</a>
       </p>
     </div>
   `;
@@ -170,15 +172,13 @@ export async function sendStatusUpdateEmail(
         </p>
         ${trackingSection}
       </div>
-      <p>
-        <a href="${APP_URL}/confirmation?order=${order.order_id}"
-           style="background: #78350f; color: #fff; padding: 12px 24px; border-radius: 8px; text-decoration: none; display: inline-block;">
-          View Order Details
-        </a>
-      </p>
-      <p style="margin-top: 32px; font-size: 13px; color: #999;">
-        If you have any questions, reply to this email or visit <a href="${APP_URL}">${APP_URL}</a>.
-      </p>
+      <div style="margin-top: 16px; background: #f5f0eb; padding: 16px 20px; border-radius: 8px;">
+        <p style="margin: 0 0 4px 0; font-size: 14px; font-weight: 600; color: #44403c;">Need help?</p>
+        <p style="margin: 0; font-size: 13px; color: #78716c;">
+          Contact us at
+          <a href="mailto:support@memoramagnet.shop" style="color: #78350f; text-decoration: none; font-weight: 500;">support@memoramagnet.shop</a>
+        </p>
+      </div>
     </div>
   `;
 

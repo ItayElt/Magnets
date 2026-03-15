@@ -258,7 +258,7 @@ export default function RecipientsPage() {
   return (
     <div className="min-h-screen">
       <nav className="flex items-center justify-between px-6 py-4 max-w-2xl mx-auto">
-        <button onClick={() => router.back()} className="text-stone-500 hover:text-stone-700">
+        <button onClick={() => router.push('/customize')} className="text-stone-500 hover:text-stone-700">
           ← Back
         </button>
         <span className="font-[family-name:var(--font-playfair)] text-xl font-bold text-stone-800">
