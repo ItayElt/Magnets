@@ -121,13 +121,13 @@ function ConfirmationContent() {
 
   return (
     <div className="min-h-screen">
-      <nav className="flex items-center justify-center px-6 py-4 max-w-2xl mx-auto">
+      <nav className="flex items-center justify-center px-6 py-4 max-w-3xl mx-auto">
         <span className="font-[family-name:var(--font-playfair)] text-xl font-bold text-stone-800">
           Memora
         </span>
       </nav>
 
-      <div className="px-6 pb-12 max-w-lg mx-auto text-center">
+      <div className="px-6 pb-12 max-w-xl mx-auto text-center">
         <div className="mt-8 mb-6">
           <div className="w-20 h-20 mx-auto bg-green-100 rounded-full flex items-center justify-center animate-[scale-in_0.3s_ease-out]">
             <svg className="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">

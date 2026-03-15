@@ -113,7 +113,7 @@ export default function CustomizePage() {
 
   return (
     <div className="min-h-screen">
-      <nav className="flex items-center justify-between px-6 py-4 max-w-2xl mx-auto">
+      <nav className="flex items-center justify-between px-6 py-4 max-w-3xl mx-auto">
         <button onClick={() => router.push('/crop')} className="text-stone-500 hover:text-stone-700 text-sm font-medium">
           ← Back
         </button>
@@ -125,7 +125,7 @@ export default function CustomizePage() {
 
       <StepIndicator currentStep={2} />
 
-      <div className="px-6 pb-12 max-w-lg mx-auto">
+      <div className="px-6 pb-12 max-w-xl mx-auto">
         <h1 className="font-[family-name:var(--font-playfair)] text-2xl font-bold text-stone-900 text-center mb-1">
           Customize your magnet
         </h1>

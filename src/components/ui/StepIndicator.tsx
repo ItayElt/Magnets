@@ -8,7 +8,7 @@ interface StepIndicatorProps {
 
 export default function StepIndicator({ currentStep }: StepIndicatorProps) {
   return (
-    <div className="w-full max-w-md mx-auto px-4 py-4">
+    <div className="w-full max-w-lg mx-auto px-4 py-4">
       <div className="flex items-center justify-between">
         {STEP_LABELS.slice(0, 5).map((label, i) => (
           <div key={label} className="flex items-center">
