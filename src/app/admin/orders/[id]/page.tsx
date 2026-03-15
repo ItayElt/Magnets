@@ -313,7 +313,7 @@ export default function OrderDetailPage() {
         photo_style: order.photo_style,
         caption: order.caption,
         image_url: order.image_path
-          ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/magnets/${order.image_path}`
+          ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/magnet-images/${order.image_path}`
           : null,
         unit_price: order.unit_price,
         total_price: order.total_price,

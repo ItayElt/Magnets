@@ -58,7 +58,7 @@ export async function sendPrintShopBatchEmail(
         <td style="padding: 8px; border: 1px solid #ddd;">
           ${
             order.image_path
-              ? `<a href="${APP_URL}/api/images/${encodeURIComponent(order.image_path)}">View Image</a>`
+              ? `<a href="${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/magnet-images/${order.image_path}">View Image</a>`
               : '—'
           }
         </td>
