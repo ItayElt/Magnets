@@ -12,7 +12,7 @@ import Button from '@/components/ui/Button';
 // Status config
 // ---------------------------------------------------------------------------
 
-const ALL_STATUSES: { key: OrderStatus | 'all'; label: string }[] = [
+const ALL_STATUSES: { key: OrderStatus | 'refunded' | 'all'; label: string }[] = [
   { key: 'all', label: 'All' },
   { key: 'paid', label: 'Paid' },
   { key: 'processing', label: 'Processing' },
@@ -20,6 +20,7 @@ const ALL_STATUSES: { key: OrderStatus | 'all'; label: string }[] = [
   { key: 'printed', label: 'Printed' },
   { key: 'shipped', label: 'Shipped' },
   { key: 'delivered', label: 'Delivered' },
+  { key: 'refunded', label: 'Refunded' },
 ];
 
 const statusBadge: Record<string, string> = {
@@ -29,6 +30,7 @@ const statusBadge: Record<string, string> = {
   printed: 'bg-indigo-100 text-indigo-800',
   shipped: 'bg-purple-100 text-purple-800',
   delivered: 'bg-green-100 text-green-800',
+  refunded: 'bg-red-100 text-red-800',
 };
 
 function formatStatus(s: string) {

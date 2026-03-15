@@ -49,6 +49,7 @@ export async function POST(
     }
 
     const previousStatus = order.status;
+    const internalId = order.id; // The actual UUID primary key
 
     // Update the order status and timestamp in Supabase
     const { error: updateError } = await supabaseAdmin
@@ -57,15 +58,15 @@ export async function POST(
         status: 'refunded',
         status_updated_at: new Date().toISOString(),
       })
-      .eq('order_id', orderId);
+      .eq('id', internalId);
 
     if (updateError) {
       console.error('Failed to update order status after refund:', updateError);
     }
 
-    // Add to status log
+    // Add to status log using the internal UUID (matches order_status_log.order_id FK)
     await supabaseAdmin.from('order_status_log').insert({
-      order_id: orderId,
+      order_id: internalId,
       old_status: previousStatus,
       new_status: 'refunded',
       changed_by: 'admin',

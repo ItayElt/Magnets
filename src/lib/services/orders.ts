@@ -224,31 +224,45 @@ export async function getOrderStats(): Promise<OrderStats> {
 
   const [allOrders, todayOrders, weekOrders, monthOrders] = await Promise.all([
     supabaseAdmin.from('orders').select('status, total_price'),
-    supabaseAdmin.from('orders').select('total_price').gte('created_at', todayStart),
-    supabaseAdmin.from('orders').select('total_price').gte('created_at', weekStart),
-    supabaseAdmin.from('orders').select('total_price').gte('created_at', monthStart),
+    supabaseAdmin.from('orders').select('status, total_price').gte('created_at', todayStart),
+    supabaseAdmin.from('orders').select('status, total_price').gte('created_at', weekStart),
+    supabaseAdmin.from('orders').select('status, total_price').gte('created_at', monthStart),
   ]);
 
   const orders = allOrders.data ?? [];
   const countsByStatus: Record<string, number> = {};
   let totalRevenue = 0;
+  let refundedRevenue = 0;
 
   for (const order of orders) {
     countsByStatus[order.status] = (countsByStatus[order.status] ?? 0) + 1;
-    totalRevenue += Number(order.total_price);
+    const price = Number(order.total_price);
+    totalRevenue += price;
+    if (order.status === 'refunded') {
+      refundedRevenue += price;
+    }
   }
 
-  const sumPrices = (rows: { total_price: number }[] | null) =>
-    (rows ?? []).reduce((sum, r) => sum + Number(r.total_price), 0);
+  // Net revenue = total minus refunded orders
+  const netRevenue = totalRevenue - refundedRevenue;
+
+  // Sum prices excluding refunded orders
+  const sumPricesNet = (rows: { status: string; total_price: number }[] | null) =>
+    (rows ?? [])
+      .filter((r) => r.status !== 'refunded')
+      .reduce((sum, r) => sum + Number(r.total_price), 0);
+
+  const countNonRefunded = (rows: { status: string }[] | null) =>
+    (rows ?? []).filter((r) => r.status !== 'refunded').length;
 
   return {
     totalOrders: orders.length,
-    totalRevenue,
+    totalRevenue: netRevenue,
     countsByStatus,
-    revenueToday: sumPrices(todayOrders.data),
-    revenueThisWeek: sumPrices(weekOrders.data),
-    revenueThisMonth: sumPrices(monthOrders.data),
-    ordersToday: (todayOrders.data ?? []).length,
+    revenueToday: sumPricesNet(todayOrders.data),
+    revenueThisWeek: sumPricesNet(weekOrders.data),
+    revenueThisMonth: sumPricesNet(monthOrders.data),
+    ordersToday: countNonRefunded(todayOrders.data),
   };
 }
 

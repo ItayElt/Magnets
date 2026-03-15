@@ -39,13 +39,14 @@ interface Stats {
 // Status config
 // ---------------------------------------------------------------------------
 
-const STATUS_PIPELINE: { key: OrderStatus; label: string; color: string; bg: string }[] = [
+const STATUS_PIPELINE: { key: OrderStatus | 'refunded'; label: string; color: string; bg: string }[] = [
   { key: 'paid', label: 'Paid', color: 'bg-yellow-400', bg: 'bg-yellow-50 text-yellow-800' },
   { key: 'processing', label: 'Processing', color: 'bg-orange-400', bg: 'bg-orange-50 text-orange-800' },
   { key: 'sent_to_print', label: 'Sent to Print', color: 'bg-blue-400', bg: 'bg-blue-50 text-blue-800' },
   { key: 'printed', label: 'Printed', color: 'bg-indigo-400', bg: 'bg-indigo-50 text-indigo-800' },
   { key: 'shipped', label: 'Shipped', color: 'bg-purple-400', bg: 'bg-purple-50 text-purple-800' },
   { key: 'delivered', label: 'Delivered', color: 'bg-green-400', bg: 'bg-green-50 text-green-800' },
+  { key: 'refunded', label: 'Refunded', color: 'bg-red-400', bg: 'bg-red-50 text-red-800' },
 ];
 
 // ---------------------------------------------------------------------------
@@ -162,6 +163,7 @@ const statusBadge: Record<string, string> = {
   printed: 'bg-indigo-100 text-indigo-800',
   shipped: 'bg-purple-100 text-purple-800',
   delivered: 'bg-green-100 text-green-800',
+  refunded: 'bg-red-100 text-red-800',
 };
 
 function formatStatus(s: string) {
