@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
-import { adminClient } from '@/lib/supabase/admin';
+import { supabaseAdmin } from '@/lib/supabase/admin';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? '', {
   apiVersion: '2025-04-30.basil' as Stripe.LatestApiVersion,
@@ -14,7 +14,7 @@ export async function POST(
 
   try {
     // Get the order from Supabase
-    const { data: order, error: orderError } = await adminClient
+    const { data: order, error: orderError } = await supabaseAdmin
       .from('orders')
       .select('*')
       .eq('order_id', orderId)
@@ -48,7 +48,7 @@ export async function POST(
     }
 
     // Update the order status in Supabase
-    const { error: updateError } = await adminClient
+    const { error: updateError } = await supabaseAdmin
       .from('orders')
       .update({ status: 'refunded' })
       .eq('order_id', orderId);
@@ -58,7 +58,7 @@ export async function POST(
     }
 
     // Add to status log
-    await adminClient.from('order_status_log').insert({
+    await supabaseAdmin.from('order_status_log').insert({
       order_id: orderId,
       old_status: order.status,
       new_status: 'refunded',

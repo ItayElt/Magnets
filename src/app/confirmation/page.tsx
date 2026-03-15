@@ -2,7 +2,6 @@
 
 import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import Link from 'next/link';
 import { useOrder } from '@/lib/context/OrderContext';
 import { getTotalPrice } from '@/lib/constants';
 import Button from '@/components/ui/Button';
