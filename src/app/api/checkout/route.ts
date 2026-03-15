@@ -10,7 +10,7 @@ interface CheckoutRequestBody {
   mode: string;
   selfAddress: Record<string, string> | null;
   recipients: Array<Record<string, unknown>> | null;
-  imagePath: string;
+  imagePath: string | null;
 }
 
 export async function POST(request: Request) {
@@ -20,9 +20,9 @@ export async function POST(request: Request) {
     const { email, quantity, photoStyle, caption, mode, selfAddress, recipients, imagePath } = body;
 
     // Validate required fields
-    if (!email || !quantity || !photoStyle || !mode || !imagePath) {
+    if (!email || !quantity || !photoStyle || !mode) {
       return NextResponse.json(
-        { error: 'Missing required fields: email, quantity, photoStyle, mode, imagePath' },
+        { error: 'Missing required fields: email, quantity, photoStyle, mode' },
         { status: 400 }
       );
     }
@@ -47,7 +47,7 @@ export async function POST(request: Request) {
       photoStyle,
       caption: caption || '',
       mode,
-      imagePath,
+      imagePath: imagePath || '',
     };
 
     // Store addresses in metadata if they fit, otherwise truncate

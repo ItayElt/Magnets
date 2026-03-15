@@ -5,7 +5,7 @@ function getResend() {
   return new Resend(process.env.RESEND_API_KEY ?? '');
 }
 
-const FROM_EMAIL = 'Memora <notifications@memora.com>';
+const FROM_EMAIL = 'Memora <onboarding@resend.dev>';
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000';
 
 // ---------------------------------------------------------------------------

@@ -83,13 +83,28 @@ export default function CheckoutPage() {
     }
 
     try {
-      // Step 1: Upload image to Supabase Storage
+      // Step 1: Upload image via server-side API
       let imagePath: string | null = null;
-      if (state.croppedImage && process.env.NEXT_PUBLIC_SUPABASE_URL) {
+      if (state.croppedImage) {
         setProcessingMessage('Uploading image...');
         try {
-          const tempId = `temp-${Date.now()}`;
-          imagePath = await uploadCroppedImage(state.croppedImage, tempId);
+          // Convert data URL to blob then upload via API route
+          const res = await fetch(state.croppedImage);
+          const blob = await res.blob();
+          const formData = new FormData();
+          formData.append('file', blob, 'magnet.jpg');
+
+          const uploadRes = await fetch('/api/upload-image', {
+            method: 'POST',
+            body: formData,
+          });
+
+          if (uploadRes.ok) {
+            const { imagePath: path } = await uploadRes.json();
+            imagePath = path;
+          } else {
+            console.error('Image upload failed:', await uploadRes.text());
+          }
         } catch (err) {
           console.error('Image upload failed, continuing without image:', err);
         }
