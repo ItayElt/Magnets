@@ -1,15 +1,32 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { createBrowserClient } from '@supabase/ssr';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
+
+  // Don't show admin chrome on the login page
+  if (pathname === '/admin/login') {
+    return <>{children}</>;
+  }
 
   const links = [
     { href: '/admin', label: 'Dashboard' },
     { href: '/admin/orders', label: 'Orders' },
+    { href: '/admin/settings', label: 'Settings' },
   ];
+
+  const handleSignOut = async () => {
+    const supabase = createBrowserClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
+    await supabase.auth.signOut();
+    router.push('/admin/login');
+  };
 
   return (
     <div className="min-h-screen bg-stone-50">
@@ -35,9 +52,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               ))}
             </div>
           </div>
-          <Link href="/" className="text-sm text-stone-400 hover:text-white transition-colors">
-            ← Back to site
-          </Link>
+          <div className="flex items-center gap-4">
+            <Link href="/" className="text-sm text-stone-400 hover:text-white transition-colors">
+              &larr; Back to site
+            </Link>
+            <button
+              onClick={handleSignOut}
+              className="text-sm text-stone-400 hover:text-red-400 transition-colors font-[family-name:var(--font-dm-sans)]"
+            >
+              Sign Out
+            </button>
+          </div>
         </div>
       </nav>
       <main className="max-w-6xl mx-auto px-6 py-8">{children}</main>

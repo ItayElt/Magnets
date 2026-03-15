@@ -6,6 +6,7 @@ import { useOrder } from '@/lib/context/OrderContext';
 import { getUnitPrice, getTotalPrice } from '@/lib/constants';
 import { saveOrder } from '@/lib/mock-data';
 import { CompletedOrder, FrameStyle } from '@/lib/types';
+import { uploadCroppedImage } from '@/lib/services/image-upload';
 import StepIndicator from '@/components/ui/StepIndicator';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
@@ -15,16 +16,15 @@ function generateOrderId(): string {
   return `MEM-${num}`;
 }
 
+const isStripeConfigured = typeof window !== 'undefined' && !!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
+
 export default function CheckoutPage() {
   const router = useRouter();
   const { state, dispatch } = useOrder();
   const [email, setEmail] = useState(state.email);
   const [emailError, setEmailError] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState<'apple' | 'card'>('apple');
-  const [cardNumber, setCardNumber] = useState('');
-  const [expiry, setExpiry] = useState('');
-  const [cvc, setCvc] = useState('');
   const [processing, setProcessing] = useState(false);
+  const [processingMessage, setProcessingMessage] = useState('');
 
   useEffect(() => {
     if (!state.croppedImage) {
@@ -38,54 +38,106 @@ export default function CheckoutPage() {
   const unitPrice = getUnitPrice(quantity);
   const total = getTotalPrice(quantity);
 
-  const handlePlaceOrder = async () => {
+  const handleProceedToPayment = async () => {
     // Validate email
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setEmailError('Please enter a valid email address');
       return;
     }
     setEmailError('');
-
     setProcessing(true);
     dispatch({ type: 'SET_EMAIL', payload: email });
 
-    // Simulate payment processing
-    await new Promise((res) => setTimeout(res, 1500));
+    if (!isStripeConfigured) {
+      // Fallback: mock behavior for development
+      setProcessingMessage('Processing...');
+      await new Promise((res) => setTimeout(res, 1500));
 
-    const orderId = generateOrderId();
-    const orderDate = new Date().toISOString();
+      const orderId = generateOrderId();
+      const orderDate = new Date().toISOString();
 
-    // Save to completed orders
-    const completedOrder: CompletedOrder = {
-      orderId,
-      orderDate,
-      email,
-      mode: state.mode,
-      quantity,
-      selectedFrame: state.selectedFrame,
-      caption: state.caption,
-      croppedImage: state.croppedImage || '',
-      selfAddress: state.selfAddress,
-      recipients: state.recipients,
-      unitPrice,
-      totalPrice: total,
-      status: 'processing',
-    };
-    saveOrder(completedOrder);
+      const completedOrder: CompletedOrder = {
+        orderId,
+        orderDate,
+        email,
+        mode: state.mode,
+        quantity,
+        selectedFrame: state.selectedFrame,
+        caption: state.caption,
+        croppedImage: state.croppedImage || '',
+        selfAddress: state.selfAddress,
+        recipients: state.recipients,
+        unitPrice,
+        totalPrice: total,
+        status: 'processing',
+      };
+      saveOrder(completedOrder);
 
-    dispatch({
-      type: 'COMPLETE_ORDER',
-      payload: { orderId, orderDate },
-    });
+      dispatch({
+        type: 'COMPLETE_ORDER',
+        payload: { orderId, orderDate },
+      });
 
-    router.push('/confirmation');
+      router.push('/confirmation');
+      return;
+    }
+
+    try {
+      // Step 1: Upload image to Supabase Storage
+      let imagePath: string | null = null;
+      if (state.croppedImage && process.env.NEXT_PUBLIC_SUPABASE_URL) {
+        setProcessingMessage('Uploading image...');
+        try {
+          const tempId = `temp-${Date.now()}`;
+          imagePath = await uploadCroppedImage(state.croppedImage, tempId);
+        } catch (err) {
+          console.error('Image upload failed, continuing without image:', err);
+        }
+      }
+
+      // Step 2: Create Stripe Checkout session
+      setProcessingMessage('Preparing payment...');
+      const response = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          quantity,
+          photoStyle: state.selectedFrame,
+          caption: state.caption,
+          mode: state.mode,
+          selfAddress: state.selfAddress,
+          recipients: state.recipients,
+          imagePath,
+        }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        throw new Error(data.error || 'Failed to create checkout session');
+      }
+
+      const { url } = await response.json();
+
+      if (!url) {
+        throw new Error('No checkout URL returned');
+      }
+
+      // Step 3: Redirect to Stripe Checkout
+      window.location.href = url;
+    } catch (err) {
+      console.error('Checkout error:', err);
+      setProcessingMessage('');
+      setProcessing(false);
+      setEmailError(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
+    }
   };
 
   return (
     <div className="min-h-screen">
       <nav className="flex items-center justify-between px-6 py-4 max-w-2xl mx-auto">
         <button onClick={() => router.back()} className="text-stone-500 hover:text-stone-700">
-          ← Back
+          &larr; Back
         </button>
         <span className="font-[family-name:var(--font-playfair)] text-xl font-bold text-stone-800">
           Memora
@@ -132,7 +184,7 @@ export default function CheckoutPage() {
           </div>
           <div className="border-t border-stone-100 mt-3 pt-3">
             <div className="flex justify-between text-sm text-stone-600">
-              <span>{quantity} × ${unitPrice.toFixed(2)}</span>
+              <span>{quantity} &times; ${unitPrice.toFixed(2)}</span>
               <span>${total.toFixed(2)}</span>
             </div>
             <div className="flex justify-between text-sm text-stone-600">
@@ -159,117 +211,35 @@ export default function CheckoutPage() {
           <p className="text-xs text-stone-400 mt-1">For order confirmation and shipping updates</p>
         </div>
 
-        {/* Payment method */}
-        <div className="mb-6">
-          <p className="text-sm font-medium text-stone-700 mb-3">Payment method</p>
-
-          {/* Toggle buttons */}
-          <div className="grid grid-cols-2 gap-2 mb-4">
-            <button
-              onClick={() => setPaymentMethod('apple')}
-              className={`flex items-center justify-center gap-2 py-3 rounded-xl border-2 text-sm font-medium transition-all ${
-                paymentMethod === 'apple'
-                  ? 'border-stone-900 bg-stone-900 text-white'
-                  : 'border-stone-200 bg-white text-stone-600 hover:border-stone-300'
-              }`}
-            >
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
+        {/* CTA Button */}
+        <Button
+          variant="primary"
+          fullWidth
+          size="lg"
+          onClick={handleProceedToPayment}
+          disabled={processing}
+        >
+          {processing ? (
+            <span className="flex items-center gap-2">
+              <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
               </svg>
-              Apple Pay
-            </button>
-            <button
-              onClick={() => setPaymentMethod('card')}
-              className={`flex items-center justify-center gap-2 py-3 rounded-xl border-2 text-sm font-medium transition-all ${
-                paymentMethod === 'card'
-                  ? 'border-stone-900 bg-stone-900 text-white'
-                  : 'border-stone-200 bg-white text-stone-600 hover:border-stone-300'
-              }`}
-            >
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <rect x="2" y="5" width="20" height="14" rx="2" />
-                <line x1="2" y1="10" x2="22" y2="10" />
-              </svg>
-              Card
-            </button>
-          </div>
-
-          {/* Apple Pay */}
-          {paymentMethod === 'apple' && (
-            <button
-              onClick={handlePlaceOrder}
-              disabled={processing}
-              className="w-full py-4 bg-black text-white rounded-xl font-medium text-base flex items-center justify-center gap-2 hover:bg-stone-800 transition-colors disabled:opacity-50"
-            >
-              {processing ? (
-                <span className="flex items-center gap-2">
-                  <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                  </svg>
-                  Processing...
-                </span>
-              ) : (
-                <>
-                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
-                  </svg>
-                  Pay ${total.toFixed(2)}
-                </>
-              )}
-            </button>
+              {processingMessage || 'Processing...'}
+            </span>
+          ) : (
+            `Proceed to Payment — $${total.toFixed(2)}`
           )}
+        </Button>
 
-          {/* Manual card entry */}
-          {paymentMethod === 'card' && (
-            <div className="bg-white rounded-2xl p-4 border border-stone-200">
-              <div className="space-y-3">
-                <Input
-                  label="Card number"
-                  value={cardNumber}
-                  onChange={(e) => setCardNumber(e.target.value.replace(/\D/g, '').slice(0, 16))}
-                  placeholder="4242 4242 4242 4242"
-                />
-                <div className="grid grid-cols-2 gap-3">
-                  <Input
-                    label="Expiry"
-                    value={expiry}
-                    onChange={(e) => setExpiry(e.target.value.slice(0, 5))}
-                    placeholder="MM/YY"
-                  />
-                  <Input
-                    label="CVC"
-                    value={cvc}
-                    onChange={(e) => setCvc(e.target.value.replace(/\D/g, '').slice(0, 4))}
-                    placeholder="123"
-                  />
-                </div>
-              </div>
-            </div>
-          )}
+        {/* Stripe badge */}
+        <div className="flex items-center justify-center gap-1.5 mt-4 text-stone-400">
+          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+            <path d="M7 11V7a5 5 0 0110 0v4" />
+          </svg>
+          <span className="text-xs font-[family-name:var(--font-dm-sans)]">Secure payment by Stripe</span>
         </div>
-
-        {paymentMethod === 'card' && (
-          <Button
-            variant="primary"
-            fullWidth
-            size="lg"
-            onClick={handlePlaceOrder}
-            disabled={processing}
-          >
-            {processing ? (
-              <span className="flex items-center gap-2">
-                <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                </svg>
-                Processing...
-              </span>
-            ) : (
-              `Pay $${total.toFixed(2)}`
-            )}
-          </Button>
-        )}
       </div>
     </div>
   );

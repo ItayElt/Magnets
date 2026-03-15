@@ -1,3 +1,6 @@
+// Expanded status type
+export type OrderStatus = 'paid' | 'processing' | 'sent_to_print' | 'printed' | 'shipped' | 'delivered';
+
 export interface Address {
   fullName: string;
   address1: string;
@@ -60,7 +63,7 @@ export interface CompletedOrder {
   recipients: Recipient[];
   unitPrice: number;
   totalPrice: number;
-  status: 'processing' | 'printed' | 'shipped' | 'delivered';
+  status: OrderStatus;
 }
 
 export type OrderAction =
@@ -77,3 +80,58 @@ export type OrderAction =
   | { type: 'SET_EMAIL'; payload: string }
   | { type: 'COMPLETE_ORDER'; payload: { orderId: string; orderDate: string } }
   | { type: 'RESET' };
+
+// Database types
+export interface DbOrder {
+  id: string;
+  order_id: string;
+  created_at: string;
+  email: string;
+  mode: RecipientMode;
+  quantity: number;
+  photo_style: string;
+  caption: string;
+  image_path: string | null;
+  unit_price: number;
+  total_price: number;
+  status: OrderStatus;
+  stripe_payment_intent_id: string | null;
+  stripe_session_id: string | null;
+  batch_id: string | null;
+  status_updated_at: string;
+  notes: string;
+  tracking_number: string | null;
+}
+
+export interface DbOrderItem {
+  id: string;
+  order_id: string;
+  recipient_name: string;
+  address1: string;
+  address2: string;
+  city: string;
+  state: string;
+  zip: string;
+  quantity: number;
+  created_at: string;
+}
+
+export interface DbStatusLog {
+  id: string;
+  order_id: string;
+  old_status: string | null;
+  new_status: string;
+  changed_by: string;
+  note: string;
+  created_at: string;
+}
+
+export interface ContactSubmission {
+  id: string;
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+  created_at: string;
+  resolved: boolean;
+}
