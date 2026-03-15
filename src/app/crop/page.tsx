@@ -69,7 +69,7 @@ export default function CropPage() {
         <h1 className="font-[family-name:var(--font-playfair)] text-2xl font-bold text-stone-900 text-center mb-2">
           Crop your photo
         </h1>
-        <p className="text-center text-stone-500 mb-6">Adjust to fit your 10 × 7.5 cm magnet</p>
+        <p className="text-center text-stone-500 mb-6">Adjust to fit your 4&quot; × 3&quot; magnet</p>
 
         <div className="crop-container mb-4">
           <Cropper

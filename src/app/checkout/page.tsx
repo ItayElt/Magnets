@@ -20,6 +20,7 @@ export default function CheckoutPage() {
   const { state, dispatch } = useOrder();
   const [email, setEmail] = useState(state.email);
   const [emailError, setEmailError] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState<'apple' | 'card'>('apple');
   const [cardNumber, setCardNumber] = useState('');
   const [expiry, setExpiry] = useState('');
   const [cvc, setCvc] = useState('');
@@ -33,8 +34,7 @@ export default function CheckoutPage() {
 
   if (!state.croppedImage) return null;
 
-  const quantity =
-    state.mode === 'friends' ? Math.max(1, state.recipients.length) : state.quantity;
+  const quantity = Math.max(1, state.quantity);
   const unitPrice = getUnitPrice(quantity);
   const total = getTotalPrice(quantity);
 
@@ -159,58 +159,117 @@ export default function CheckoutPage() {
           <p className="text-xs text-stone-400 mt-1">For order confirmation and shipping updates</p>
         </div>
 
-        {/* Mock payment */}
-        <div className="bg-white rounded-2xl p-4 border border-stone-200 mb-6">
-          <div className="flex items-center justify-between mb-4">
-            <p className="text-sm font-medium text-stone-700">Payment</p>
-            <span className="text-xs text-stone-400 bg-stone-100 px-2 py-1 rounded-full">
-              Demo mode
-            </span>
+        {/* Payment method */}
+        <div className="mb-6">
+          <p className="text-sm font-medium text-stone-700 mb-3">Payment method</p>
+
+          {/* Toggle buttons */}
+          <div className="grid grid-cols-2 gap-2 mb-4">
+            <button
+              onClick={() => setPaymentMethod('apple')}
+              className={`flex items-center justify-center gap-2 py-3 rounded-xl border-2 text-sm font-medium transition-all ${
+                paymentMethod === 'apple'
+                  ? 'border-stone-900 bg-stone-900 text-white'
+                  : 'border-stone-200 bg-white text-stone-600 hover:border-stone-300'
+              }`}
+            >
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
+              </svg>
+              Apple Pay
+            </button>
+            <button
+              onClick={() => setPaymentMethod('card')}
+              className={`flex items-center justify-center gap-2 py-3 rounded-xl border-2 text-sm font-medium transition-all ${
+                paymentMethod === 'card'
+                  ? 'border-stone-900 bg-stone-900 text-white'
+                  : 'border-stone-200 bg-white text-stone-600 hover:border-stone-300'
+              }`}
+            >
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="2" y="5" width="20" height="14" rx="2" />
+                <line x1="2" y1="10" x2="22" y2="10" />
+              </svg>
+              Card
+            </button>
           </div>
 
-          <div className="space-y-3">
-            <Input
-              label="Card number"
-              value={cardNumber}
-              onChange={(e) => setCardNumber(e.target.value.replace(/\D/g, '').slice(0, 16))}
-              placeholder="4242 4242 4242 4242"
-            />
-            <div className="grid grid-cols-2 gap-3">
-              <Input
-                label="Expiry"
-                value={expiry}
-                onChange={(e) => setExpiry(e.target.value.slice(0, 5))}
-                placeholder="MM/YY"
-              />
-              <Input
-                label="CVC"
-                value={cvc}
-                onChange={(e) => setCvc(e.target.value.replace(/\D/g, '').slice(0, 4))}
-                placeholder="123"
-              />
+          {/* Apple Pay */}
+          {paymentMethod === 'apple' && (
+            <button
+              onClick={handlePlaceOrder}
+              disabled={processing}
+              className="w-full py-4 bg-black text-white rounded-xl font-medium text-base flex items-center justify-center gap-2 hover:bg-stone-800 transition-colors disabled:opacity-50"
+            >
+              {processing ? (
+                <span className="flex items-center gap-2">
+                  <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                  </svg>
+                  Processing...
+                </span>
+              ) : (
+                <>
+                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
+                  </svg>
+                  Pay ${total.toFixed(2)}
+                </>
+              )}
+            </button>
+          )}
+
+          {/* Manual card entry */}
+          {paymentMethod === 'card' && (
+            <div className="bg-white rounded-2xl p-4 border border-stone-200">
+              <div className="space-y-3">
+                <Input
+                  label="Card number"
+                  value={cardNumber}
+                  onChange={(e) => setCardNumber(e.target.value.replace(/\D/g, '').slice(0, 16))}
+                  placeholder="4242 4242 4242 4242"
+                />
+                <div className="grid grid-cols-2 gap-3">
+                  <Input
+                    label="Expiry"
+                    value={expiry}
+                    onChange={(e) => setExpiry(e.target.value.slice(0, 5))}
+                    placeholder="MM/YY"
+                  />
+                  <Input
+                    label="CVC"
+                    value={cvc}
+                    onChange={(e) => setCvc(e.target.value.replace(/\D/g, '').slice(0, 4))}
+                    placeholder="123"
+                  />
+                </div>
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
-        <Button
-          variant="primary"
-          fullWidth
-          size="lg"
-          onClick={handlePlaceOrder}
-          disabled={processing}
-        >
-          {processing ? (
-            <span className="flex items-center gap-2">
-              <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-              </svg>
-              Processing...
-            </span>
-          ) : (
-            `Pay $${total.toFixed(2)}`
-          )}
-        </Button>
+        {paymentMethod === 'card' && (
+          <Button
+            variant="primary"
+            fullWidth
+            size="lg"
+            onClick={handlePlaceOrder}
+            disabled={processing}
+          >
+            {processing ? (
+              <span className="flex items-center gap-2">
+                <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                </svg>
+                Processing...
+              </span>
+            ) : (
+              `Pay $${total.toFixed(2)}`
+            )}
+          </Button>
+        )}
       </div>
     </div>
   );
