@@ -69,6 +69,7 @@ export async function PATCH(
         'printed',
         'shipped',
         'delivered',
+        'refunded',
         'cancelled',
       ];
       if (!validStatuses.includes(body.status)) {

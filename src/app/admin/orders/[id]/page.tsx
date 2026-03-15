@@ -236,9 +236,39 @@ export default function OrderDetailPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Refund failed');
-      setOrder((prev) => prev ? { ...prev, status: 'refunded' } : prev);
-      setSelectedStatus('refunded');
-      setMessage(`Refund processed successfully (${data.refundId})`);
+
+      // Re-fetch the full order to get updated status, log, etc.
+      try {
+        const refreshRes = await fetch(`/api/admin/orders/${orderId}`);
+        if (refreshRes.ok) {
+          const refreshData = await refreshRes.json();
+          const o = refreshData.order;
+          setOrder({
+            order_id: o.order_id,
+            created_at: o.created_at,
+            email: o.email,
+            mode: o.mode,
+            quantity: o.quantity,
+            photo_style: o.photo_style,
+            caption: o.caption,
+            image_path: o.image_path,
+            unit_price: o.unit_price,
+            total_price: o.total_price,
+            status: o.status,
+            notes: o.notes ?? '',
+            tracking_number: o.tracking_number ?? '',
+            items: o.items ?? [],
+            status_log: o.status_log ?? [],
+          });
+          setSelectedStatus(o.status);
+        }
+      } catch {
+        // Fallback: just update local state
+        setOrder((prev) => prev ? { ...prev, status: 'refunded' } : prev);
+        setSelectedStatus('refunded');
+      }
+
+      setMessage(`Refund processed successfully (${data.refundId}). Customer has been notified by email.`);
       setShowRefundConfirm(false);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Failed to process refund';

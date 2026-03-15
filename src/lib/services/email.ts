@@ -35,6 +35,7 @@ function statusLabel(status: string): string {
     printed: 'Printed',
     shipped: 'Shipped',
     delivered: 'Delivered',
+    refunded: 'Refunded',
   };
   return labels[status] ?? status;
 }
@@ -190,6 +191,52 @@ export async function sendStatusUpdateEmail(
   });
 
   if (error) throw new Error(`Failed to send status update email: ${error.message}`);
+}
+
+// ---------------------------------------------------------------------------
+// sendRefundConfirmationEmail — refund notification to customer
+// ---------------------------------------------------------------------------
+
+export async function sendRefundConfirmationEmail(
+  order: OrderRow,
+  customerEmail: string,
+  refundId: string
+) {
+  const html = `
+    <div style="font-family: sans-serif; max-width: 560px; margin: 0 auto;">
+      <h1 style="color: #78350f;">Your Refund Has Been Processed</h1>
+      <p>We've processed a full refund for your order. Here are the details:</p>
+      <table style="width: 100%; margin: 16px 0; font-size: 14px;">
+        <tr><td style="padding: 4px 0; color: #666;">Order ID</td><td style="padding: 4px 0; font-weight: 600;">${order.order_id}</td></tr>
+        <tr><td style="padding: 4px 0; color: #666;">Refund Amount</td><td style="padding: 4px 0; font-weight: 600;">$${Number(order.total_price).toFixed(2)}</td></tr>
+        <tr><td style="padding: 4px 0; color: #666;">Refund ID</td><td style="padding: 4px 0; font-family: monospace; font-size: 12px;">${refundId}</td></tr>
+      </table>
+      <div style="background: #fef2f2; padding: 16px 20px; border-radius: 8px; margin: 16px 0; border: 1px solid #fecaca;">
+        <p style="margin: 0; font-size: 14px; color: #991b1b;">
+          The refund will appear on your original payment method within 5\u201310 business days, depending on your bank.
+        </p>
+      </div>
+      <div style="margin-top: 24px; background: #f5f0eb; padding: 16px 20px; border-radius: 8px;">
+        <p style="margin: 0 0 4px 0; font-size: 14px; font-weight: 600; color: #44403c;">Questions?</p>
+        <p style="margin: 0; font-size: 13px; color: #78716c;">
+          If you have any questions about your refund, contact us at
+          <a href="mailto:support@memoramagnet.shop" style="color: #78350f; text-decoration: none; font-weight: 500;">support@memoramagnet.shop</a>
+        </p>
+      </div>
+      <p style="margin-top: 24px; font-size: 13px; color: #999; text-align: center;">
+        <a href="${APP_URL}" style="color: #78350f; text-decoration: none;">memoramagnet.shop</a>
+      </p>
+    </div>
+  `;
+
+  const { error } = await getResend().emails.send({
+    from: FROM_EMAIL,
+    to: customerEmail,
+    subject: `Memora — Refund Processed (${order.order_id})`,
+    html,
+  });
+
+  if (error) throw new Error(`Failed to send refund email: ${error.message}`);
 }
 
 // ---------------------------------------------------------------------------
