@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useOrder } from '@/lib/context/OrderContext';
 import { Address } from '@/lib/types';
@@ -35,7 +35,7 @@ function StateAutocomplete({
   const [query, setQuery] = useState(value);
   const [open, setOpen] = useState(false);
   const [highlightIdx, setHighlightIdx] = useState(-1);
-  const [dropdownPos, setDropdownPos] = useState<{ top: number; left: number } | null>(null);
+  const [dropdownPos, setDropdownPos] = useState<{ top: number; left: number; flipped: boolean } | null>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   // Sync external value changes
@@ -52,9 +52,15 @@ function StateAutocomplete({
         setOpen(false);
         return;
       }
+      const dropdownHeight = 200; // approximate max height
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const spaceAbove = rect.top;
+      const flipAbove = spaceBelow < dropdownHeight && spaceAbove > spaceBelow;
+      const dropdownWidth = Math.min(window.innerWidth - 32, 220);
       setDropdownPos({
-        top: rect.bottom + 4,
-        left: Math.min(rect.left, window.innerWidth - 190),
+        top: flipAbove ? rect.top - 4 : rect.bottom + 4,
+        left: Math.min(rect.left, window.innerWidth - dropdownWidth - 8),
+        flipped: flipAbove,
       });
     };
     updatePos();
@@ -138,8 +144,13 @@ function StateAutocomplete({
       />
       {open && dropdownPos && filtered.length > 0 && (
         <div
-          className="fixed z-[100] bg-white border border-stone-200 rounded-xl shadow-lg max-h-48 overflow-y-auto min-w-[180px]"
-          style={{ top: dropdownPos.top, left: dropdownPos.left }}
+          className="fixed z-[100] bg-white border border-stone-200 rounded-xl shadow-lg max-h-[200px] overflow-y-auto animate-in fade-in duration-150"
+          style={{
+            top: dropdownPos.flipped ? undefined : dropdownPos.top,
+            bottom: dropdownPos.flipped ? `${window.innerHeight - dropdownPos.top}px` : undefined,
+            left: dropdownPos.left,
+            width: Math.min(window.innerWidth - 32, 220),
+          }}
         >
           {filtered.map((s, i) => (
             <button
@@ -147,7 +158,7 @@ function StateAutocomplete({
               type="button"
               onMouseDown={(e) => e.preventDefault()}
               onClick={() => handleSelect(s)}
-              className={`w-full text-left px-3 py-2.5 text-sm transition-colors ${
+              className={`w-full text-left px-3 py-3 text-sm transition-colors min-h-[44px] ${
                 i === highlightIdx ? 'bg-[#0066FF] text-white' : 'text-stone-700 hover:bg-stone-50'
               } ${i === 0 ? 'rounded-t-xl' : ''} ${i === filtered.length - 1 ? 'rounded-b-xl' : ''}`}
             >
@@ -161,8 +172,13 @@ function StateAutocomplete({
       )}
       {open && dropdownPos && filtered.length === 0 && query && (
         <div
-          className="fixed z-[100] bg-white border border-stone-200 rounded-xl shadow-lg px-3 py-2.5 text-sm text-stone-400 min-w-[180px]"
-          style={{ top: dropdownPos.top, left: dropdownPos.left }}
+          className="fixed z-[100] bg-white border border-stone-200 rounded-xl shadow-lg px-3 py-3 text-sm text-stone-400"
+          style={{
+            top: dropdownPos.flipped ? undefined : dropdownPos.top,
+            bottom: dropdownPos.flipped ? `${window.innerHeight - dropdownPos.top}px` : undefined,
+            left: dropdownPos.left,
+            width: Math.min(window.innerWidth - 32, 220),
+          }}
         >
           No matching state
         </div>
@@ -190,6 +206,41 @@ function AddressForm({
   onChange: (address: Address) => void;
   errors: Partial<Record<keyof Address, string>>;
 }) {
+  const [zipLoading, setZipLoading] = useState(false);
+  const [zipAutoFilled, setZipAutoFilled] = useState(false);
+
+  const handleZipChange = useCallback(
+    async (zip: string) => {
+      onChange({ ...address, zip });
+      // Auto-fill city & state from ZIP when exactly 5 digits
+      if (/^\d{5}$/.test(zip)) {
+        setZipLoading(true);
+        try {
+          const res = await fetch(`https://api.zippopotam.us/us/${zip}`);
+          if (res.ok) {
+            const data = await res.json();
+            const place = data?.places?.[0];
+            if (place) {
+              onChange({
+                ...address,
+                zip,
+                city: place['place name'] || address.city,
+                state: place['state abbreviation'] || address.state,
+              });
+              setZipAutoFilled(true);
+              setTimeout(() => setZipAutoFilled(false), 2000);
+            }
+          }
+        } catch {
+          // Silently fail — user can type manually
+        } finally {
+          setZipLoading(false);
+        }
+      }
+    },
+    [address, onChange]
+  );
+
   return (
     <div className="space-y-3">
       <Input
@@ -212,7 +263,34 @@ function AddressForm({
         onChange={(e) => onChange({ ...address, address2: e.target.value })}
         placeholder="Apt 4B"
       />
+
+      {/* ZIP first, then City & State — ZIP auto-fills the others */}
       <div className="grid grid-cols-5 gap-3">
+        <div className="col-span-2">
+          <div className="relative">
+            <Input
+              label="ZIP"
+              value={address.zip}
+              onChange={(e) => handleZipChange(e.target.value)}
+              error={errors.zip}
+              placeholder="02118"
+              inputMode="numeric"
+              maxLength={5}
+            />
+            {zipLoading && (
+              <div className="absolute right-3 top-[34px]">
+                <div className="w-4 h-4 border-2 border-[#0066FF] border-t-transparent rounded-full animate-spin" />
+              </div>
+            )}
+            {zipAutoFilled && !zipLoading && (
+              <div className="absolute right-3 top-[34px]">
+                <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+              </div>
+            )}
+          </div>
+        </div>
         <div className="col-span-2">
           <Input
             label="City"
@@ -227,15 +305,6 @@ function AddressForm({
             value={address.state}
             onChange={(val) => onChange({ ...address, state: val })}
             error={errors.state}
-          />
-        </div>
-        <div className="col-span-2">
-          <Input
-            label="ZIP"
-            value={address.zip}
-            onChange={(e) => onChange({ ...address, zip: e.target.value })}
-            error={errors.zip}
-            placeholder="02118"
           />
         </div>
       </div>

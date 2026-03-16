@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useOrder } from '@/lib/context/OrderContext';
 import { PHOTO_STYLES, MAX_CAPTION_LENGTH } from '@/lib/constants';
@@ -31,24 +31,35 @@ function MagnetPreview({
   style,
   caption,
   size = 'large',
+  onTapCaption,
 }: {
   image: string;
   style: PhotoStyle;
   caption: string;
   size?: 'large' | 'small';
+  onTapCaption?: () => void;
 }) {
   const isLarge = size === 'large';
+  const [showHint, setShowHint] = useState(isLarge && !!onTapCaption);
+
+  useEffect(() => {
+    if (showHint) {
+      const t = setTimeout(() => setShowHint(false), 2500);
+      return () => clearTimeout(t);
+    }
+  }, [showHint]);
 
   return (
     <div
-      className={`bg-white ${isLarge ? 'p-[8px] pb-[48px]' : 'p-[4px] pb-[22px]'} polaroid-shadow rounded-[2px] inline-block relative`}
+      className={`bg-white ${isLarge ? 'p-[6px] pb-[38px] sm:p-[8px] sm:pb-[48px]' : 'p-[4px] pb-[22px]'} polaroid-shadow rounded-[2px] inline-block relative ${isLarge && onTapCaption ? 'cursor-pointer' : ''}`}
+      onClick={isLarge && onTapCaption ? onTapCaption : undefined}
     >
       <div className="relative overflow-hidden rounded-[1px]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={image}
           alt="Your magnet"
-          className={`block ${isLarge ? 'max-h-64 sm:max-h-80' : 'h-20'} w-auto rounded-[1px]`}
+          className={`block ${isLarge ? 'max-h-44 sm:max-h-72' : 'h-20'} w-auto rounded-[1px]`}
           style={{
             aspectRatio: '4/3',
             objectFit: 'cover',
@@ -95,6 +106,20 @@ function MagnetPreview({
       >
         {caption || (isLarge ? '' : 'Caption')}
       </p>
+
+      {/* Tap-to-edit hint — fades after 2.5s */}
+      {isLarge && onTapCaption && (
+        <div
+          className={`absolute bottom-1 right-1 flex items-center gap-1 bg-white/90 backdrop-blur-sm rounded-full px-2 py-1 shadow-sm transition-opacity duration-700 ${
+            showHint ? 'opacity-100' : 'opacity-0 pointer-events-none'
+          }`}
+        >
+          <svg className="w-3 h-3 text-[#0066FF]" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
+          </svg>
+          <span className="text-[10px] text-[#0066FF] font-medium">Tap to edit</span>
+        </div>
+      )}
     </div>
   );
 }
@@ -119,6 +144,12 @@ function PenIcon() {
 export default function CustomizePage() {
   const router = useRouter();
   const { state, dispatch } = useOrder();
+  const captionInputRef = useRef<HTMLInputElement>(null);
+
+  const handleTapCaption = () => {
+    captionInputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(() => captionInputRef.current?.focus(), 350);
+  };
 
   useEffect(() => {
     if (!state.croppedImage) {
@@ -142,19 +173,19 @@ export default function CustomizePage() {
 
       <StepIndicator currentStep={2} />
 
-      <div className="px-6 pb-12 max-w-xl mx-auto">
-        <h1 className="text-2xl sm:text-3xl font-bold text-stone-900 text-center tracking-tight mb-1">
+      <div className="px-6 pb-10 max-w-xl mx-auto">
+        <h1 className="text-2xl sm:text-3xl font-bold text-stone-900 text-center tracking-tight mb-0.5">
           Customize your magnet
         </h1>
         <p
-          className="text-center text-[#0066FF] mb-6"
+          className="text-center text-[#0066FF] mb-4"
           style={{ fontFamily: 'var(--font-caveat), cursive', fontSize: '1.1rem' }}
         >
           pick a style and add a caption
         </p>
 
-        {/* Live preview in soft card */}
-        <div className="bg-[#F5F7FF] rounded-3xl p-5 sm:p-6 mb-6">
+        {/* Live preview — compact on mobile */}
+        <div className="bg-[#F5F7FF] rounded-3xl p-4 sm:p-6 mb-4">
           <div className="flex justify-center">
             <div className="transform -rotate-2 hover:rotate-0 transition-transform duration-300">
               <MagnetPreview
@@ -162,60 +193,44 @@ export default function CustomizePage() {
                 style={state.selectedFrame}
                 caption={state.caption}
                 size="large"
+                onTapCaption={handleTapCaption}
               />
             </div>
           </div>
         </div>
 
-        {/* Photo style selector */}
-        <div className="mb-6">
-          <div className="flex items-center gap-2 mb-3">
-            <div className="w-7 h-7 rounded-lg bg-[#0066FF]/10 flex items-center justify-center">
-              <PaintbrushIcon />
-            </div>
-            <label className="text-sm font-semibold text-stone-800">Photo style</label>
-          </div>
-          <div className="grid grid-cols-3 gap-2.5">
+        {/* Photo style — pick one */}
+        <div className="mb-3">
+          <label className="text-xs font-semibold text-stone-500 uppercase tracking-wider mb-2 block">Choose a style</label>
+          <div className="flex gap-2">
             {PHOTO_STYLES.map((ps) => {
               const isSelected = state.selectedFrame === ps.id;
               return (
                 <button
                   key={ps.id}
                   onClick={() => dispatch({ type: 'SET_FRAME', payload: ps.id })}
-                  className={`p-2.5 rounded-2xl transition-all text-center ${
+                  className={`flex-1 py-2 px-1.5 rounded-xl transition-all text-center border-2 ${
                     isSelected
-                      ? 'bg-[#F5F7FF] ring-2 ring-[#0066FF] shadow-sm'
-                      : 'bg-[#F5F7FF] hover:bg-[#EEF1FF] ring-1 ring-transparent'
+                      ? 'border-[#0066FF] bg-[#F0F4FF] shadow-sm'
+                      : 'border-transparent bg-[#F5F7FF] hover:bg-[#EEF1FF]'
                   }`}
                 >
-                  <div className="flex justify-center mb-2">
-                    <MagnetPreview
-                      image={state.croppedImage!}
-                      style={ps.id}
-                      caption={state.caption || 'Caption'}
-                      size="small"
-                    />
-                  </div>
-                  <p className={`text-xs font-semibold ${isSelected ? 'text-[#0066FF]' : 'text-stone-700'}`}>{ps.name}</p>
-                  <p className="text-[10px] text-stone-400 leading-tight mt-0.5">{ps.description}</p>
+                  <p className={`text-xs font-semibold ${isSelected ? 'text-[#0066FF]' : 'text-stone-600'}`}>{ps.name}</p>
+                  <p className={`text-[10px] leading-tight mt-0.5 ${isSelected ? 'text-[#0066FF]/60' : 'text-stone-400'}`}>{ps.description}</p>
                 </button>
               );
             })}
           </div>
         </div>
 
-        {/* Caption input */}
-        <div className="mb-8">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="w-7 h-7 rounded-lg bg-[#0066FF]/10 flex items-center justify-center">
-              <PenIcon />
-            </div>
-            <label className="text-sm font-semibold text-stone-800">
-              Caption <span className="text-stone-400 font-normal">(optional)</span>
-            </label>
-          </div>
+        {/* Caption input — compact */}
+        <div className="mb-4">
+          <label className="text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1.5 block">
+            Caption <span className="normal-case font-normal">(optional)</span>
+          </label>
           <div className="relative">
             <input
+              ref={captionInputRef}
               type="text"
               value={state.caption}
               onChange={(e) => {
@@ -224,11 +239,11 @@ export default function CustomizePage() {
                 }
               }}
               placeholder="e.g. Summer 2025"
-              className="w-full px-4 py-3.5 rounded-2xl bg-[#F5F7FF] text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-[#0066FF] border-none"
+              className="w-full px-4 py-2.5 rounded-xl bg-[#F5F7FF] text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-[#0066FF] border-none text-sm"
               style={{ fontFamily: 'var(--font-garamond), Georgia, serif', fontStyle: 'italic' }}
               maxLength={MAX_CAPTION_LENGTH}
             />
-            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-stone-400">
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-stone-400">
               {state.caption.length}/{MAX_CAPTION_LENGTH}
             </span>
           </div>

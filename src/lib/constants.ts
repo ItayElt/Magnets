@@ -1,9 +1,9 @@
 import { PhotoStyle } from './types';
 
 export const PHOTO_STYLES: { id: PhotoStyle; name: string; description: string; emoji: string }[] = [
+  { id: 'vintage', name: 'Vintage Film', description: 'Warm, faded', emoji: '🎞️' },
   { id: 'normal', name: 'Original', description: 'Your photo as-is', emoji: '📸' },
-  { id: 'vintage', name: 'Vintage Film', description: 'Warm, faded polaroid look', emoji: '🎞️' },
-  { id: 'bw-vintage', name: 'Black & White', description: 'Timeless monochrome', emoji: '🖤' },
+  { id: 'bw-vintage', name: 'Black & White', description: 'Timeless mono', emoji: '🖤' },
 ];
 
 /** @deprecated Use PHOTO_STYLES */

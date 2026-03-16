@@ -118,7 +118,7 @@ export default function AdminLoginPage() {
     <div className="min-h-screen bg-stone-50 flex flex-col">
       <nav className="bg-stone-900 text-white px-6 py-4">
         <div className="max-w-6xl mx-auto">
-          <span className="font-[family-name:var(--font-playfair)] text-lg font-bold">
+          <span className="text-lg font-bold tracking-tight">
             Memora Admin
           </span>
         </div>
