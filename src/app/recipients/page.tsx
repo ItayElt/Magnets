@@ -290,7 +290,7 @@ export default function RecipientsPage() {
                 setIncludeSelf(false);
                 setMyErrors({});
               }}
-              defaultOpen={false}
+              defaultOpen={true}
             >
               <AddressForm address={myAddress} onChange={setMyAddress} errors={myErrors} />
             </RecipientCard>
@@ -390,7 +390,7 @@ export default function RecipientsPage() {
             </div>
           ) : (
             <button
-              onClick={() => { setShowFriendForm(true); setFriendFormOpen(false); }}
+              onClick={() => { setShowFriendForm(true); setFriendFormOpen(true); }}
               className="w-full py-3 border-2 border-dashed border-stone-300 rounded-xl text-stone-500 hover:border-[#0066FF] hover:text-[#0066FF] transition-colors text-sm font-medium"
             >
               🎁 + Friend&apos;s address
@@ -442,11 +442,11 @@ export default function RecipientsPage() {
         <Button
           variant="primary"
           fullWidth
-          size="lg"
+          size="md"
           onClick={handleContinue}
           disabled={totalQty === 0}
         >
-          Continue to Checkout
+          <span className="text-sm">Continue to Checkout</span>
         </Button>
       </div>
     </div>

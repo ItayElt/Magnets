@@ -230,7 +230,7 @@ export default function CheckoutPage() {
         <Button
           variant="primary"
           fullWidth
-          size="lg"
+          size="md"
           onClick={handleProceedToPayment}
           disabled={processing}
         >
@@ -243,7 +243,7 @@ export default function CheckoutPage() {
               {processingMessage || 'Processing...'}
             </span>
           ) : (
-            `Proceed to Payment — $${total.toFixed(2)}`
+            <span className="text-sm">{`Proceed to Payment: $${total.toFixed(2)}`}</span>
           )}
         </Button>
 

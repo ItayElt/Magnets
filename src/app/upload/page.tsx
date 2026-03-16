@@ -170,9 +170,10 @@ export default function UploadPage() {
               <Button
                 variant="primary"
                 fullWidth
+                size="md"
                 onClick={() => router.push('/crop')}
               >
-                Continue
+                <span className="text-sm">Continue</span>
               </Button>
             </div>
           </div>

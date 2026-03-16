@@ -106,11 +106,11 @@ export default function CropPage() {
         <Button
           variant="primary"
           fullWidth
-          size="lg"
+          size="md"
           onClick={handleContinue}
           disabled={processing}
         >
-          {processing ? 'Processing...' : 'Continue'}
+          <span className="text-sm">{processing ? 'Processing...' : 'Continue'}</span>
         </Button>
       </div>
     </div>

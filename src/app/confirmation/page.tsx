@@ -197,7 +197,7 @@ function ConfirmationContent() {
           <Button
             variant="primary"
             fullWidth
-            size="lg"
+            size="md"
             onClick={() => {
               dispatch({ type: 'RESET' });
               router.push('/');

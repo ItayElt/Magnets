@@ -205,10 +205,10 @@ export default function CustomizePage() {
         <Button
           variant="primary"
           fullWidth
-          size="lg"
+          size="md"
           onClick={() => router.push('/recipients')}
         >
-          Continue
+          <span className="text-sm">Continue</span>
         </Button>
       </div>
     </div>
