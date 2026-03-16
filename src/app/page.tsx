@@ -276,7 +276,7 @@ export default function LandingPage() {
       </section>
 
       {/* ════════════ PRODUCT SCROLL — "Find the magnet that…" ════════════ */}
-      <section id="magnets" className="relative z-[2] py-16 md:py-24" style={{ background: 'rgba(255, 240, 247, 1)' }}>
+      <section id="magnets" className="relative z-[2] -mt-5 pt-16 pb-16 md:-mt-0 md:py-24" style={{ background: 'rgba(255, 240, 247, 1)' }}>
         <div className="max-w-7xl mx-auto px-5 md:px-10">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center tracking-tight mb-3">
             Find the magnet that…
