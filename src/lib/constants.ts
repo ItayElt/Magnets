@@ -10,9 +10,9 @@ export const PHOTO_STYLES: { id: PhotoStyle; name: string; description: string; 
 export const FRAMES = PHOTO_STYLES;
 
 export const PRICING_TIERS = [
-  { minQty: 5, pricePerUnit: 4.49 },
-  { minQty: 3, pricePerUnit: 4.99 },
-  { minQty: 1, pricePerUnit: 5.99 },
+  { minQty: 5, pricePerUnit: 4.99 },
+  { minQty: 3, pricePerUnit: 5.99 },
+  { minQty: 1, pricePerUnit: 6.99 },
 ];
 
 export const QUICK_QUANTITIES = [1, 3, 5, 10];
@@ -44,22 +44,29 @@ export function getUnitPrice(quantity: number): number {
 }
 
 export function getTotalPrice(quantity: number): number {
+  // Fixed bundle prices for exact tier quantities
+  if (quantity === 3) return 17.99;
+  if (quantity === 5) return 24.99;
   return +(getUnitPrice(quantity) * quantity).toFixed(2);
 }
 
 export function getSavingsMessage(quantity: number): string | null {
   if (quantity >= 5) return null;
   if (quantity >= 3) {
-    const savings = +((5 - quantity) * (getUnitPrice(quantity) - getUnitPrice(5))).toFixed(2);
+    // Show savings from upgrading all magnets to the 5+ tier
     const moreNeeded = 5 - quantity;
-    return `Add ${moreNeeded} more → save $${(savings + moreNeeded * getUnitPrice(5) - moreNeeded * getUnitPrice(quantity)).toFixed(2)} total`;
+    const withoutDiscount = quantity * getUnitPrice(quantity) + moreNeeded * getUnitPrice(quantity);
+    const withDiscount = 5 * getUnitPrice(5);
+    const savings = +(withoutDiscount - withDiscount).toFixed(2);
+    return `Add ${moreNeeded} more to unlock $${getUnitPrice(5).toFixed(2)}/ea — save $${savings.toFixed(2)}`;
   }
+  // quantity 1–2: show savings from reaching the 3-magnet tier
   const moreNeeded = 3 - quantity;
-  const currentTotal = getTotalPrice(quantity);
-  const newTotal = getTotalPrice(quantity + moreNeeded);
-  const savings = (currentTotal + moreNeeded * getUnitPrice(quantity)) - newTotal;
+  const withoutDiscount = 3 * getUnitPrice(1);
+  const withDiscount = 3 * getUnitPrice(3);
+  const savings = +(withoutDiscount - withDiscount).toFixed(2);
   if (savings > 0) {
-    return `Add ${moreNeeded} more magnet${moreNeeded > 1 ? 's' : ''} → save $${savings.toFixed(2)}`;
+    return `Add ${moreNeeded} more to unlock $${getUnitPrice(3).toFixed(2)}/ea — save $${savings.toFixed(2)}`;
   }
   return null;
 }

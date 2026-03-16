@@ -79,7 +79,7 @@ export default function TrackPage() {
         <div className="max-w-2xl mx-auto flex items-center justify-between">
           <Link
             href="/"
-            className="font-[family-name:var(--font-playfair)] text-xl font-bold"
+            className="text-2xl font-bold tracking-tight"
             style={{ color: '#0066FF' }}
           >
             Memora
@@ -95,7 +95,7 @@ export default function TrackPage() {
 
       <main className="max-w-xl mx-auto px-6 py-12">
         <div className="text-center mb-10">
-          <h1 className="text-3xl font-bold text-stone-900 font-[family-name:var(--font-playfair)] mb-2">
+          <h1 className="text-3xl font-bold text-stone-900 mb-2">
             Track Your Order
           </h1>
           <p className="text-stone-500">

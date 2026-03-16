@@ -8,7 +8,7 @@ export default function TermsOfServicePage() {
         <div className="max-w-2xl mx-auto flex items-center justify-between">
           <Link
             href="/"
-            className="font-[family-name:var(--font-playfair)] text-xl font-bold"
+            className="text-2xl font-bold tracking-tight"
             style={{ color: '#0066FF' }}
           >
             Memora
@@ -25,13 +25,13 @@ export default function TermsOfServicePage() {
       <main className="max-w-2xl mx-auto px-6 py-12">
         <p className="text-sm text-stone-400 mb-6">Last updated: March 2026</p>
 
-        <h1 className="text-3xl font-bold text-stone-900 font-[family-name:var(--font-playfair)] mb-8">
+        <h1 className="text-3xl font-bold text-stone-900 mb-8">
           Terms of Service
         </h1>
 
         <div className="space-y-8 text-stone-700 leading-relaxed text-[15px]">
           <section>
-            <h2 className="text-xl font-semibold text-stone-900 font-[family-name:var(--font-playfair)] mb-3">
+            <h2 className="text-xl font-semibold text-stone-900 mb-3">
               1. Agreement to Terms
             </h2>
             <p>
@@ -43,7 +43,7 @@ export default function TermsOfServicePage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-stone-900 font-[family-name:var(--font-playfair)] mb-3">
+            <h2 className="text-xl font-semibold text-stone-900 mb-3">
               2. Use of Service
             </h2>
             <p className="mb-3">
@@ -70,7 +70,7 @@ export default function TermsOfServicePage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-stone-900 font-[family-name:var(--font-playfair)] mb-3">
+            <h2 className="text-xl font-semibold text-stone-900 mb-3">
               3. Orders &amp; Payment
             </h2>
             <p className="mb-3">
@@ -93,7 +93,7 @@ export default function TermsOfServicePage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-stone-900 font-[family-name:var(--font-playfair)] mb-3">
+            <h2 className="text-xl font-semibold text-stone-900 mb-3">
               4. Shipping
             </h2>
             <p className="mb-3">
@@ -110,7 +110,7 @@ export default function TermsOfServicePage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-stone-900 font-[family-name:var(--font-playfair)] mb-3">
+            <h2 className="text-xl font-semibold text-stone-900 mb-3">
               5. Intellectual Property
             </h2>
             <p className="mb-3">
@@ -132,7 +132,7 @@ export default function TermsOfServicePage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-stone-900 font-[family-name:var(--font-playfair)] mb-3">
+            <h2 className="text-xl font-semibold text-stone-900 mb-3">
               6. Limitation of Liability
             </h2>
             <p className="mb-3">
@@ -151,7 +151,7 @@ export default function TermsOfServicePage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-stone-900 font-[family-name:var(--font-playfair)] mb-3">
+            <h2 className="text-xl font-semibold text-stone-900 mb-3">
               7. Changes to Terms
             </h2>
             <p>
@@ -164,7 +164,7 @@ export default function TermsOfServicePage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-stone-900 font-[family-name:var(--font-playfair)] mb-3">
+            <h2 className="text-xl font-semibold text-stone-900 mb-3">
               8. Contact
             </h2>
             <p>

@@ -57,7 +57,7 @@ export default function CropPage() {
         <button onClick={() => router.push('/upload')} className="text-stone-500 hover:text-stone-700">
           ← Back
         </button>
-        <span className="font-[family-name:var(--font-playfair)] text-xl font-bold" style={{ color: '#0066FF' }}>
+        <span className="text-2xl font-bold tracking-tight" style={{ color: '#0066FF' }}>
           Memora
         </span>
         <div className="w-12" />
@@ -66,7 +66,7 @@ export default function CropPage() {
       <StepIndicator currentStep={1} />
 
       <div className="px-6 pb-12 max-w-xl mx-auto">
-        <h1 className="font-[family-name:var(--font-playfair)] text-2xl font-bold text-stone-900 text-center mb-2">
+        <h1 className="text-2xl font-bold text-stone-900 text-center tracking-tight mb-2">
           Crop your photo
         </h1>
         <p className="text-center text-stone-500 mb-6">Adjust to fit your 4&quot; × 3&quot; magnet</p>

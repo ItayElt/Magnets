@@ -8,7 +8,7 @@ export default function RefundPolicyPage() {
         <div className="max-w-2xl mx-auto flex items-center justify-between">
           <Link
             href="/"
-            className="font-[family-name:var(--font-playfair)] text-xl font-bold"
+            className="text-2xl font-bold tracking-tight"
             style={{ color: '#0066FF' }}
           >
             Memora
@@ -25,13 +25,13 @@ export default function RefundPolicyPage() {
       <main className="max-w-2xl mx-auto px-6 py-12">
         <p className="text-sm text-stone-400 mb-6">Last updated: March 2026</p>
 
-        <h1 className="text-3xl font-bold text-stone-900 font-[family-name:var(--font-playfair)] mb-8">
+        <h1 className="text-3xl font-bold text-stone-900 mb-8">
           Refund Policy
         </h1>
 
         <div className="space-y-8 text-stone-700 leading-relaxed text-[15px]">
           <section>
-            <h2 className="text-xl font-semibold text-stone-900 font-[family-name:var(--font-playfair)] mb-3">
+            <h2 className="text-xl font-semibold text-stone-900 mb-3">
               Custom Products
             </h2>
             <p>
@@ -43,7 +43,7 @@ export default function RefundPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-stone-900 font-[family-name:var(--font-playfair)] mb-3">
+            <h2 className="text-xl font-semibold text-stone-900 mb-3">
               Damaged or Defective Products
             </h2>
             <p className="mb-3">
@@ -71,7 +71,7 @@ export default function RefundPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-stone-900 font-[family-name:var(--font-playfair)] mb-3">
+            <h2 className="text-xl font-semibold text-stone-900 mb-3">
               Order Cancellation
             </h2>
             <p className="mb-3">
@@ -101,7 +101,7 @@ export default function RefundPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-stone-900 font-[family-name:var(--font-playfair)] mb-3">
+            <h2 className="text-xl font-semibold text-stone-900 mb-3">
               After Production Begins
             </h2>
             <p>
@@ -120,7 +120,7 @@ export default function RefundPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-stone-900 font-[family-name:var(--font-playfair)] mb-3">
+            <h2 className="text-xl font-semibold text-stone-900 mb-3">
               How to Request a Refund or Replacement
             </h2>
             <p className="mb-3">

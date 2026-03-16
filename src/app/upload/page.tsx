@@ -72,7 +72,7 @@ export default function UploadPage() {
         <button onClick={() => router.push('/')} className="text-stone-500 hover:text-stone-700 text-sm font-medium">
           ← Back
         </button>
-        <span className="font-[family-name:var(--font-playfair)] text-xl font-bold" style={{ color: '#0066FF' }}>
+        <span className="text-2xl font-bold tracking-tight" style={{ color: '#0066FF' }}>
           Memora
         </span>
         <div className="w-12" />
@@ -81,7 +81,7 @@ export default function UploadPage() {
       <StepIndicator currentStep={0} />
 
       <div className="px-6 pb-12 max-w-xl mx-auto">
-        <h1 className="font-[family-name:var(--font-playfair)] text-2xl font-bold text-stone-900 text-center mb-2">
+        <h1 className="text-2xl font-bold text-stone-900 text-center tracking-tight mb-2">
           Upload your photo
         </h1>
         <p className="text-center text-stone-500 mb-8">JPG, PNG, or HEIC</p>

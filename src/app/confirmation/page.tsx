@@ -80,7 +80,7 @@ function ConfirmationContent() {
     return (
       <div className="min-h-screen flex items-center justify-center px-6">
         <div className="text-center max-w-sm">
-          <h1 className="font-[family-name:var(--font-playfair)] text-2xl font-bold text-stone-900 mb-2">
+          <h1 className="text-2xl font-bold text-stone-900 tracking-tight mb-2">
             Something went wrong
           </h1>
           <p className="text-stone-500 mb-6">{error}</p>
@@ -122,7 +122,7 @@ function ConfirmationContent() {
   return (
     <div className="min-h-screen">
       <nav className="flex items-center justify-center px-6 py-4 max-w-3xl mx-auto">
-        <span className="font-[family-name:var(--font-playfair)] text-xl font-bold" style={{ color: '#0066FF' }}>
+        <span className="text-2xl font-bold tracking-tight" style={{ color: '#0066FF' }}>
           Memora
         </span>
       </nav>
@@ -136,7 +136,7 @@ function ConfirmationContent() {
           </div>
         </div>
 
-        <h1 className="font-[family-name:var(--font-playfair)] text-3xl font-bold text-stone-900 mb-2">
+        <h1 className="text-3xl font-bold text-stone-900 tracking-tight mb-2">
           Order confirmed!
         </h1>
         <p className="text-stone-500 mb-8">

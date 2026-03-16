@@ -117,7 +117,7 @@ export default function CustomizePage() {
         <button onClick={() => router.push('/crop')} className="text-stone-500 hover:text-stone-700 text-sm font-medium">
           ← Back
         </button>
-        <span className="font-[family-name:var(--font-playfair)] text-xl font-bold" style={{ color: '#0066FF' }}>
+        <span className="text-2xl font-bold tracking-tight" style={{ color: '#0066FF' }}>
           Memora
         </span>
         <div className="w-12" />
@@ -126,7 +126,7 @@ export default function CustomizePage() {
       <StepIndicator currentStep={2} />
 
       <div className="px-6 pb-12 max-w-xl mx-auto">
-        <h1 className="font-[family-name:var(--font-playfair)] text-2xl font-bold text-stone-900 text-center mb-1">
+        <h1 className="text-2xl font-bold text-stone-900 text-center tracking-tight mb-1">
           Customize your magnet
         </h1>
         <p

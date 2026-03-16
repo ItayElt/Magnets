@@ -207,7 +207,7 @@ export default function LandingPage() {
                   </svg>
                 </Link>
                 <p className="mt-4 text-[10px] sm:text-xs text-blue-200/70 tracking-wide whitespace-nowrap">
-                  Free shipping · Ships in 3–7 days · <span className="font-bold text-white">From $4.49</span> · USA made
+                  Free shipping · Ships in 3–7 days · <span className="font-bold text-white">From $6.99</span> · USA made
                 </p>
               </div>
             </div>
@@ -224,7 +224,7 @@ export default function LandingPage() {
                   zIndex: 10,
                 }}
               >
-                <div className="bg-white p-1.5 pb-4 sm:p-2 sm:pb-5 rounded-lg magnet-shadow w-[105px] sm:w-[135px] lg:w-[190px]">
+                <div className="bg-white p-1.5 pb-1.5 sm:p-2 sm:pb-2 rounded-lg magnet-shadow w-[105px] sm:w-[135px] lg:w-[190px]">
                   <div className="rounded-md overflow-hidden aspect-[4/3] relative">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src="/examples/taj-mahal.jpg" alt="India" className="w-full h-full object-cover" style={{ filter: 'saturate(0.55) contrast(0.85) brightness(1.08) sepia(0.35)' }} />
@@ -242,7 +242,7 @@ export default function LandingPage() {
                   zIndex: 20,
                 }}
               >
-                <div className="bg-white p-1.5 pb-4 sm:p-2 sm:pb-5 rounded-lg magnet-shadow w-[115px] sm:w-[150px] lg:w-[200px]">
+                <div className="bg-white p-1.5 pb-1.5 sm:p-2 sm:pb-2 rounded-lg magnet-shadow w-[115px] sm:w-[150px] lg:w-[200px]">
                   <div className="rounded-md overflow-hidden aspect-[4/3] relative">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src="/examples/group-party.jpg" alt="Halloween" className="w-full h-full object-cover" />
@@ -260,7 +260,7 @@ export default function LandingPage() {
                   zIndex: 15,
                 }}
               >
-                <div className="bg-white p-1.5 pb-4 sm:p-2 sm:pb-5 rounded-lg magnet-shadow w-[105px] sm:w-[135px] lg:w-[190px]">
+                <div className="bg-white p-1.5 pb-1.5 sm:p-2 sm:pb-2 rounded-lg magnet-shadow w-[105px] sm:w-[135px] lg:w-[190px]">
                   <div className="rounded-md overflow-hidden aspect-[4/3] relative">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src="/examples/formal-night.jpg" alt="Gala" className="w-full h-full object-cover" style={{ filter: 'grayscale(1) contrast(1.1) brightness(1.02)' }} />
@@ -287,17 +287,17 @@ export default function LandingPage() {
           {/* Horizontal scroll on mobile, grid on desktop */}
           <div className="flex md:grid md:grid-cols-3 gap-5 md:gap-8 overflow-x-auto no-scrollbar pb-4 snap-x snap-mandatory -mx-5 px-5 md:mx-0 md:px-0">
             {[
-              { img: '/examples/group-party.jpg', filter: 'none', caption: "Halloween '25", bg: '#FFE4E1', title: 'Classic Magnets', desc: 'Your photos, bright and bold — printed on premium glossy stock with vivid color.' },
-              { img: '/examples/taj-mahal.jpg', filter: 'saturate(0.55) contrast(0.85) brightness(1.08) sepia(0.35)', caption: "India '26", bg: '#FFF3CD', title: 'Vintage Magnets', desc: 'Warm, sun-kissed tones for a treasured memory feel.' },
-              { img: '/examples/formal-night.jpg', filter: 'grayscale(1) contrast(1.1) brightness(1.02)', caption: "HBS Gala '25", bg: '#E8E0F0', title: 'B&W Magnets', desc: 'Timeless black & white — elegant and perfect for special moments.' },
+              { img: '/examples/larry-itay-taj.jpg', filter: 'none', caption: "Namaste from India 🇮🇳", bg: '#FFE4E1', title: 'Classic Magnets', desc: 'Your photos, bright and bold — printed on premium glossy stock with vivid color.', objectPosition: 'center 72%' },
+              { img: '/examples/acadia-hike.jpg', filter: 'saturate(0.55) contrast(0.85) brightness(1.08) sepia(0.35)', caption: "Acadia '25 🍂", bg: '#FFF3CD', title: 'Vintage Magnets', desc: 'Warm, sun-kissed tones for a treasured memory feel.', objectPosition: undefined },
+              { img: '/examples/formal-night.jpg', filter: 'grayscale(1) contrast(1.1) brightness(1.02)', caption: "HBS Gala '25", bg: '#E8E0F0', title: 'B&W Magnets', desc: 'Timeless black & white — elegant and perfect for special moments.', objectPosition: undefined },
             ].map((card) => (
               <div key={card.title} className="snap-center flex-shrink-0 w-[260px] sm:w-[280px] md:w-auto bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group">
                 <div className="relative overflow-hidden" style={{ background: card.bg }}>
                   <div className="aspect-[4/3] flex items-center justify-center p-6 md:p-8">
-                    <div className="bg-white p-1.5 pb-5 sm:p-2 sm:pb-6 rounded-lg magnet-shadow transform -rotate-2 group-hover:rotate-0 transition-transform duration-500">
+                    <div className="bg-white p-1.5 pb-1.5 sm:p-2 sm:pb-2 rounded-lg magnet-shadow transform -rotate-2 group-hover:rotate-0 transition-transform duration-500">
                       <div className="w-36 sm:w-44 md:w-48 aspect-[4/3] rounded-md overflow-hidden">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={card.img} alt={card.title} className="w-full h-full object-cover" style={{ filter: card.filter }} />
+                        <img src={card.img} alt={card.title} className="w-full h-full object-cover" style={{ filter: card.filter, objectPosition: card.objectPosition || 'center' }} />
                       </div>
                       <p className="text-center text-[10px] sm:text-xs text-stone-400 italic mt-1" style={{ fontFamily: 'var(--font-garamond), serif' }}>{card.caption}</p>
                     </div>
@@ -362,7 +362,7 @@ export default function LandingPage() {
         <div className="max-w-xl mx-auto px-5 text-center">
           <span className="text-3xl">💌</span>
           <h3 className="mt-3 text-xl sm:text-2xl font-bold tracking-tight">
-            The gift they&apos;ll actually keep.
+            Send as a gift
           </h3>
           <p className="mt-2 text-stone-500 text-sm md:text-base">
             Send one to someone you love — we&apos;ll ship it straight to their door.
@@ -416,21 +416,21 @@ export default function LandingPage() {
             Send more, save more
           </h2>
           <p className="text-center text-stone-500 mb-10 md:mb-14 text-base md:text-lg">
-            Free shipping on every order. Fair and simple pricing.
+            Free shipping on every order.
           </p>
 
           <div className="grid grid-cols-3 gap-3 sm:gap-6 max-w-3xl mx-auto">
             {[
-              { qty: '1', label: 'magnet', price: '5.99', tagline: 'Just for you', best: false },
-              { qty: '3', label: 'magnets', price: '4.99', tagline: 'Most popular', best: true },
-              { qty: '5+', label: 'magnets', price: '4.49', tagline: 'Best value', best: false },
+              { qty: '1', label: 'magnet', price: '6.99', tagline: 'Just for you', best: false },
+              { qty: '3', label: 'magnets', price: '5.99', tagline: 'Most popular', best: true },
+              { qty: '5', label: 'magnets', price: '4.99', tagline: 'Best value', best: false },
             ].map((tier) => (
               <div key={tier.qty} className={`relative rounded-2xl sm:rounded-3xl p-4 sm:p-7 text-center transition-all duration-300 hover:scale-105 ${tier.best ? 'text-white shadow-2xl' : 'bg-white border border-stone-200 hover:shadow-lg'}`} style={tier.best ? { background: '#0066FF' } : {}}>
                 {tier.best && <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 px-3 py-0.5 sm:px-4 sm:py-1 bg-white text-[10px] sm:text-xs font-bold rounded-full shadow-lg" style={{ color: '#0066FF' }}>POPULAR</div>}
                 <p className="text-2xl sm:text-4xl font-extrabold mt-1">{tier.qty}</p>
                 <p className={`text-xs sm:text-sm ${tier.best ? 'text-blue-200' : 'text-stone-400'}`}>{tier.label}</p>
                 <div className={`my-3 sm:my-4 border-t ${tier.best ? 'border-white/20' : 'border-stone-100'}`} />
-                <p className="text-xl sm:text-3xl font-bold">${tier.price}<span className={`text-[10px] sm:text-sm font-normal ml-0.5 sm:ml-1 ${tier.best ? 'text-blue-200' : 'text-stone-400'}`}>each</span></p>
+                <p className="text-xl sm:text-3xl font-bold">${tier.price}<span className={`text-[8px] sm:text-xs font-normal ml-0.5 ${tier.best ? 'text-blue-200' : 'text-stone-400'}`}>each</span></p>
                 <p className={`text-[10px] sm:text-sm mt-1 sm:mt-2 ${tier.best ? 'text-blue-200' : 'text-stone-400'}`}>{tier.tagline}</p>
               </div>
             ))}
@@ -438,7 +438,7 @@ export default function LandingPage() {
 
           <div className="text-center mt-8 md:mt-10">
             <Link href="/upload" className="inline-flex items-center justify-center px-8 py-3.5 sm:px-10 sm:py-4 text-sm sm:text-base font-semibold text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200" style={{ background: '#0066FF' }}>
-              Start Creating
+              Create
             </Link>
           </div>
         </div>
@@ -473,7 +473,7 @@ export default function LandingPage() {
             <p className="text-blue-200 text-sm leading-relaxed">Get exclusive offers and discover new styles before everyone else!</p>
           </div>
           <div className="flex-1 w-full">
-            <div className="flex gap-2 sm:gap-3">
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
               <input type="email" placeholder="Your email" className="flex-1 px-4 sm:px-5 py-3 sm:py-3.5 rounded-full bg-white/10 border border-white/20 text-white placeholder:text-blue-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
               <button className="px-5 sm:px-6 py-3 sm:py-3.5 bg-white rounded-full text-sm font-semibold transition-all hover:shadow-lg cursor-pointer whitespace-nowrap" style={{ color: '#002B71' }}>Subscribe</button>
             </div>
@@ -511,7 +511,7 @@ export default function LandingPage() {
               </ul>
             </div>
             <div>
-              <h4 className="font-bold text-xl md:text-2xl mb-2">Memora</h4>
+              <h4 className="font-bold text-sm mb-3 md:mb-4">Memora</h4>
               <p className="text-sm text-blue-100 leading-relaxed">Turn your photos into real magnets. Made with love in the USA.</p>
             </div>
           </div>

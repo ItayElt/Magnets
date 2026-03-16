@@ -70,7 +70,7 @@ export default function ContactPage() {
       <nav className="flex items-center justify-between px-6 md:px-10 py-4 max-w-7xl mx-auto">
         <Link
           href="/"
-          className="font-[family-name:var(--font-playfair)] text-2xl font-bold tracking-tight"
+          className="text-2xl font-bold tracking-tight"
           style={{ color: '#0066FF' }}
         >
           Memora
@@ -86,7 +86,7 @@ export default function ContactPage() {
       {/* Hero */}
       <div className="bg-gradient-to-b from-stone-50 to-white border-b border-stone-100">
         <div className="max-w-5xl mx-auto px-6 py-16 md:py-20 text-center">
-          <h1 className="font-[family-name:var(--font-playfair)] text-4xl md:text-5xl font-bold text-stone-900 mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold text-stone-900 mb-4">
             How can we help?
           </h1>
           <p className="text-lg text-stone-500 max-w-xl mx-auto">
@@ -146,7 +146,7 @@ export default function ContactPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
           {/* Left — Contact Form */}
           <div>
-            <h2 className="font-[family-name:var(--font-playfair)] text-2xl font-bold text-stone-900 mb-2">
+            <h2 className="text-2xl font-bold text-stone-900 mb-2">
               Send us a message
             </h2>
             <p className="text-stone-500 text-sm mb-6">
@@ -236,7 +236,7 @@ export default function ContactPage() {
 
           {/* Right — FAQ Accordion */}
           <div>
-            <h2 className="font-[family-name:var(--font-playfair)] text-2xl font-bold text-stone-900 mb-2">
+            <h2 className="text-2xl font-bold text-stone-900 mb-2">
               Frequently Asked Questions
             </h2>
             <p className="text-stone-500 text-sm mb-6">
@@ -284,7 +284,7 @@ export default function ContactPage() {
       <footer className="px-6 py-10 border-t border-stone-100">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col items-center gap-4">
-            <span className="font-[family-name:var(--font-playfair)] text-lg font-bold" style={{ color: '#0066FF' }}>
+            <span className="text-2xl font-bold tracking-tight" style={{ color: '#0066FF' }}>
               Memora
             </span>
             <div className="flex items-center gap-6 text-sm text-stone-400">

@@ -93,7 +93,8 @@ function AddressForm({
 function QtyStepper({ qty, onChange, allowZero }: { qty: number; onChange: (n: number) => void; allowZero?: boolean }) {
   const min = allowZero ? 0 : 1;
   return (
-    <div className="flex items-center gap-1">
+    <div className="flex items-center gap-1.5">
+      <span className="text-xs text-stone-400 uppercase tracking-wide mr-0.5">Qty</span>
       <button
         onClick={() => onChange(Math.max(min, qty - 1))}
         className="w-7 h-7 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-600 flex items-center justify-center text-lg font-medium transition-colors"
@@ -144,12 +145,12 @@ function RecipientCard({
     <div className="border-2 border-stone-200 rounded-xl overflow-hidden transition-all">
       {/* Header row */}
       <div
-        className="flex items-center justify-between px-4 py-3 bg-white cursor-pointer"
+        className="flex items-center justify-between gap-2 px-4 py-3 bg-white cursor-pointer"
         onClick={() => setOpen(!open)}
       >
         <div className="flex items-center gap-3">
           <span className="text-lg">{icon}</span>
-          <p className="font-medium text-sm text-stone-800">{label}</p>
+          <p className="font-medium text-sm text-stone-800 whitespace-nowrap">{label}</p>
         </div>
         <div className="flex items-center gap-3">
           <div onClick={(e) => e.stopPropagation()}>
@@ -175,7 +176,7 @@ export default function RecipientsPage() {
   const router = useRouter();
   const { state, dispatch } = useOrder();
 
-  const [includeSelf, setIncludeSelf] = useState(true);
+  const [includeSelf, setIncludeSelf] = useState(false);
   const [myAddress, setMyAddress] = useState<Address>(state.selfAddress || emptyAddress);
   const [myErrors, setMyErrors] = useState<Partial<Record<keyof Address, string>>>({});
   const [myQty, setMyQty] = useState(1);
@@ -183,6 +184,7 @@ export default function RecipientsPage() {
   const [friendQtys, setFriendQtys] = useState<Record<string, number>>({});
 
   const [showFriendForm, setShowFriendForm] = useState(false);
+  const [friendFormOpen, setFriendFormOpen] = useState(false);
   const [friendAddress, setFriendAddress] = useState<Address>(emptyAddress);
   const [friendErrors, setFriendErrors] = useState<Partial<Record<keyof Address, string>>>({});
   const [newFriendQty, setNewFriendQty] = useState(1);
@@ -261,7 +263,7 @@ export default function RecipientsPage() {
         <button onClick={() => router.push('/customize')} className="text-stone-500 hover:text-stone-700">
           ← Back
         </button>
-        <span className="font-[family-name:var(--font-playfair)] text-xl font-bold" style={{ color: '#0066FF' }}>
+        <span className="text-2xl font-bold tracking-tight" style={{ color: '#0066FF' }}>
           Memora
         </span>
         <div className="w-12" />
@@ -270,7 +272,7 @@ export default function RecipientsPage() {
       <StepIndicator currentStep={3} />
 
       <div className="px-6 pb-12 max-w-xl mx-auto">
-        <h1 className="font-[family-name:var(--font-playfair)] text-2xl font-bold text-stone-900 text-center mb-1">
+        <h1 className="text-2xl font-bold text-stone-900 text-center tracking-tight mb-1">
           Where should we send it?
         </h1>
         <p className="text-center text-stone-500 text-sm mb-8">Add addresses &middot; choose quantity for each</p>
@@ -288,7 +290,7 @@ export default function RecipientsPage() {
                 setIncludeSelf(false);
                 setMyErrors({});
               }}
-              defaultOpen={true}
+              defaultOpen={false}
             >
               <AddressForm address={myAddress} onChange={setMyAddress} errors={myErrors} />
             </RecipientCard>
@@ -320,62 +322,94 @@ export default function RecipientsPage() {
         </div>
 
         {/* ── ADD NEW ADDRESS ── */}
-        {showFriendForm ? (
-          <div className="border-2 border-stone-200 rounded-xl overflow-hidden mb-6">
-            {/* Same header style as RecipientCard */}
-            <div className="flex items-center justify-between px-4 py-3 bg-white">
-              <div className="flex items-center gap-3">
-                <span className="text-lg">🎁</span>
-                <p className="font-medium text-sm text-stone-800">Add a friend</p>
-              </div>
-              <QtyStepper qty={newFriendQty} onChange={(n) => {
-                if (n === 0) {
-                  setShowFriendForm(false);
-                  setFriendAddress(emptyAddress);
-                  setFriendErrors({});
-                  setNewFriendQty(1);
-                } else {
-                  setNewFriendQty(n);
-                }
-              }} allowZero />
-            </div>
-            <div className="px-4 pb-4 pt-2 bg-stone-50 border-t border-stone-100">
-              <AddressForm address={friendAddress} onChange={setFriendAddress} errors={friendErrors} />
-              <div className="flex gap-2 mt-4">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => {
-                    setShowFriendForm(false);
-                    setFriendAddress(emptyAddress);
-                    setFriendErrors({});
-                    setNewFriendQty(1);
-                  }}
-                >
-                  Cancel
-                </Button>
-                <Button variant="secondary" size="sm" fullWidth onClick={addFriend}>
-                  Add
-                </Button>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div className="space-y-2 mb-6">
-            {!includeSelf && (
-              <button
-                onClick={() => setIncludeSelf(true)}
-                className="w-full py-3 border-2 border-dashed border-stone-300 rounded-xl text-stone-500 hover:border-[#0066FF] hover:text-[#0066FF] transition-colors text-sm font-medium"
-              >
-                + My address
-              </button>
-            )}
+        <div className="space-y-2 mb-6">
+          {/* "My address" add button — always visible when not yet added */}
+          {!includeSelf && (
             <button
-              onClick={() => setShowFriendForm(true)}
+              onClick={() => setIncludeSelf(true)}
               className="w-full py-3 border-2 border-dashed border-stone-300 rounded-xl text-stone-500 hover:border-[#0066FF] hover:text-[#0066FF] transition-colors text-sm font-medium"
             >
-              + A friend&apos;s address
+              🏠 + My address
             </button>
+          )}
+
+          {/* Friend form — shown when user clicks "+ Friend's address" */}
+          {showFriendForm ? (
+            <div className="border-2 border-stone-200 rounded-xl overflow-hidden">
+              {/* Collapsible header */}
+              <div
+                className="flex items-center justify-between gap-2 px-4 py-3 bg-white cursor-pointer"
+                onClick={() => setFriendFormOpen(!friendFormOpen)}
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-lg">🎁</span>
+                  <p className="font-medium text-sm text-stone-800 whitespace-nowrap">Friend&apos;s address</p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div onClick={(e) => e.stopPropagation()}>
+                    <QtyStepper qty={newFriendQty} onChange={(n) => {
+                      if (n === 0) {
+                        setShowFriendForm(false);
+                        setFriendFormOpen(false);
+                        setFriendAddress(emptyAddress);
+                        setFriendErrors({});
+                        setNewFriendQty(1);
+                      } else {
+                        setNewFriendQty(n);
+                      }
+                    }} allowZero />
+                  </div>
+                  <svg className={`w-4 h-4 text-stone-400 transition-transform ${friendFormOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              </div>
+              {friendFormOpen && (
+                <div className="px-4 pb-4 pt-2 bg-stone-50 border-t border-stone-100">
+                  <AddressForm address={friendAddress} onChange={setFriendAddress} errors={friendErrors} />
+                  <div className="flex gap-2 mt-4">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        setShowFriendForm(false);
+                        setFriendFormOpen(false);
+                        setFriendAddress(emptyAddress);
+                        setFriendErrors({});
+                        setNewFriendQty(1);
+                      }}
+                    >
+                      Remove
+                    </Button>
+                    <Button variant="secondary" size="sm" fullWidth onClick={addFriend}>
+                      Save address
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+            <button
+              onClick={() => { setShowFriendForm(true); setFriendFormOpen(false); }}
+              className="w-full py-3 border-2 border-dashed border-stone-300 rounded-xl text-stone-500 hover:border-[#0066FF] hover:text-[#0066FF] transition-colors text-sm font-medium"
+            >
+              🎁 + Friend&apos;s address
+            </button>
+          )}
+        </div>
+
+        {/* ── PRICING TIERS ── */}
+        {totalQty > 0 && (
+          <div className="flex items-center justify-center gap-2 mb-3 text-xs">
+            <span className={`px-2.5 py-1 rounded-full ${totalQty >= 1 && totalQty < 3 ? 'bg-[#0066FF] text-white font-semibold' : 'bg-stone-100 text-stone-400'}`}>
+              1+ $6.99/ea
+            </span>
+            <span className={`px-2.5 py-1 rounded-full ${totalQty >= 3 && totalQty < 5 ? 'bg-[#0066FF] text-white font-semibold' : 'bg-stone-100 text-stone-400'}`}>
+              3+ $5.99/ea
+            </span>
+            <span className={`px-2.5 py-1 rounded-full ${totalQty >= 5 ? 'bg-[#0066FF] text-white font-semibold' : 'bg-stone-100 text-stone-400'}`}>
+              5+ $4.99/ea
+            </span>
           </div>
         )}
 
@@ -395,7 +429,7 @@ export default function RecipientsPage() {
               <span className="font-semibold text-stone-800">${total.toFixed(2)}</span>
             </div>
             {savings && (
-              <p className="text-xs text-[#0066FF] mt-2">{savings}</p>
+              <p className="text-xs text-[#0066FF] mt-2 font-medium">{savings}</p>
             )}
           </div>
         )}
