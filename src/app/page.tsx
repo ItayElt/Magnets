@@ -106,6 +106,15 @@ export default function LandingPage() {
   const heroContentOpacity = useTransform(scrollY, [0, 400], [1, 0], { clamp: true });
   const heroContentY = useTransform(scrollY, [0, 400], [0, -60], { clamp: true });
 
+  // Bottom blob — parallax as user scrolls into newsletter/footer area
+  const bottomBlobRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: bottomProgress } = useScroll({
+    target: bottomBlobRef,
+    offset: ['start end', 'end start'],
+  });
+  const bottomBlobY = useTransform(bottomProgress, [0, 1], [100, -100], { clamp: true });
+  const bottomBlobScale = useTransform(bottomProgress, [0, 0.5], [0.9, 1.15], { clamp: true });
+
   return (
     <div className="min-h-screen bg-white overflow-x-hidden" style={{ color: '#262836' }}>
 
@@ -358,19 +367,19 @@ export default function LandingPage() {
       </section>
 
       {/* ════════════ GIFT SECTION ════════════ */}
-      <section className="relative z-[2] py-12 md:py-16" style={{ background: '#FFF5F5' }}>
+      <section className="relative z-[2] py-16 md:py-20" style={{ background: '#FFF5F5' }}>
         <div className="max-w-xl mx-auto px-5 text-center">
-          <span className="text-3xl">💌</span>
-          <h3 className="mt-3 text-xl sm:text-2xl font-bold tracking-tight">
+          <span className="text-4xl">💌</span>
+          <h3 className="mt-4 text-2xl sm:text-3xl font-bold tracking-tight">
             Send as a gift
           </h3>
-          <p className="mt-2 text-stone-500 text-sm md:text-base">
+          <p className="mt-3 text-stone-500 text-base md:text-lg leading-relaxed">
             Send one to someone you love — we&apos;ll ship it straight to their door.
           </p>
-          <div className="mt-5">
+          <div className="mt-6">
             <Link
               href="/upload"
-              className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-white rounded-full shadow-md hover:shadow-lg hover:scale-[1.03] transition-all duration-200"
+              className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold text-white rounded-full shadow-md hover:shadow-lg hover:scale-[1.03] transition-all duration-200"
               style={{ background: '#0066FF' }}
             >
               Send a gift
@@ -383,7 +392,7 @@ export default function LandingPage() {
       </section>
 
       {/* ════════════ HOW IT WORKS ════════════ */}
-      <section id="how-it-works" className="relative z-[2] py-14 md:py-20" style={{ background: '#faf8f6' }}>
+      <section id="how-it-works" className="relative z-[2] py-16 md:py-20" style={{ background: '#FAFBFF' }}>
         <div className="max-w-5xl mx-auto px-5 md:px-10">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center tracking-tight mb-3">
             How it works
@@ -444,29 +453,76 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ════════════ TRUST BAR ════════════ */}
-      <section className="relative z-[2] border-y border-stone-100 py-10 md:py-12 px-5 md:px-10 bg-white">
-        <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-10 text-center">
-          <div className="flex flex-col items-center">
-            <LockIcon />
-            <h3 className="text-sm sm:text-base font-bold mt-3 mb-2">Secure payment</h3>
-            <div className="flex items-center gap-2"><VisaIcon /><MastercardIcon /><PaypalIcon /></div>
+      {/* ════════════ BOTTOM BLOB TRANSITION — trust + newsletter with organic blob bg ════════════ */}
+      <div ref={bottomBlobRef} className="relative overflow-hidden" style={{ background: '#002B71' }}>
+
+        {/* Large organic blob shape — parallax on scroll */}
+        <motion.div
+          className="absolute pointer-events-none"
+          style={{
+            top: '-30%',
+            left: '-20%',
+            width: '140%',
+            y: bottomBlobY,
+            scale: bottomBlobScale,
+            willChange: 'transform',
+          }}
+        >
+          <svg className="w-full h-auto" viewBox="0 0 900 500" fill="none" preserveAspectRatio="none">
+            <path
+              d="M0 0 L900 0 L900 80 Q720 280 450 180 Q200 90 50 240 Q0 290 0 200 Z"
+              fill="white"
+            />
+          </svg>
+        </motion.div>
+
+        {/* Second smaller decorative blob */}
+        <motion.div
+          className="absolute pointer-events-none"
+          style={{
+            top: '-10%',
+            right: '-15%',
+            width: '60%',
+            y: bottomBlobY,
+            opacity: 0.06,
+          }}
+        >
+          <svg className="w-full h-auto" viewBox="0 0 410 340" fill="none">
+            <path
+              d="M74.9914 313.754C90.6733 323.471 115.211 332.732 129.518 335.58C143.826 338.285 158.438 339.088 183.229 333.723C254.888 318.216 330.23 248.762 373.147 191.349C409.027 143.349 418.015 106.354 403.664 63.0821C394.135 34.3265 366.695 14.0256 337.746 5.84298C308.825 -2.33007 278.374 -0.238835 248.878 3.23897C203.545 8.57847 156.545 10.8865 112.855 24.1062C-22.921 65.4353 -35.7829 245.178 74.9914 313.754Z"
+              fill="white"
+            />
+          </svg>
+        </motion.div>
+
+      {/* ════════════ TRUST BAR — floats on the organic bg ════════════ */}
+      <section className="relative z-[2] py-10 md:py-14 px-5 md:px-10">
+        <div className="max-w-5xl mx-auto text-center text-white">
+          <div className="grid grid-cols-3 gap-4 sm:gap-10">
+            <div className="flex flex-col items-center">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0110 0v4" /></svg>
+              <h3 className="text-xs sm:text-base font-bold mt-2 sm:mt-3">Secure payment</h3>
+            </div>
+            <div className="flex flex-col items-center">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M1 3h15v13H1zM16 8h4l3 3v5h-7V8z" /><circle cx="5.5" cy="18.5" r="2.5" /><circle cx="18.5" cy="18.5" r="2.5" /></svg>
+              <h3 className="text-xs sm:text-base font-bold mt-2 sm:mt-3">Free delivery</h3>
+              <p className="text-[10px] sm:text-sm text-blue-200 leading-tight mt-0.5">On all orders</p>
+            </div>
+            <div className="flex flex-col items-center">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0112 2a8 8 0 018 8.2c0 7.3-8 11.8-8 11.8z" /><circle cx="12" cy="10" r="3" /></svg>
+              <h3 className="text-xs sm:text-base font-bold mt-2 sm:mt-3">Track it</h3>
+              <p className="text-[10px] sm:text-sm text-blue-200 leading-tight mt-0.5">Real-time tracking</p>
+            </div>
           </div>
-          <div className="flex flex-col items-center">
-            <TruckIcon />
-            <h3 className="text-sm sm:text-base font-bold mt-3 mb-1">Free delivery</h3>
-            <p className="text-sm text-stone-500">Free shipping on all orders, always.</p>
-          </div>
-          <div className="flex flex-col items-center">
-            <TrackIcon />
-            <h3 className="text-sm sm:text-base font-bold mt-3 mb-1">Track your delivery</h3>
-            <p className="text-sm text-stone-500">Real-time tracking on every order.</p>
+          {/* Payment icons — centered below all 3 columns */}
+          <div className="flex items-center justify-center gap-2 sm:gap-3 mt-6">
+            <VisaIcon /><MastercardIcon /><PaypalIcon />
           </div>
         </div>
       </section>
 
       {/* ════════════ NEWSLETTER / STAY TUNED ════════════ */}
-      <section className="relative z-[2] py-12 md:py-16 px-5 md:px-10" style={{ background: '#002B71' }}>
+      <section className="relative z-[2] py-12 md:py-16 px-5 md:px-10">
         <div className="max-w-5xl mx-auto rounded-3xl p-6 md:p-12 flex flex-col md:flex-row items-center gap-6 md:gap-8" style={{ background: '#001A4A' }}>
           <div className="flex-1 text-center md:text-left">
             <h3 className="text-xl md:text-3xl font-bold text-white mb-2">Stay tuned!</h3>
@@ -521,6 +577,7 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
+      </div>{/* end bottom blob ref wrapper */}
     </div>
   );
 }

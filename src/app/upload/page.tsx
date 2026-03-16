@@ -67,7 +67,7 @@ export default function UploadPage() {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-white">
       <nav className="flex items-center justify-between px-6 py-4 max-w-3xl mx-auto">
         <button onClick={() => router.push('/')} className="text-stone-500 hover:text-stone-700 text-sm font-medium">
           ← Back
@@ -81,52 +81,56 @@ export default function UploadPage() {
       <StepIndicator currentStep={0} />
 
       <div className="px-6 pb-12 max-w-xl mx-auto">
-        <h1 className="text-2xl font-bold text-stone-900 text-center tracking-tight mb-2">
-          Upload your photo
-        </h1>
-        <p className="text-center text-stone-500 mb-8">JPG, PNG, or HEIC</p>
 
         {!preview ? (
-          <div
-            onDragOver={(e) => { e.preventDefault(); setDragActive(true); }}
-            onDragLeave={() => setDragActive(false)}
-            onDrop={handleDrop}
-            className={`border-2 border-dashed rounded-2xl p-12 text-center transition-colors cursor-pointer ${
-              dragActive
-                ? 'border-[#0066FF] bg-blue-50'
-                : 'border-stone-300 hover:border-blue-300 bg-white'
-            }`}
-            onClick={() => fileInputRef.current?.click()}
-          >
-            <div className="text-5xl mb-4">📷</div>
-            <p className="text-stone-700 font-medium mb-1">
-              Drop your photo here
+          <div className="flex flex-col items-center">
+            <h1 className="text-2xl sm:text-3xl font-bold text-stone-900 text-center tracking-tight mb-2">
+              Upload your photo
+            </h1>
+            <p className="text-stone-400 text-sm text-center mb-8">
+              Pick a memory you love
             </p>
-            <p className="text-sm text-stone-400 mb-6">or click to browse</p>
 
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Button
-                variant="primary"
-                size="md"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  fileInputRef.current?.click();
-                }}
-              >
-                Choose Photo
-              </Button>
-              <Button
-                variant="secondary"
-                size="md"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  cameraInputRef.current?.click();
-                }}
-              >
-                Take Photo
-              </Button>
+            {/* Drop zone */}
+            <div
+              onDragOver={(e) => { e.preventDefault(); setDragActive(true); }}
+              onDragLeave={() => setDragActive(false)}
+              onDrop={handleDrop}
+              onClick={() => fileInputRef.current?.click()}
+              className={`w-full rounded-3xl p-10 sm:p-14 text-center transition-all duration-300 cursor-pointer ${
+                dragActive
+                  ? 'bg-blue-50 border-2 border-[#0066FF] shadow-lg'
+                  : 'bg-[#F5F7FF] hover:bg-[#EEF1FF] border-2 border-transparent'
+              }`}
+            >
+              {/* Upload icon */}
+              <div className="mx-auto mb-5 w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex items-center justify-center" style={{ background: '#0066FF' }}>
+                <svg className="w-8 h-8 sm:w-10 sm:h-10 text-white" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.338-2.32 3 3 0 013.8 3.8A3.75 3.75 0 0118 19.5H6.75z" />
+                </svg>
+              </div>
+
+              <p className="text-stone-700 font-semibold text-base sm:text-lg mb-1">
+                Tap to choose a photo
+              </p>
+              <p className="text-stone-400 text-sm">
+                or drag and drop here
+              </p>
             </div>
 
+            {/* Camera option — subtle pill */}
+            <button
+              onClick={() => cameraInputRef.current?.click()}
+              className="mt-5 flex items-center gap-2.5 px-6 py-3 rounded-full text-sm font-medium text-stone-600 bg-stone-100 hover:bg-stone-200 hover:text-stone-800 transition-all cursor-pointer"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z" />
+              </svg>
+              Take a photo instead
+            </button>
+
+            {/* Hidden file inputs */}
             <input
               ref={fileInputRef}
               type="file"
@@ -145,13 +149,17 @@ export default function UploadPage() {
           </div>
         ) : (
           <div className="space-y-6">
-            <div className="bg-white rounded-2xl p-4 shadow-sm">
+            <h1 className="text-2xl font-bold text-stone-900 text-center tracking-tight mb-2">
+              Looking good!
+            </h1>
+
+            <div className="bg-[#F5F7FF] rounded-3xl p-4 sm:p-5">
               <img
                 src={preview}
                 alt="Preview"
-                className="w-full rounded-lg object-contain max-h-80"
+                className="w-full rounded-2xl object-contain max-h-80"
               />
-              <p className="mt-3 text-sm text-stone-500 text-center truncate">
+              <p className="mt-3 text-xs text-stone-400 text-center truncate">
                 {fileName}
               </p>
             </div>
@@ -160,12 +168,13 @@ export default function UploadPage() {
               <Button
                 variant="secondary"
                 fullWidth
+                size="md"
                 onClick={() => {
                   setPreview(null);
                   setFileName('');
                 }}
               >
-                Choose Different
+                <span className="text-sm">Change</span>
               </Button>
               <Button
                 variant="primary"
