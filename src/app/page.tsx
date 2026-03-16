@@ -142,7 +142,7 @@ export default function LandingPage() {
       <div className="h-[56px]" />
 
       {/* ════════════ HERO — Blue blob + expanding pink transition ════════════ */}
-      <section ref={heroRef} className="relative pb-8 md:min-h-[85vh] bg-white overflow-visible">
+      <section ref={heroRef} className="relative pb-0 md:min-h-[85vh] bg-white overflow-visible">
 
         {/* Static blue blob in the hero — the main background shape */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
