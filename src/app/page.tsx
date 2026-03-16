@@ -183,7 +183,7 @@ export default function LandingPage() {
 
         {/* Hero content */}
         <motion.div
-          className="relative z-10 px-6 md:px-10 pt-12 sm:pt-20 pb-16 max-w-7xl mx-auto"
+          className="relative z-10 px-6 md:px-10 pt-12 sm:pt-20 pb-10 sm:pb-12 md:pb-16 max-w-7xl mx-auto"
           style={{ opacity: heroContentOpacity, y: heroContentY }}
         >
           <div className="flex flex-col lg:grid lg:grid-cols-2 gap-6 lg:gap-6 items-center">
@@ -215,7 +215,7 @@ export default function LandingPage() {
 
             {/* Right — Magnets fanned out like polaroids */}
             {/* Mobile/tablet: flexbox row. Desktop: absolute positioned scatter */}
-            <div className="animate-fade-up-delay-1 order-2 flex justify-center items-end gap-3 sm:gap-4 -mx-4 sm:mx-0 lg:relative lg:mx-auto lg:w-[480px] lg:h-[380px] lg:block">
+            <div className="animate-fade-up-delay-1 order-2 flex justify-center items-end gap-3 sm:gap-4 -mx-4 sm:mx-0 mt-10 sm:mt-12 lg:mt-0 lg:relative lg:mx-auto lg:w-[480px] lg:h-[380px] lg:block">
 
               {/* Magnet 1 — Left, tilted */}
               <div
