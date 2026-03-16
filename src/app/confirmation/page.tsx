@@ -122,7 +122,7 @@ function ConfirmationContent() {
   return (
     <div className="min-h-screen">
       <nav className="flex items-center justify-center px-6 py-4 max-w-3xl mx-auto">
-        <span className="font-[family-name:var(--font-playfair)] text-xl font-bold text-stone-800">
+        <span className="font-[family-name:var(--font-playfair)] text-xl font-bold" style={{ color: '#0066FF' }}>
           Memora
         </span>
       </nav>
@@ -188,7 +188,7 @@ function ConfirmationContent() {
 
         <div className="bg-stone-50 rounded-xl p-4 mb-6 text-sm text-stone-500">
           Questions about your order? Contact us at{' '}
-          <a href="mailto:support@memoramagnet.shop" className="text-[var(--color-brand)] font-medium hover:underline">
+          <a href="mailto:support@memoramagnet.shop" className="text-[#0066FF] font-medium hover:underline">
             support@memoramagnet.shop
           </a>
         </div>

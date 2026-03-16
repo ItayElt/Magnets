@@ -57,7 +57,7 @@ export default function CropPage() {
         <button onClick={() => router.push('/upload')} className="text-stone-500 hover:text-stone-700">
           ← Back
         </button>
-        <span className="font-[family-name:var(--font-playfair)] text-xl font-bold text-stone-800">
+        <span className="font-[family-name:var(--font-playfair)] text-xl font-bold" style={{ color: '#0066FF' }}>
           Memora
         </span>
         <div className="w-12" />
@@ -93,7 +93,7 @@ export default function CropPage() {
             step={0.1}
             value={zoom}
             onChange={(e) => setZoom(Number(e.target.value))}
-            className="flex-1 accent-amber-700"
+            className="flex-1 accent-[#0066FF]"
           />
         </div>
 

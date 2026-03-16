@@ -65,7 +65,7 @@ function AddressForm({
           <select
             value={address.state}
             onChange={(e) => onChange({ ...address, state: e.target.value })}
-            className={`w-full px-2 py-3 rounded-xl border bg-white text-stone-900 transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent ${
+            className={`w-full px-2 py-3 rounded-xl border bg-white text-stone-900 transition-colors focus:outline-none focus:ring-2 focus:ring-[#0066FF] focus:border-transparent ${
               errors.state ? 'border-red-400' : 'border-stone-300'
             }`}
           >
@@ -261,7 +261,7 @@ export default function RecipientsPage() {
         <button onClick={() => router.push('/customize')} className="text-stone-500 hover:text-stone-700">
           ← Back
         </button>
-        <span className="font-[family-name:var(--font-playfair)] text-xl font-bold text-stone-800">
+        <span className="font-[family-name:var(--font-playfair)] text-xl font-bold" style={{ color: '#0066FF' }}>
           Memora
         </span>
         <div className="w-12" />
@@ -365,14 +365,14 @@ export default function RecipientsPage() {
             {!includeSelf && (
               <button
                 onClick={() => setIncludeSelf(true)}
-                className="w-full py-3 border-2 border-dashed border-stone-300 rounded-xl text-stone-500 hover:border-[var(--color-brand)] hover:text-[var(--color-brand)] transition-colors text-sm font-medium"
+                className="w-full py-3 border-2 border-dashed border-stone-300 rounded-xl text-stone-500 hover:border-[#0066FF] hover:text-[#0066FF] transition-colors text-sm font-medium"
               >
                 + My address
               </button>
             )}
             <button
               onClick={() => setShowFriendForm(true)}
-              className="w-full py-3 border-2 border-dashed border-stone-300 rounded-xl text-stone-500 hover:border-[var(--color-brand)] hover:text-[var(--color-brand)] transition-colors text-sm font-medium"
+              className="w-full py-3 border-2 border-dashed border-stone-300 rounded-xl text-stone-500 hover:border-[#0066FF] hover:text-[#0066FF] transition-colors text-sm font-medium"
             >
               + A friend&apos;s address
             </button>
@@ -395,7 +395,7 @@ export default function RecipientsPage() {
               <span className="font-semibold text-stone-800">${total.toFixed(2)}</span>
             </div>
             {savings && (
-              <p className="text-xs text-[var(--color-brand)] mt-2">{savings}</p>
+              <p className="text-xs text-[#0066FF] mt-2">{savings}</p>
             )}
           </div>
         )}

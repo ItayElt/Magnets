@@ -79,7 +79,8 @@ export default function TrackPage() {
         <div className="max-w-2xl mx-auto flex items-center justify-between">
           <Link
             href="/"
-            className="font-[family-name:var(--font-playfair)] text-xl font-bold text-stone-900"
+            className="font-[family-name:var(--font-playfair)] text-xl font-bold"
+            style={{ color: '#0066FF' }}
           >
             Memora
           </Link>
@@ -109,12 +110,12 @@ export default function TrackPage() {
             value={orderId}
             onChange={(e) => setOrderId(e.target.value)}
             placeholder="MEM-12345"
-            className="flex-1 px-4 py-3 rounded-xl border border-stone-300 bg-white text-stone-900 placeholder:text-stone-400 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent font-mono"
+            className="flex-1 px-4 py-3 rounded-xl border border-stone-300 bg-white text-stone-900 placeholder:text-stone-400 text-sm focus:outline-none focus:ring-2 focus:ring-[#0066FF] focus:border-transparent font-mono"
           />
           <button
             type="submit"
             disabled={loading || !orderId.trim()}
-            className="px-6 py-3 bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-xl transition-colors disabled:opacity-50 cursor-pointer text-sm"
+            className="px-6 py-3 bg-[#0066FF] hover:bg-[#0052CC] text-white font-medium rounded-xl transition-colors disabled:opacity-50 cursor-pointer text-sm"
           >
             {loading ? 'Searching...' : 'Search'}
           </button>

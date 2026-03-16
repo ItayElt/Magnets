@@ -70,7 +70,8 @@ export default function ContactPage() {
       <nav className="flex items-center justify-between px-6 md:px-10 py-4 max-w-7xl mx-auto">
         <Link
           href="/"
-          className="font-[family-name:var(--font-playfair)] text-2xl font-bold text-stone-900 tracking-tight"
+          className="font-[family-name:var(--font-playfair)] text-2xl font-bold tracking-tight"
+          style={{ color: '#0066FF' }}
         >
           Memora
         </Link>
@@ -100,16 +101,16 @@ export default function ContactPage() {
           {/* Email Card */}
           <a
             href="mailto:support@memoramagnet.shop"
-            className="group bg-white rounded-2xl border border-stone-200 p-6 hover:border-[var(--color-brand-light)] hover:shadow-lg transition-all"
+            className="group bg-white rounded-2xl border border-stone-200 p-6 hover:border-blue-300 hover:shadow-lg transition-all"
           >
-            <div className="w-12 h-12 bg-[var(--color-brand-50)] rounded-2xl flex items-center justify-center mb-4 group-hover:bg-[var(--color-brand)]/10 transition-colors">
-              <svg className="w-6 h-6 text-[var(--color-brand)]" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+            <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-blue-100 transition-colors">
+              <svg className="w-6 h-6 text-[#0066FF]" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
               </svg>
             </div>
             <h3 className="font-semibold text-stone-900 mb-1">Email Us</h3>
             <p className="text-sm text-stone-500 mb-3">We typically respond within 24 hours.</p>
-            <span className="text-sm font-medium text-[var(--color-brand)]">
+            <span className="text-sm font-medium text-[#0066FF]">
               support@memoramagnet.shop &rarr;
             </span>
           </a>
@@ -181,7 +182,7 @@ export default function ContactPage() {
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder="Your name"
-                      className="w-full px-4 py-3 rounded-xl border border-stone-200 bg-stone-50 text-stone-900 placeholder:text-stone-400 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent focus:bg-white transition-colors"
+                      className="w-full px-4 py-3 rounded-xl border border-stone-200 bg-stone-50 text-stone-900 placeholder:text-stone-400 text-sm focus:outline-none focus:ring-2 focus:ring-[#0066FF] focus:border-transparent focus:bg-white transition-colors"
                     />
                   </div>
                   <div>
@@ -192,7 +193,7 @@ export default function ContactPage() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="you@example.com"
-                      className="w-full px-4 py-3 rounded-xl border border-stone-200 bg-stone-50 text-stone-900 placeholder:text-stone-400 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent focus:bg-white transition-colors"
+                      className="w-full px-4 py-3 rounded-xl border border-stone-200 bg-stone-50 text-stone-900 placeholder:text-stone-400 text-sm focus:outline-none focus:ring-2 focus:ring-[#0066FF] focus:border-transparent focus:bg-white transition-colors"
                     />
                   </div>
                 </div>
@@ -206,7 +207,7 @@ export default function ContactPage() {
                     value={subject}
                     onChange={(e) => setSubject(e.target.value)}
                     placeholder="What is this about?"
-                    className="w-full px-4 py-3 rounded-xl border border-stone-200 bg-stone-50 text-stone-900 placeholder:text-stone-400 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent focus:bg-white transition-colors"
+                    className="w-full px-4 py-3 rounded-xl border border-stone-200 bg-stone-50 text-stone-900 placeholder:text-stone-400 text-sm focus:outline-none focus:ring-2 focus:ring-[#0066FF] focus:border-transparent focus:bg-white transition-colors"
                   />
                 </div>
 
@@ -218,14 +219,14 @@ export default function ContactPage() {
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     placeholder="Tell us how we can help..."
-                    className="w-full px-4 py-3 rounded-xl border border-stone-200 bg-stone-50 text-stone-900 placeholder:text-stone-400 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent focus:bg-white resize-none transition-colors"
+                    className="w-full px-4 py-3 rounded-xl border border-stone-200 bg-stone-50 text-stone-900 placeholder:text-stone-400 text-sm focus:outline-none focus:ring-2 focus:ring-[#0066FF] focus:border-transparent focus:bg-white resize-none transition-colors"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="w-full py-3 bg-[var(--color-brand)] hover:bg-[var(--color-brand-dark)] text-white font-semibold rounded-xl transition-colors disabled:opacity-50 cursor-pointer"
+                  className="w-full py-3 bg-[#0066FF] hover:bg-[#0052CC] text-white font-semibold rounded-xl transition-colors disabled:opacity-50 cursor-pointer"
                 >
                   {submitting ? 'Sending...' : 'Send Message'}
                 </button>
@@ -283,7 +284,7 @@ export default function ContactPage() {
       <footer className="px-6 py-10 border-t border-stone-100">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col items-center gap-4">
-            <span className="font-[family-name:var(--font-playfair)] text-lg font-bold text-stone-800">
+            <span className="font-[family-name:var(--font-playfair)] text-lg font-bold" style={{ color: '#0066FF' }}>
               Memora
             </span>
             <div className="flex items-center gap-6 text-sm text-stone-400">

@@ -154,7 +154,7 @@ export default function CheckoutPage() {
         <button onClick={() => router.push('/recipients')} className="text-stone-500 hover:text-stone-700">
           &larr; Back
         </button>
-        <span className="font-[family-name:var(--font-playfair)] text-xl font-bold text-stone-800">
+        <span className="font-[family-name:var(--font-playfair)] text-xl font-bold" style={{ color: '#0066FF' }}>
           Memora
         </span>
         <div className="w-12" />

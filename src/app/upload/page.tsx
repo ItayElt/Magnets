@@ -72,7 +72,7 @@ export default function UploadPage() {
         <button onClick={() => router.push('/')} className="text-stone-500 hover:text-stone-700 text-sm font-medium">
           ← Back
         </button>
-        <span className="font-[family-name:var(--font-playfair)] text-xl font-bold text-stone-800">
+        <span className="font-[family-name:var(--font-playfair)] text-xl font-bold" style={{ color: '#0066FF' }}>
           Memora
         </span>
         <div className="w-12" />
@@ -93,8 +93,8 @@ export default function UploadPage() {
             onDrop={handleDrop}
             className={`border-2 border-dashed rounded-2xl p-12 text-center transition-colors cursor-pointer ${
               dragActive
-                ? 'border-purple-400 bg-purple-50'
-                : 'border-stone-300 hover:border-purple-300 bg-white'
+                ? 'border-[#0066FF] bg-blue-50'
+                : 'border-stone-300 hover:border-blue-300 bg-white'
             }`}
             onClick={() => fileInputRef.current?.click()}
           >

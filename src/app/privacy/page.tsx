@@ -8,7 +8,8 @@ export default function PrivacyPolicyPage() {
         <div className="max-w-2xl mx-auto flex items-center justify-between">
           <Link
             href="/"
-            className="font-[family-name:var(--font-playfair)] text-xl font-bold text-stone-900"
+            className="font-[family-name:var(--font-playfair)] text-xl font-bold"
+            style={{ color: '#0066FF' }}
           >
             Memora
           </Link>
@@ -110,7 +111,7 @@ export default function PrivacyPolicyPage() {
                   href="https://stripe.com/privacy"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-amber-700 hover:text-amber-800 underline"
+                  className="text-[#0066FF] hover:text-[#0052CC] underline"
                 >
                   Stripe&apos;s Privacy Policy
                 </a>
@@ -189,7 +190,7 @@ export default function PrivacyPolicyPage() {
               To exercise any of these rights, please{' '}
               <Link
                 href="/contact"
-                className="text-amber-700 hover:text-amber-800 underline"
+                className="text-[#0066FF] hover:text-[#0052CC] underline"
               >
                 contact us
               </Link>
@@ -206,7 +207,7 @@ export default function PrivacyPolicyPage() {
               how we handle your data, please{' '}
               <Link
                 href="/contact"
-                className="text-amber-700 hover:text-amber-800 underline"
+                className="text-[#0066FF] hover:text-[#0052CC] underline"
               >
                 contact us
               </Link>
@@ -219,7 +220,7 @@ export default function PrivacyPolicyPage() {
         <div className="mt-12 pt-6 border-t border-stone-200">
           <Link
             href="/"
-            className="text-sm text-amber-700 hover:text-amber-800"
+            className="text-sm text-[#0066FF] hover:text-[#0052CC]"
           >
             &larr; Back to home
           </Link>

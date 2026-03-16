@@ -16,9 +16,9 @@ export default function StepIndicator({ currentStep }: StepIndicatorProps) {
               <div
                 className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
                   i < currentStep
-                    ? 'bg-[var(--color-brand)] text-white'
+                    ? 'bg-[#0066FF] text-white'
                     : i === currentStep
-                    ? 'bg-[var(--color-brand)] text-white ring-2 ring-purple-300'
+                    ? 'bg-[#0066FF] text-white ring-2 ring-blue-200'
                     : 'bg-stone-200 text-stone-500'
                 }`}
               >
@@ -37,7 +37,7 @@ export default function StepIndicator({ currentStep }: StepIndicatorProps) {
             {i < 4 && (
               <div
                 className={`w-8 sm:w-12 h-0.5 mx-1 ${
-                  i < currentStep ? 'bg-[var(--color-brand)]' : 'bg-stone-200'
+                  i < currentStep ? 'bg-[#0066FF]' : 'bg-stone-200'
                 }`}
               />
             )}

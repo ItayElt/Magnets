@@ -117,7 +117,7 @@ export default function CustomizePage() {
         <button onClick={() => router.push('/crop')} className="text-stone-500 hover:text-stone-700 text-sm font-medium">
           ← Back
         </button>
-        <span className="font-[family-name:var(--font-playfair)] text-xl font-bold text-stone-800">
+        <span className="font-[family-name:var(--font-playfair)] text-xl font-bold" style={{ color: '#0066FF' }}>
           Memora
         </span>
         <div className="w-12" />
@@ -130,7 +130,7 @@ export default function CustomizePage() {
           Customize your magnet
         </h1>
         <p
-          className="text-center text-[var(--color-brand)] mb-8"
+          className="text-center text-[#0066FF] mb-8"
           style={{ fontFamily: 'var(--font-caveat), cursive', fontSize: '1.1rem' }}
         >
           pick a style and add a caption
@@ -158,7 +158,7 @@ export default function CustomizePage() {
                 onClick={() => dispatch({ type: 'SET_FRAME', payload: ps.id })}
                 className={`p-3 rounded-xl border-2 transition-all text-center ${
                   state.selectedFrame === ps.id
-                    ? 'border-[var(--color-brand)] bg-purple-50'
+                    ? 'border-[#0066FF] bg-blue-50'
                     : 'border-stone-200 bg-white hover:border-stone-300'
                 }`}
               >
@@ -192,7 +192,7 @@ export default function CustomizePage() {
                 }
               }}
               placeholder="e.g. Summer 2025"
-              className="w-full px-4 py-3 rounded-xl border border-stone-300 bg-white text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent"
+              className="w-full px-4 py-3 rounded-xl border border-stone-300 bg-white text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-[#0066FF] focus:border-transparent"
               style={{ fontFamily: 'var(--font-garamond), Georgia, serif', fontStyle: 'italic' }}
               maxLength={MAX_CAPTION_LENGTH}
             />

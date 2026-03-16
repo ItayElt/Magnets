@@ -19,7 +19,7 @@ export default function Button({
   const base = 'inline-flex items-center justify-center font-semibold rounded-full transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed';
 
   const variants = {
-    primary: 'bg-[var(--color-brand)] hover:bg-[var(--color-brand-dark)] text-white shadow-md hover:shadow-lg shadow-purple-200/30',
+    primary: 'bg-[#0066FF] hover:bg-[#0052CC] text-white shadow-md hover:shadow-lg shadow-blue-200/30',
     secondary: 'bg-white hover:bg-stone-50 text-stone-800 border border-stone-300 shadow-sm',
     ghost: 'bg-transparent hover:bg-stone-100 text-stone-600',
   };
