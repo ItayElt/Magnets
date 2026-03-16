@@ -147,8 +147,7 @@ export default function CustomizePage() {
   const captionInputRef = useRef<HTMLInputElement>(null);
 
   const handleTapCaption = () => {
-    captionInputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    setTimeout(() => captionInputRef.current?.focus(), 350);
+    captionInputRef.current?.focus({ preventScroll: true });
   };
 
   useEffect(() => {

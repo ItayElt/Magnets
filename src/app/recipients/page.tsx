@@ -365,7 +365,7 @@ function RecipientCard({
   };
 
   return (
-    <div className="bg-[#F5F7FF] rounded-2xl overflow-hidden transition-all">
+    <div className="bg-[#F5F7FF] rounded-2xl transition-all">
       {/* Header row */}
       <div
         className="flex items-center justify-between gap-2 px-4 py-3.5 cursor-pointer"
@@ -387,12 +387,17 @@ function RecipientCard({
         </div>
       </div>
 
-      {/* Expandable content */}
-      {open && (
-        <div className="px-4 pb-4 pt-1">
-          {children}
+      {/* Expandable content — smooth height animation */}
+      <div
+        className="grid transition-[grid-template-rows] duration-300 ease-in-out"
+        style={{ gridTemplateRows: open ? '1fr' : '0fr' }}
+      >
+        <div className="overflow-hidden">
+          <div className="px-4 pb-4 pt-1">
+            {children}
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }
