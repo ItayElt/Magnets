@@ -98,7 +98,6 @@ function PaypalIcon() {
 export default function LandingPage() {
   const headerVisible = useSmartHeader();
   const heroRef = useRef<HTMLDivElement>(null);
-
   // Scroll-driven blob expansion — starts expanding immediately on scroll
   const { scrollY } = useScroll();
   const blobScale = useTransform(scrollY, [0, 800], [0.6, 14], { clamp: true });
@@ -327,7 +326,7 @@ export default function LandingPage() {
             Your fridge, but <span style={{ color: '#0066FF' }}>cooler</span> ❄️
           </h2>
           <p className="text-center text-stone-500 mb-10 md:mb-14 text-base md:text-lg max-w-lg mx-auto">
-            Every photo tells a story. Imagine yours right here — front and center, every single day.
+            Every photo tells a story. Imagine yours<br />front and center, every single day.
           </p>
 
           {/* Fridge image with subtle shadow & rounded corners */}
@@ -358,27 +357,52 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ════════════ GIFT SECTION ════════════ */}
+      <section className="relative z-[2] py-12 md:py-16" style={{ background: '#FFF5F5' }}>
+        <div className="max-w-xl mx-auto px-5 text-center">
+          <span className="text-3xl">💌</span>
+          <h3 className="mt-3 text-xl sm:text-2xl font-bold tracking-tight">
+            The gift they&apos;ll actually keep.
+          </h3>
+          <p className="mt-2 text-stone-500 text-sm md:text-base">
+            Send one to someone you love — we&apos;ll ship it straight to their door.
+          </p>
+          <div className="mt-5">
+            <Link
+              href="/upload"
+              className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-white rounded-full shadow-md hover:shadow-lg hover:scale-[1.03] transition-all duration-200"
+              style={{ background: '#0066FF' }}
+            >
+              Send a gift
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* ════════════ HOW IT WORKS ════════════ */}
-      <section id="how-it-works" className="relative z-[2] py-16 md:py-24" style={{ background: '#faf8f6' }}>
+      <section id="how-it-works" className="relative z-[2] py-14 md:py-20" style={{ background: '#faf8f6' }}>
         <div className="max-w-5xl mx-auto px-5 md:px-10">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center tracking-tight mb-3">
             How it works
           </h2>
-          <p className="text-center text-stone-500 mb-10 md:mb-14 text-base md:text-lg">
-            From photo to doorstep in under 2 minutes
+          <p className="text-center text-stone-500 mb-8 md:mb-12 text-base md:text-lg">
+            Spoiler: it&apos;s really easy.
           </p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 md:gap-8">
+          <div className="grid grid-cols-3 gap-3 md:gap-6">
             {[
-              { step: '01', title: 'Upload a photo', desc: 'Snap a new photo or pick one from your library. JPG, PNG, or HEIC.', color: '#0066FF', icon: <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" /><path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z" /></svg> },
-              { step: '02', title: 'Pick your style', desc: 'Choose Classic, Vintage, or B&W. Crop, add a caption, and preview.', color: '#FF6B6B', icon: <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42" /></svg> },
-              { step: '03', title: 'Ship it', desc: 'Send to yourself or up to 10 friends. We print and deliver in 3–7 days.', color: '#FFB347', icon: <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" /></svg> },
+              { step: '01', title: 'Upload', desc: 'Any photo, any format.', color: '#0066FF', icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" /><path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z" /></svg> },
+              { step: '02', title: 'Style it', desc: 'Classic, Vintage, or B&W.', color: '#FF6B6B', icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42" /></svg> },
+              { step: '03', title: 'Ship it', desc: 'Delivered in 3–7 days.', color: '#FFB347', icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" /></svg> },
             ].map((item) => (
-              <div key={item.step} className="bg-white rounded-3xl p-6 md:p-8 border border-stone-100 hover:shadow-lg transition-all duration-300">
-                <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl flex items-center justify-center mb-4 md:mb-5" style={{ background: `${item.color}15`, color: item.color }}>{item.icon}</div>
-                <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: item.color }}>Step {item.step}</p>
-                <h3 className="text-lg md:text-xl font-bold mb-2">{item.title}</h3>
-                <p className="text-stone-500 leading-relaxed text-sm">{item.desc}</p>
+              <div key={item.step} className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-stone-100 hover:shadow-lg transition-all duration-300 text-center">
+                <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center mx-auto mb-3" style={{ background: `${item.color}15`, color: item.color }}>{item.icon}</div>
+                <p className="text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-1.5" style={{ color: item.color }}>Step {item.step}</p>
+                <h3 className="text-sm sm:text-lg font-bold mb-1">{item.title}</h3>
+                <p className="text-stone-500 text-xs sm:text-sm leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
