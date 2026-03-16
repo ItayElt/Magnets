@@ -35,18 +35,42 @@ function StateAutocomplete({
   const [query, setQuery] = useState(value);
   const [open, setOpen] = useState(false);
   const [highlightIdx, setHighlightIdx] = useState(-1);
+  const [dropdownPos, setDropdownPos] = useState<{ top: number; left: number } | null>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   // Sync external value changes
   useEffect(() => { setQuery(value); }, [value]);
+
+  // Update dropdown position on scroll/resize, close if input scrolls out of view
+  useEffect(() => {
+    if (!open) return;
+    const updatePos = () => {
+      if (!wrapperRef.current) return;
+      const rect = wrapperRef.current.getBoundingClientRect();
+      // Close if input scrolled out of viewport
+      if (rect.bottom < 0 || rect.top > window.innerHeight) {
+        setOpen(false);
+        return;
+      }
+      setDropdownPos({
+        top: rect.bottom + 4,
+        left: Math.min(rect.left, window.innerWidth - 190),
+      });
+    };
+    updatePos();
+    window.addEventListener('scroll', updatePos, { passive: true });
+    window.addEventListener('resize', updatePos, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', updatePos);
+      window.removeEventListener('resize', updatePos);
+    };
+  }, [open]);
 
   const filtered = query
     ? US_STATES.filter((s) => {
         const q = query.toLowerCase();
         const abbr = s.toLowerCase();
         const name = STATE_NAMES[s]?.toLowerCase() ?? '';
-        // Match: abbreviation starts with query, OR full name starts with query,
-        // OR any word in the name starts with query (e.g. "hamp" matches "New Hampshire")
         return abbr.startsWith(q) || name.startsWith(q) || name.split(' ').some(w => w.startsWith(q));
       })
     : US_STATES;
@@ -59,16 +83,14 @@ function StateAutocomplete({
   };
 
   const handleBlur = (e: React.FocusEvent) => {
-    // Don't close if clicking inside the wrapper
     if (wrapperRef.current?.contains(e.relatedTarget as Node)) return;
-    // If typed value matches a state exactly, select it
     const match = US_STATES.find(
       (s) => s.toLowerCase() === query.toLowerCase() || STATE_NAMES[s]?.toLowerCase() === query.toLowerCase()
     );
     if (match) {
       handleSelect(match);
     } else if (query && !US_STATES.includes(query)) {
-      setQuery(value); // revert to last valid
+      setQuery(value);
     }
     setOpen(false);
   };
@@ -102,7 +124,7 @@ function StateAutocomplete({
         value={query}
         onChange={(e) => {
           setQuery(e.target.value);
-          onChange(''); // clear until they pick
+          onChange('');
           setOpen(true);
           setHighlightIdx(0);
         }}
@@ -114,12 +136,10 @@ function StateAutocomplete({
           error ? 'border-red-400' : 'border-stone-300'
         }`}
       />
-      {open && filtered.length > 0 && (
-        <div className="fixed z-[100] bg-white border border-stone-200 rounded-xl shadow-lg max-h-48 overflow-y-auto min-w-[180px]"
-          style={{
-            top: wrapperRef.current ? wrapperRef.current.getBoundingClientRect().bottom + 4 : 0,
-            left: wrapperRef.current ? Math.min(wrapperRef.current.getBoundingClientRect().left, window.innerWidth - 190) : 0,
-          }}
+      {open && dropdownPos && filtered.length > 0 && (
+        <div
+          className="fixed z-[100] bg-white border border-stone-200 rounded-xl shadow-lg max-h-48 overflow-y-auto min-w-[180px]"
+          style={{ top: dropdownPos.top, left: dropdownPos.left }}
         >
           {filtered.map((s, i) => (
             <button
@@ -139,12 +159,10 @@ function StateAutocomplete({
           ))}
         </div>
       )}
-      {open && filtered.length === 0 && query && (
-        <div className="fixed z-[100] bg-white border border-stone-200 rounded-xl shadow-lg px-3 py-2.5 text-sm text-stone-400 min-w-[180px]"
-          style={{
-            top: wrapperRef.current ? wrapperRef.current.getBoundingClientRect().bottom + 4 : 0,
-            left: wrapperRef.current ? Math.min(wrapperRef.current.getBoundingClientRect().left, window.innerWidth - 190) : 0,
-          }}
+      {open && dropdownPos && filtered.length === 0 && query && (
+        <div
+          className="fixed z-[100] bg-white border border-stone-200 rounded-xl shadow-lg px-3 py-2.5 text-sm text-stone-400 min-w-[180px]"
+          style={{ top: dropdownPos.top, left: dropdownPos.left }}
         >
           No matching state
         </div>
