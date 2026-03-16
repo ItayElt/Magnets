@@ -99,6 +99,23 @@ function MagnetPreview({
   );
 }
 
+/* Style icon SVGs */
+function PaintbrushIcon() {
+  return (
+    <svg className="w-4 h-4 text-[#0066FF]" fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42" />
+    </svg>
+  );
+}
+
+function PenIcon() {
+  return (
+    <svg className="w-4 h-4 text-[#0066FF]" fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
+    </svg>
+  );
+}
+
 export default function CustomizePage() {
   const router = useRouter();
   const { state, dispatch } = useOrder();
@@ -112,7 +129,7 @@ export default function CustomizePage() {
   if (!state.croppedImage) return null;
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-white">
       <nav className="flex items-center justify-between px-6 py-4 max-w-3xl mx-auto">
         <button onClick={() => router.push('/crop')} className="text-stone-500 hover:text-stone-700 text-sm font-medium">
           ← Back
@@ -126,62 +143,77 @@ export default function CustomizePage() {
       <StepIndicator currentStep={2} />
 
       <div className="px-6 pb-12 max-w-xl mx-auto">
-        <h1 className="text-2xl font-bold text-stone-900 text-center tracking-tight mb-1">
+        <h1 className="text-2xl sm:text-3xl font-bold text-stone-900 text-center tracking-tight mb-1">
           Customize your magnet
         </h1>
         <p
-          className="text-center text-[#0066FF] mb-8"
+          className="text-center text-[#0066FF] mb-6"
           style={{ fontFamily: 'var(--font-caveat), cursive', fontSize: '1.1rem' }}
         >
           pick a style and add a caption
         </p>
 
-        {/* Live preview */}
-        <div className="flex justify-center mb-8">
-          <div className="transform -rotate-2 hover:rotate-0 transition-transform duration-300">
-            <MagnetPreview
-              image={state.croppedImage!}
-              style={state.selectedFrame}
-              caption={state.caption}
-              size="large"
-            />
+        {/* Live preview in soft card */}
+        <div className="bg-[#F5F7FF] rounded-3xl p-5 sm:p-6 mb-6">
+          <div className="flex justify-center">
+            <div className="transform -rotate-2 hover:rotate-0 transition-transform duration-300">
+              <MagnetPreview
+                image={state.croppedImage!}
+                style={state.selectedFrame}
+                caption={state.caption}
+                size="large"
+              />
+            </div>
           </div>
         </div>
 
         {/* Photo style selector */}
         <div className="mb-6">
-          <label className="block text-sm font-medium text-stone-700 mb-3">Photo style</label>
-          <div className="grid grid-cols-3 gap-3">
-            {PHOTO_STYLES.map((ps) => (
-              <button
-                key={ps.id}
-                onClick={() => dispatch({ type: 'SET_FRAME', payload: ps.id })}
-                className={`p-3 rounded-xl border-2 transition-all text-center ${
-                  state.selectedFrame === ps.id
-                    ? 'border-[#0066FF] bg-blue-50'
-                    : 'border-stone-200 bg-white hover:border-stone-300'
-                }`}
-              >
-                <div className="flex justify-center mb-2">
-                  <MagnetPreview
-                    image={state.croppedImage!}
-                    style={ps.id}
-                    caption={state.caption || 'Caption'}
-                    size="small"
-                  />
-                </div>
-                <p className="text-xs font-medium text-stone-700">{ps.name}</p>
-                <p className="text-[10px] text-stone-400">{ps.description}</p>
-              </button>
-            ))}
+          <div className="flex items-center gap-2 mb-3">
+            <div className="w-7 h-7 rounded-lg bg-[#0066FF]/10 flex items-center justify-center">
+              <PaintbrushIcon />
+            </div>
+            <label className="text-sm font-semibold text-stone-800">Photo style</label>
+          </div>
+          <div className="grid grid-cols-3 gap-2.5">
+            {PHOTO_STYLES.map((ps) => {
+              const isSelected = state.selectedFrame === ps.id;
+              return (
+                <button
+                  key={ps.id}
+                  onClick={() => dispatch({ type: 'SET_FRAME', payload: ps.id })}
+                  className={`p-2.5 rounded-2xl transition-all text-center ${
+                    isSelected
+                      ? 'bg-[#F5F7FF] ring-2 ring-[#0066FF] shadow-sm'
+                      : 'bg-[#F5F7FF] hover:bg-[#EEF1FF] ring-1 ring-transparent'
+                  }`}
+                >
+                  <div className="flex justify-center mb-2">
+                    <MagnetPreview
+                      image={state.croppedImage!}
+                      style={ps.id}
+                      caption={state.caption || 'Caption'}
+                      size="small"
+                    />
+                  </div>
+                  <p className={`text-xs font-semibold ${isSelected ? 'text-[#0066FF]' : 'text-stone-700'}`}>{ps.name}</p>
+                  <p className="text-[10px] text-stone-400 leading-tight mt-0.5">{ps.description}</p>
+                </button>
+              );
+            })}
           </div>
         </div>
 
-        {/* Caption input — always visible */}
+        {/* Caption input */}
         <div className="mb-8">
-          <label className="block text-sm font-medium text-stone-700 mb-1">
-            Caption <span className="text-stone-400 font-normal">(optional)</span>
-          </label>
+          <div className="flex items-center gap-2 mb-2">
+            <div className="w-7 h-7 rounded-lg bg-[#0066FF]/10 flex items-center justify-center">
+              <PenIcon />
+            </div>
+            <label className="text-sm font-semibold text-stone-800">
+              Caption <span className="text-stone-400 font-normal">(optional)</span>
+            </label>
+          </div>
           <div className="relative">
             <input
               type="text"
@@ -192,7 +224,7 @@ export default function CustomizePage() {
                 }
               }}
               placeholder="e.g. Summer 2025"
-              className="w-full px-4 py-3 rounded-xl border border-stone-300 bg-white text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-[#0066FF] focus:border-transparent"
+              className="w-full px-4 py-3.5 rounded-2xl bg-[#F5F7FF] text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-[#0066FF] border-none"
               style={{ fontFamily: 'var(--font-garamond), Georgia, serif', fontStyle: 'italic' }}
               maxLength={MAX_CAPTION_LENGTH}
             />
