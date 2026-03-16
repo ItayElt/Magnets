@@ -189,17 +189,17 @@ export default function LandingPage() {
           <div className="flex flex-col lg:grid lg:grid-cols-2 gap-6 lg:gap-6 items-center">
 
             {/* Left — Copy */}
-            <div className="max-w-lg animate-fade-up order-1">
-              <h1 className="text-3xl sm:text-5xl lg:text-[3.75rem] font-extrabold text-white leading-[1.1] tracking-tight">
-                Turn your memories into unique prints 📸
+            <div className="max-w-xl animate-fade-up order-1 text-center lg:text-left">
+              <h1 className="text-[2.1rem] sm:text-5xl lg:text-[3.5rem] font-extrabold text-white leading-[1.05] tracking-[-0.03em]">
+                Bring your<br />memories <span className="italic font-semibold" style={{ fontFamily: 'var(--font-playfair)' }}>to life</span>
               </h1>
-              <p className="mt-4 text-base sm:text-lg text-blue-100 leading-relaxed">
-                Matte, glossy, retro… choose your style!
+              <p className="mt-4 sm:mt-5 text-[14px] sm:text-lg text-blue-100/90 leading-[1.5] mx-auto lg:mx-0 px-2 sm:px-0 sm:max-w-md">
+                Your camera roll has 4,000 photos, your fridge has zero. Fix that in under 60 seconds.
               </p>
-              <div className="mt-6 sm:mt-8">
+              <div className="mt-7 sm:mt-9 flex flex-col items-center lg:items-start">
                 <Link
                   href="/upload"
-                  className="inline-flex items-center justify-center px-7 py-3.5 sm:px-8 sm:py-4 text-sm sm:text-base font-semibold bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 group"
+                  className="inline-flex items-center justify-center px-8 py-4 sm:px-9 sm:py-4 text-sm sm:text-base font-semibold bg-white rounded-full shadow-lg hover:shadow-xl hover:scale-[1.03] transition-all duration-200 group"
                   style={{ color: '#0066FF' }}
                 >
                   Get started
@@ -207,6 +207,9 @@ export default function LandingPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
                 </Link>
+                <p className="mt-4 text-[10px] sm:text-xs text-blue-200/70 tracking-wide whitespace-nowrap">
+                  Free shipping · Ships in 3–7 days · From $4.49 · USA made
+                </p>
               </div>
             </div>
 
