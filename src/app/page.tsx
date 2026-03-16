@@ -202,13 +202,13 @@ export default function LandingPage() {
                   className="inline-flex items-center justify-center px-8 py-4 sm:px-9 sm:py-4 text-sm sm:text-base font-semibold bg-white rounded-full shadow-lg hover:shadow-xl hover:scale-[1.03] transition-all duration-200 group"
                   style={{ color: '#0066FF' }}
                 >
-                  Get started
+                  Pick a photo
                   <svg className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
                 </Link>
                 <p className="mt-4 text-[10px] sm:text-xs text-blue-200/70 tracking-wide whitespace-nowrap">
-                  Free shipping · Ships in 3–7 days · From $4.49 · USA made
+                  Free shipping · Ships in 3–7 days · <span className="font-bold text-white">From $4.49</span> · USA made
                 </p>
               </div>
             </div>
@@ -279,10 +279,10 @@ export default function LandingPage() {
       <section id="magnets" className="relative z-[2] -mt-5 pt-16 pb-16 md:-mt-0 md:py-24" style={{ background: 'rgba(255, 240, 247, 1)' }}>
         <div className="max-w-7xl mx-auto px-5 md:px-10">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center tracking-tight mb-3">
-            Find the magnet that…
+            Your magnet. Your style.
           </h2>
           <p className="text-center text-stone-500 mb-10 md:mb-14 text-base md:text-lg">
-            Three styles. One photo. Infinite memories.
+            Three options. Zero bad ones.
           </p>
 
           {/* Horizontal scroll on mobile, grid on desktop */}
