@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useOrder } from '@/lib/context/OrderContext';
 import { Address } from '@/lib/types';
@@ -9,6 +9,150 @@ import { validateAddress } from '@/lib/utils/address';
 import StepIndicator from '@/components/ui/StepIndicator';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
+
+const STATE_NAMES: Record<string, string> = {
+  AL:'Alabama',AK:'Alaska',AZ:'Arizona',AR:'Arkansas',CA:'California',
+  CO:'Colorado',CT:'Connecticut',DE:'Delaware',FL:'Florida',GA:'Georgia',
+  HI:'Hawaii',ID:'Idaho',IL:'Illinois',IN:'Indiana',IA:'Iowa',
+  KS:'Kansas',KY:'Kentucky',LA:'Louisiana',ME:'Maine',MD:'Maryland',
+  MA:'Massachusetts',MI:'Michigan',MN:'Minnesota',MS:'Mississippi',MO:'Missouri',
+  MT:'Montana',NE:'Nebraska',NV:'Nevada',NH:'New Hampshire',NJ:'New Jersey',
+  NM:'New Mexico',NY:'New York',NC:'North Carolina',ND:'North Dakota',OH:'Ohio',
+  OK:'Oklahoma',OR:'Oregon',PA:'Pennsylvania',RI:'Rhode Island',SC:'South Carolina',
+  SD:'South Dakota',TN:'Tennessee',TX:'Texas',UT:'Utah',VT:'Vermont',
+  VA:'Virginia',WA:'Washington',WV:'West Virginia',WI:'Wisconsin',WY:'Wyoming',DC:'Washington DC',
+};
+
+function StateAutocomplete({
+  value,
+  onChange,
+  error,
+}: {
+  value: string;
+  onChange: (val: string) => void;
+  error?: string;
+}) {
+  const [query, setQuery] = useState(value);
+  const [open, setOpen] = useState(false);
+  const [highlightIdx, setHighlightIdx] = useState(-1);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  // Sync external value changes
+  useEffect(() => { setQuery(value); }, [value]);
+
+  const filtered = query
+    ? US_STATES.filter((s) => {
+        const q = query.toLowerCase();
+        const abbr = s.toLowerCase();
+        const name = STATE_NAMES[s]?.toLowerCase() ?? '';
+        // Match: abbreviation starts with query, OR full name starts with query,
+        // OR any word in the name starts with query (e.g. "hamp" matches "New Hampshire")
+        return abbr.startsWith(q) || name.startsWith(q) || name.split(' ').some(w => w.startsWith(q));
+      })
+    : US_STATES;
+
+  const handleSelect = (abbr: string) => {
+    onChange(abbr);
+    setQuery(abbr);
+    setOpen(false);
+    setHighlightIdx(-1);
+  };
+
+  const handleBlur = (e: React.FocusEvent) => {
+    // Don't close if clicking inside the wrapper
+    if (wrapperRef.current?.contains(e.relatedTarget as Node)) return;
+    // If typed value matches a state exactly, select it
+    const match = US_STATES.find(
+      (s) => s.toLowerCase() === query.toLowerCase() || STATE_NAMES[s]?.toLowerCase() === query.toLowerCase()
+    );
+    if (match) {
+      handleSelect(match);
+    } else if (query && !US_STATES.includes(query)) {
+      setQuery(value); // revert to last valid
+    }
+    setOpen(false);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (!open) {
+      if (e.key === 'ArrowDown' || e.key === 'Enter') { setOpen(true); e.preventDefault(); }
+      return;
+    }
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setHighlightIdx((i) => Math.min(i + 1, filtered.length - 1));
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setHighlightIdx((i) => Math.max(i - 1, 0));
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      if (highlightIdx >= 0 && filtered[highlightIdx]) {
+        handleSelect(filtered[highlightIdx]);
+      }
+    } else if (e.key === 'Escape') {
+      setOpen(false);
+    }
+  };
+
+  return (
+    <div ref={wrapperRef} className="relative">
+      <label className="block text-sm font-medium text-stone-700 mb-1">State</label>
+      <input
+        type="text"
+        value={query}
+        onChange={(e) => {
+          setQuery(e.target.value);
+          onChange(''); // clear until they pick
+          setOpen(true);
+          setHighlightIdx(0);
+        }}
+        onFocus={() => setOpen(true)}
+        onBlur={handleBlur}
+        onKeyDown={handleKeyDown}
+        placeholder="CA"
+        className={`w-full px-2 py-3 rounded-xl border bg-white text-stone-900 transition-colors focus:outline-none focus:ring-2 focus:ring-[#0066FF] focus:border-transparent ${
+          error ? 'border-red-400' : 'border-stone-300'
+        }`}
+      />
+      {open && filtered.length > 0 && (
+        <div className="fixed z-[100] bg-white border border-stone-200 rounded-xl shadow-lg max-h-48 overflow-y-auto min-w-[180px]"
+          style={{
+            top: wrapperRef.current ? wrapperRef.current.getBoundingClientRect().bottom + 4 : 0,
+            left: wrapperRef.current ? Math.min(wrapperRef.current.getBoundingClientRect().left, window.innerWidth - 190) : 0,
+          }}
+        >
+          {filtered.map((s, i) => (
+            <button
+              key={s}
+              type="button"
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => handleSelect(s)}
+              className={`w-full text-left px-3 py-2.5 text-sm transition-colors ${
+                i === highlightIdx ? 'bg-[#0066FF] text-white' : 'text-stone-700 hover:bg-stone-50'
+              } ${i === 0 ? 'rounded-t-xl' : ''} ${i === filtered.length - 1 ? 'rounded-b-xl' : ''}`}
+            >
+              <span className="font-medium">{s}</span>
+              <span className={`ml-1.5 ${i === highlightIdx ? 'text-blue-100' : 'text-stone-400'}`}>
+                {STATE_NAMES[s]}
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
+      {open && filtered.length === 0 && query && (
+        <div className="fixed z-[100] bg-white border border-stone-200 rounded-xl shadow-lg px-3 py-2.5 text-sm text-stone-400 min-w-[180px]"
+          style={{
+            top: wrapperRef.current ? wrapperRef.current.getBoundingClientRect().bottom + 4 : 0,
+            left: wrapperRef.current ? Math.min(wrapperRef.current.getBoundingClientRect().left, window.innerWidth - 190) : 0,
+          }}
+        >
+          No matching state
+        </div>
+      )}
+      {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
+    </div>
+  );
+}
 
 const emptyAddress: Address = {
   fullName: '',
@@ -61,20 +205,11 @@ function AddressForm({
           />
         </div>
         <div className="col-span-1">
-          <label className="block text-sm font-medium text-stone-700 mb-1">State</label>
-          <select
+          <StateAutocomplete
             value={address.state}
-            onChange={(e) => onChange({ ...address, state: e.target.value })}
-            className={`w-full px-2 py-3 rounded-xl border bg-white text-stone-900 transition-colors focus:outline-none focus:ring-2 focus:ring-[#0066FF] focus:border-transparent ${
-              errors.state ? 'border-red-400' : 'border-stone-300'
-            }`}
-          >
-            <option value="">--</option>
-            {US_STATES.map((s) => (
-              <option key={s} value={s}>{s}</option>
-            ))}
-          </select>
-          {errors.state && <p className="mt-1 text-sm text-red-500">{errors.state}</p>}
+            onChange={(val) => onChange({ ...address, state: val })}
+            error={errors.state}
+          />
         </div>
         <div className="col-span-2">
           <Input
@@ -97,14 +232,14 @@ function QtyStepper({ qty, onChange, allowZero }: { qty: number; onChange: (n: n
       <span className="text-xs text-stone-400 uppercase tracking-wide mr-0.5">Qty</span>
       <button
         onClick={() => onChange(Math.max(min, qty - 1))}
-        className="w-7 h-7 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-600 flex items-center justify-center text-lg font-medium transition-colors"
+        className="w-7 h-7 rounded-full bg-white hover:bg-stone-100 text-stone-600 flex items-center justify-center text-lg font-medium transition-colors border border-stone-200"
       >
         −
       </button>
       <span className="w-6 text-center text-sm font-semibold text-stone-800">{qty}</span>
       <button
         onClick={() => onChange(Math.min(10, qty + 1))}
-        className="w-7 h-7 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-600 flex items-center justify-center text-lg font-medium transition-colors"
+        className="w-7 h-7 rounded-full bg-white hover:bg-stone-100 text-stone-600 flex items-center justify-center text-lg font-medium transition-colors border border-stone-200"
       >
         +
       </button>
@@ -112,10 +247,10 @@ function QtyStepper({ qty, onChange, allowZero }: { qty: number; onChange: (n: n
   );
 }
 
-/* Reusable recipient card — used for both "myself" and each friend.
-   Pressing minus at qty 1 removes the card (qty goes to 0 → onRemove fires). */
+/* Recipient card — clean soft card style */
 function RecipientCard({
   icon,
+  iconBg,
   label,
   qty,
   onQtyChange,
@@ -123,7 +258,8 @@ function RecipientCard({
   children,
   defaultOpen,
 }: {
-  icon: string;
+  icon: React.ReactNode;
+  iconBg: string;
   label: string;
   qty: number;
   onQtyChange: (n: number) => void;
@@ -142,21 +278,23 @@ function RecipientCard({
   };
 
   return (
-    <div className="border-2 border-stone-200 rounded-xl overflow-hidden transition-all">
+    <div className="bg-[#F5F7FF] rounded-2xl overflow-hidden transition-all">
       {/* Header row */}
       <div
-        className="flex items-center justify-between gap-2 px-4 py-3 bg-white cursor-pointer"
+        className="flex items-center justify-between gap-2 px-4 py-3.5 cursor-pointer"
         onClick={() => setOpen(!open)}
       >
         <div className="flex items-center gap-3">
-          <span className="text-lg">{icon}</span>
-          <p className="font-medium text-sm text-stone-800 whitespace-nowrap">{label}</p>
+          <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${iconBg}`}>
+            {icon}
+          </div>
+          <p className="font-semibold text-sm text-stone-800">{label}</p>
         </div>
         <div className="flex items-center gap-3">
           <div onClick={(e) => e.stopPropagation()}>
             <QtyStepper qty={qty} onChange={handleQtyChange} allowZero />
           </div>
-          <svg className={`w-4 h-4 text-stone-400 transition-transform ${open ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className={`w-4 h-4 text-stone-400 transition-transform duration-200 ${open ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
         </div>
@@ -164,11 +302,36 @@ function RecipientCard({
 
       {/* Expandable content */}
       {open && (
-        <div className="px-4 pb-4 pt-2 bg-stone-50 border-t border-stone-100">
+        <div className="px-4 pb-4 pt-1">
           {children}
         </div>
       )}
     </div>
+  );
+}
+
+/* SVG Icons */
+function HomeIcon() {
+  return (
+    <svg className="w-4.5 h-4.5 text-white" fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12l8.954-8.955a1.126 1.126 0 011.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+    </svg>
+  );
+}
+
+function GiftIcon() {
+  return (
+    <svg className="w-4.5 h-4.5 text-white" fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H4.5a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 109.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1114.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+    </svg>
+  );
+}
+
+function PlusIcon() {
+  return (
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+    </svg>
   );
 }
 
@@ -258,9 +421,9 @@ export default function RecipientsPage() {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-white">
       <nav className="flex items-center justify-between px-6 py-4 max-w-3xl mx-auto">
-        <button onClick={() => router.push('/customize')} className="text-stone-500 hover:text-stone-700">
+        <button onClick={() => router.push('/customize')} className="text-stone-500 hover:text-stone-700 text-sm font-medium">
           ← Back
         </button>
         <span className="text-2xl font-bold tracking-tight" style={{ color: '#0066FF' }}>
@@ -272,17 +435,23 @@ export default function RecipientsPage() {
       <StepIndicator currentStep={3} />
 
       <div className="px-6 pb-12 max-w-xl mx-auto">
-        <h1 className="text-2xl font-bold text-stone-900 text-center tracking-tight mb-1">
+        <h1 className="text-2xl sm:text-3xl font-bold text-stone-900 text-center tracking-tight mb-1">
           Where should we send it?
         </h1>
-        <p className="text-center text-stone-500 text-sm mb-8">Add addresses &middot; choose quantity for each</p>
+        <p
+          className="text-center text-[#0066FF] mb-8"
+          style={{ fontFamily: 'var(--font-caveat), cursive', fontSize: '1.1rem' }}
+        >
+          add addresses and choose quantity
+        </p>
 
         {/* ── RECIPIENT CARDS ── */}
         <div className="space-y-3 mb-4">
           {/* My address — optional */}
           {includeSelf && (
             <RecipientCard
-              icon="🏠"
+              icon={<HomeIcon />}
+              iconBg="bg-[#0066FF]"
               label="My address"
               qty={myQty}
               onQtyChange={setMyQty}
@@ -300,7 +469,8 @@ export default function RecipientsPage() {
           {state.recipients.map((r) => (
             <RecipientCard
               key={r.id}
-              icon="🎁"
+              icon={<GiftIcon />}
+              iconBg="bg-amber-500"
               label={r.address.fullName}
               qty={getFriendQty(r.id)}
               onQtyChange={(n) => setFriendQtys((prev) => ({ ...prev, [r.id]: n }))}
@@ -322,28 +492,34 @@ export default function RecipientsPage() {
         </div>
 
         {/* ── ADD NEW ADDRESS ── */}
-        <div className="space-y-2 mb-6">
-          {/* "My address" add button — always visible when not yet added */}
+        <div className="space-y-3 mb-6">
+          {/* "My address" add button */}
           {!includeSelf && (
             <button
               onClick={() => setIncludeSelf(true)}
-              className="w-full py-3 border-2 border-dashed border-stone-300 rounded-xl text-stone-500 hover:border-[#0066FF] hover:text-[#0066FF] transition-colors text-sm font-medium"
+              className="w-full py-4 rounded-2xl bg-[#F5F7FF] hover:bg-[#EEF1FF] text-stone-600 hover:text-[#0066FF] transition-all text-sm font-medium flex items-center justify-center gap-2.5 group"
             >
-              🏠 + My address
+              <div className="w-8 h-8 rounded-xl bg-[#0066FF]/10 group-hover:bg-[#0066FF]/20 flex items-center justify-center transition-colors">
+                <HomeIcon />
+              </div>
+              <span>Add my address</span>
+              <PlusIcon />
             </button>
           )}
 
-          {/* Friend form — shown when user clicks "+ Friend's address" */}
+          {/* Friend form — shown when user clicks "Add friend's address" */}
           {showFriendForm ? (
-            <div className="border-2 border-stone-200 rounded-xl overflow-hidden">
+            <div className="bg-[#F5F7FF] rounded-2xl overflow-hidden">
               {/* Collapsible header */}
               <div
-                className="flex items-center justify-between gap-2 px-4 py-3 bg-white cursor-pointer"
+                className="flex items-center justify-between gap-2 px-4 py-3.5 cursor-pointer"
                 onClick={() => setFriendFormOpen(!friendFormOpen)}
               >
                 <div className="flex items-center gap-3">
-                  <span className="text-lg">🎁</span>
-                  <p className="font-medium text-sm text-stone-800 whitespace-nowrap">Friend&apos;s address</p>
+                  <div className="w-9 h-9 rounded-xl bg-amber-500 flex items-center justify-center">
+                    <GiftIcon />
+                  </div>
+                  <p className="font-semibold text-sm text-stone-800">Friend&apos;s address</p>
                 </div>
                 <div className="flex items-center gap-3">
                   <div onClick={(e) => e.stopPropagation()}>
@@ -359,13 +535,13 @@ export default function RecipientsPage() {
                       }
                     }} allowZero />
                   </div>
-                  <svg className={`w-4 h-4 text-stone-400 transition-transform ${friendFormOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className={`w-4 h-4 text-stone-400 transition-transform duration-200 ${friendFormOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </div>
               </div>
               {friendFormOpen && (
-                <div className="px-4 pb-4 pt-2 bg-stone-50 border-t border-stone-100">
+                <div className="px-4 pb-4 pt-1">
                   <AddressForm address={friendAddress} onChange={setFriendAddress} errors={friendErrors} />
                   <div className="flex gap-2 mt-4">
                     <Button
@@ -391,9 +567,15 @@ export default function RecipientsPage() {
           ) : (
             <button
               onClick={() => { setShowFriendForm(true); setFriendFormOpen(true); }}
-              className="w-full py-3 border-2 border-dashed border-stone-300 rounded-xl text-stone-500 hover:border-[#0066FF] hover:text-[#0066FF] transition-colors text-sm font-medium"
+              className="w-full py-4 rounded-2xl bg-[#F5F7FF] hover:bg-[#EEF1FF] text-stone-600 hover:text-amber-600 transition-all text-sm font-medium flex items-center justify-center gap-2.5 group"
             >
-              🎁 + Friend&apos;s address
+              <div className="w-8 h-8 rounded-xl bg-amber-500/10 group-hover:bg-amber-500/20 flex items-center justify-center transition-colors">
+                <svg className="w-4.5 h-4.5 text-amber-500" fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H4.5a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 109.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1114.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+                </svg>
+              </div>
+              <span>Add friend&apos;s address</span>
+              <PlusIcon />
             </button>
           )}
         </div>
@@ -401,13 +583,13 @@ export default function RecipientsPage() {
         {/* ── PRICING TIERS ── */}
         {totalQty > 0 && (
           <div className="flex items-center justify-center gap-2 mb-3 text-xs">
-            <span className={`px-2.5 py-1 rounded-full ${totalQty >= 1 && totalQty < 3 ? 'bg-[#0066FF] text-white font-semibold' : 'bg-stone-100 text-stone-400'}`}>
+            <span className={`px-2.5 py-1 rounded-full transition-colors ${totalQty >= 1 && totalQty < 3 ? 'bg-[#0066FF] text-white font-semibold' : 'bg-stone-100 text-stone-400'}`}>
               1+ $6.99/ea
             </span>
-            <span className={`px-2.5 py-1 rounded-full ${totalQty >= 3 && totalQty < 5 ? 'bg-[#0066FF] text-white font-semibold' : 'bg-stone-100 text-stone-400'}`}>
+            <span className={`px-2.5 py-1 rounded-full transition-colors ${totalQty >= 3 && totalQty < 5 ? 'bg-[#0066FF] text-white font-semibold' : 'bg-stone-100 text-stone-400'}`}>
               3+ $5.99/ea
             </span>
-            <span className={`px-2.5 py-1 rounded-full ${totalQty >= 5 ? 'bg-[#0066FF] text-white font-semibold' : 'bg-stone-100 text-stone-400'}`}>
+            <span className={`px-2.5 py-1 rounded-full transition-colors ${totalQty >= 5 ? 'bg-[#0066FF] text-white font-semibold' : 'bg-stone-100 text-stone-400'}`}>
               5+ $4.99/ea
             </span>
           </div>
@@ -415,7 +597,7 @@ export default function RecipientsPage() {
 
         {/* ── PRICE SUMMARY ── */}
         {totalQty > 0 && (
-          <div className="bg-stone-100 rounded-2xl p-4 mb-6">
+          <div className="bg-[#F5F7FF] rounded-2xl p-4 mb-6">
             <div className="flex justify-between text-sm text-stone-600 mb-1">
               <span>{totalQty} magnet{totalQty !== 1 ? 's' : ''} × ${unitPrice.toFixed(2)}</span>
               <span className="font-medium">${total.toFixed(2)}</span>
@@ -424,7 +606,7 @@ export default function RecipientsPage() {
               <span>Shipping</span>
               <span className="font-medium text-green-600">Free</span>
             </div>
-            <div className="border-t border-stone-200 mt-2 pt-2 flex justify-between">
+            <div className="border-t border-stone-200/60 mt-2 pt-2 flex justify-between">
               <span className="font-semibold text-stone-800">Total</span>
               <span className="font-semibold text-stone-800">${total.toFixed(2)}</span>
             </div>
@@ -434,7 +616,7 @@ export default function RecipientsPage() {
           </div>
         )}
 
-        {/* Empty state hint */}
+        {/* Empty state */}
         {!hasAnyAddress && (
           <p className="text-center text-stone-400 text-sm mb-6">Add at least one address to continue</p>
         )}

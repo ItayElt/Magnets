@@ -45,7 +45,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${playfair.variable} ${inter.variable} ${poppins.variable} ${ebGaramond.variable} ${caveat.variable}`}>
+    <html lang="en" data-scroll-behavior="smooth" className={`${playfair.variable} ${inter.variable} ${poppins.variable} ${ebGaramond.variable} ${caveat.variable}`}>
       <body className="font-[family-name:var(--font-poppins)] min-h-screen">
         <OrderProvider>{children}</OrderProvider>
       </body>
