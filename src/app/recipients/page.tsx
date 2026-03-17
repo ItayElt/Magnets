@@ -526,7 +526,7 @@ export default function RecipientsPage() {
 
       <StepIndicator currentStep={3} />
 
-      <div className="px-6 pb-12 max-w-xl mx-auto">
+      <div className="px-6 pb-12 max-w-xl md:max-w-2xl mx-auto">
         <h1 className="text-2xl sm:text-3xl font-bold text-stone-900 text-center tracking-tight mb-1">
           Where should we send it?
         </h1>
@@ -676,7 +676,7 @@ export default function RecipientsPage() {
         {totalQty > 0 && (
           <div className="flex items-center justify-center gap-2 mb-3 text-xs">
             <span className={`px-2.5 py-1 rounded-full transition-colors ${totalQty >= 1 && totalQty < 3 ? 'bg-[#0066FF] text-white font-semibold' : 'bg-stone-100 text-stone-400'}`}>
-              1+ $6.99/ea
+              1+ $4.99/ea
             </span>
             <span className={`px-2.5 py-1 rounded-full transition-colors ${totalQty >= 3 && totalQty < 5 ? 'bg-[#0066FF] text-white font-semibold' : 'bg-stone-100 text-stone-400'}`}>
               3+ $5.99/ea

@@ -59,7 +59,7 @@ function MagnetPreview({
         <img
           src={image}
           alt="Your magnet"
-          className={`block ${isLarge ? 'max-h-44 sm:max-h-72' : 'h-20'} w-auto rounded-[1px]`}
+          className={`block ${isLarge ? 'max-h-44 sm:max-h-72 md:max-h-80' : 'h-20'} w-auto rounded-[1px]`}
           style={{
             aspectRatio: '4/3',
             objectFit: 'cover',
@@ -160,7 +160,7 @@ export default function CustomizePage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <nav className="flex items-center justify-between px-6 py-4 max-w-3xl mx-auto">
+      <nav className="flex items-center justify-between px-6 py-4 max-w-3xl md:max-w-4xl mx-auto">
         <button onClick={() => router.push('/crop')} className="text-stone-500 hover:text-stone-700 text-sm font-medium">
           ← Back
         </button>
@@ -172,90 +172,96 @@ export default function CustomizePage() {
 
       <StepIndicator currentStep={2} />
 
-      <div className="px-6 pb-10 max-w-xl mx-auto">
+      <div className="px-6 pb-10 max-w-xl md:max-w-4xl mx-auto">
         <h1 className="text-2xl sm:text-3xl font-bold text-stone-900 text-center tracking-tight mb-0.5">
           Customize your magnet
         </h1>
         <p
-          className="text-center text-[#0066FF] mb-4"
+          className="text-center text-[#0066FF] mb-4 md:mb-8"
           style={{ fontFamily: 'var(--font-caveat), cursive', fontSize: '1.1rem' }}
         >
           pick a style and add a caption
         </p>
 
-        {/* Live preview — compact on mobile */}
-        <div className="bg-[#F5F7FF] rounded-3xl p-4 sm:p-6 mb-4">
-          <div className="flex justify-center">
-            <div className="transform -rotate-2 hover:rotate-0 transition-transform duration-300">
-              <MagnetPreview
-                image={state.croppedImage!}
-                style={state.selectedFrame}
-                caption={state.caption}
-                size="large"
-                onTapCaption={handleTapCaption}
-              />
+        {/* Desktop: side-by-side, Mobile: stacked */}
+        <div className="md:flex md:gap-10 md:items-start">
+          {/* Live preview */}
+          <div className="bg-[#F5F7FF] rounded-3xl p-4 sm:p-6 md:p-8 mb-4 md:mb-0 md:flex-1 md:sticky md:top-24">
+            <div className="flex justify-center">
+              <div className="transform -rotate-2 hover:rotate-0 transition-transform duration-300">
+                <MagnetPreview
+                  image={state.croppedImage!}
+                  style={state.selectedFrame}
+                  caption={state.caption}
+                  size="large"
+                  onTapCaption={handleTapCaption}
+                />
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Photo style — pick one */}
-        <div className="mb-3">
-          <label className="text-xs font-semibold text-stone-500 uppercase tracking-wider mb-2 block">Choose a style</label>
-          <div className="flex gap-2">
-            {PHOTO_STYLES.map((ps) => {
-              const isSelected = state.selectedFrame === ps.id;
-              return (
-                <button
-                  key={ps.id}
-                  onClick={() => dispatch({ type: 'SET_FRAME', payload: ps.id })}
-                  className={`flex-1 py-2 px-1.5 rounded-xl transition-all text-center border-2 ${
-                    isSelected
-                      ? 'border-[#0066FF] bg-[#F0F4FF] shadow-sm'
-                      : 'border-transparent bg-[#F5F7FF] hover:bg-[#EEF1FF]'
-                  }`}
-                >
-                  <p className={`text-xs font-semibold ${isSelected ? 'text-[#0066FF]' : 'text-stone-600'}`}>{ps.name}</p>
-                  <p className={`text-[10px] leading-tight mt-0.5 ${isSelected ? 'text-[#0066FF]/60' : 'text-stone-400'}`}>{ps.description}</p>
-                </button>
-              );
-            })}
+          {/* Controls */}
+          <div className="md:flex-1 md:max-w-sm">
+            {/* Photo style — pick one */}
+            <div className="mb-3 md:mb-5">
+              <label className="text-xs font-semibold text-stone-500 uppercase tracking-wider mb-2 block">Choose a style</label>
+              <div className="flex gap-2">
+                {PHOTO_STYLES.map((ps) => {
+                  const isSelected = state.selectedFrame === ps.id;
+                  return (
+                    <button
+                      key={ps.id}
+                      onClick={() => dispatch({ type: 'SET_FRAME', payload: ps.id })}
+                      className={`flex-1 py-2 px-1.5 rounded-xl transition-all text-center border-2 ${
+                        isSelected
+                          ? 'border-[#0066FF] bg-[#F0F4FF] shadow-sm'
+                          : 'border-transparent bg-[#F5F7FF] hover:bg-[#EEF1FF]'
+                      }`}
+                    >
+                      <p className={`text-xs font-semibold ${isSelected ? 'text-[#0066FF]' : 'text-stone-600'}`}>{ps.name}</p>
+                      <p className={`text-[10px] leading-tight mt-0.5 ${isSelected ? 'text-[#0066FF]/60' : 'text-stone-400'}`}>{ps.description}</p>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Caption input */}
+            <div className="mb-4 md:mb-6">
+              <label className="text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1.5 block">
+                Caption <span className="normal-case font-normal">(optional)</span>
+              </label>
+              <div className="relative">
+                <input
+                  ref={captionInputRef}
+                  type="text"
+                  value={state.caption}
+                  onChange={(e) => {
+                    if (e.target.value.length <= MAX_CAPTION_LENGTH) {
+                      dispatch({ type: 'SET_CAPTION', payload: e.target.value });
+                    }
+                  }}
+                  placeholder="e.g. Summer 2025"
+                  className="w-full px-4 py-2.5 rounded-xl bg-[#F5F7FF] text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-[#0066FF] border-none text-sm"
+                  style={{ fontFamily: 'var(--font-garamond), Georgia, serif', fontStyle: 'italic' }}
+                  maxLength={MAX_CAPTION_LENGTH}
+                />
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-stone-400">
+                  {state.caption.length}/{MAX_CAPTION_LENGTH}
+                </span>
+              </div>
+            </div>
+
+            <Button
+              variant="primary"
+              fullWidth
+              size="md"
+              onClick={() => router.push('/recipients')}
+            >
+              <span className="text-sm">Continue</span>
+            </Button>
           </div>
         </div>
-
-        {/* Caption input — compact */}
-        <div className="mb-4">
-          <label className="text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1.5 block">
-            Caption <span className="normal-case font-normal">(optional)</span>
-          </label>
-          <div className="relative">
-            <input
-              ref={captionInputRef}
-              type="text"
-              value={state.caption}
-              onChange={(e) => {
-                if (e.target.value.length <= MAX_CAPTION_LENGTH) {
-                  dispatch({ type: 'SET_CAPTION', payload: e.target.value });
-                }
-              }}
-              placeholder="e.g. Summer 2025"
-              className="w-full px-4 py-2.5 rounded-xl bg-[#F5F7FF] text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-[#0066FF] border-none text-sm"
-              style={{ fontFamily: 'var(--font-garamond), Georgia, serif', fontStyle: 'italic' }}
-              maxLength={MAX_CAPTION_LENGTH}
-            />
-            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-stone-400">
-              {state.caption.length}/{MAX_CAPTION_LENGTH}
-            </span>
-          </div>
-        </div>
-
-        <Button
-          variant="primary"
-          fullWidth
-          size="md"
-          onClick={() => router.push('/recipients')}
-        >
-          <span className="text-sm">Continue</span>
-        </Button>
       </div>
     </div>
   );

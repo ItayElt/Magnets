@@ -65,7 +65,7 @@ export default function CropPage() {
 
       <StepIndicator currentStep={1} />
 
-      <div className="px-6 pb-12 max-w-xl mx-auto">
+      <div className="px-6 pb-12 max-w-xl md:max-w-2xl mx-auto">
         <h1 className="text-2xl font-bold text-stone-900 text-center tracking-tight mb-2">
           Crop your photo
         </h1>

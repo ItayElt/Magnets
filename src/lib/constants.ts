@@ -12,7 +12,7 @@ export const FRAMES = PHOTO_STYLES;
 export const PRICING_TIERS = [
   { minQty: 5, pricePerUnit: 4.99 },
   { minQty: 3, pricePerUnit: 5.99 },
-  { minQty: 1, pricePerUnit: 6.99 },
+  { minQty: 1, pricePerUnit: 4.99 },
 ];
 
 export const QUICK_QUANTITIES = [1, 3, 5, 10];

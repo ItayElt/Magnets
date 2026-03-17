@@ -162,98 +162,104 @@ export default function CheckoutPage() {
 
       <StepIndicator currentStep={4} />
 
-      <div className="px-6 pb-12 max-w-xl mx-auto">
+      <div className="px-6 pb-12 max-w-xl md:max-w-3xl mx-auto">
         <h1 className="text-2xl font-bold text-stone-900 text-center tracking-tight mb-8">
           Checkout
         </h1>
 
-        {/* Order summary */}
-        <div className="bg-white rounded-2xl p-4 border border-stone-200 mb-6">
-          <div className="flex gap-4">
-            <div className="shrink-0">
-              <div className="bg-white p-1 pb-3 shadow rounded-sm">
-                <img
-                  src={state.croppedImage}
-                  alt="Your magnet"
-                  className="w-20 h-auto rounded-sm"
-                  style={{ aspectRatio: '4/3', objectFit: 'cover' }}
-                />
+        {/* Desktop: side-by-side, Mobile: stacked */}
+        <div className="md:flex md:gap-10 md:items-start">
+          {/* Order summary */}
+          <div className="bg-white rounded-2xl p-4 md:p-6 border border-stone-200 mb-6 md:mb-0 md:flex-1 md:sticky md:top-24">
+            <div className="flex gap-4">
+              <div className="shrink-0">
+                <div className="bg-white p-1 pb-3 md:p-1.5 md:pb-5 shadow rounded-sm">
+                  <img
+                    src={state.croppedImage}
+                    alt="Your magnet"
+                    className="w-20 md:w-32 h-auto rounded-sm"
+                    style={{ aspectRatio: '4/3', objectFit: 'cover' }}
+                  />
+                </div>
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-medium text-stone-800">
+                  {quantity} magnet{quantity !== 1 ? 's' : ''}
+                </p>
+                <p className="text-sm text-stone-500 capitalize">
+                  {state.selectedFrame.replace('-', ' ')} frame
+                </p>
+                {state.caption && (
+                  <p className="text-sm text-stone-400 truncate">&ldquo;{state.caption}&rdquo;</p>
+                )}
+                <p className="text-sm text-stone-500 mt-1">
+                  {state.mode === 'self'
+                    ? 'Shipping to you'
+                    : `Shipping to ${state.recipients.length} friend${state.recipients.length !== 1 ? 's' : ''}`}
+                </p>
               </div>
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="font-medium text-stone-800">
-                {quantity} magnet{quantity !== 1 ? 's' : ''}
-              </p>
-              <p className="text-sm text-stone-500 capitalize">
-                {state.selectedFrame.replace('-', ' ')} frame
-              </p>
-              {state.caption && (
-                <p className="text-sm text-stone-400 truncate">&ldquo;{state.caption}&rdquo;</p>
+            <div className="border-t border-stone-100 mt-3 pt-3">
+              <div className="flex justify-between text-sm text-stone-600">
+                <span>{quantity} &times; ${unitPrice.toFixed(2)}</span>
+                <span>${total.toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between text-sm text-stone-600">
+                <span>Shipping</span>
+                <span className="text-green-600">Free</span>
+              </div>
+              <div className="flex justify-between font-semibold text-stone-800 mt-1">
+                <span>Total</span>
+                <span>${total.toFixed(2)}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Payment section */}
+          <div className="md:flex-1 md:max-w-md">
+            {/* Email */}
+            <div className="mb-6">
+              <Input
+                label="Email address"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                error={emailError}
+                placeholder="you@example.com"
+              />
+              <p className="text-xs text-stone-400 mt-1">For order confirmation and shipping updates</p>
+            </div>
+
+            {/* CTA Button */}
+            <Button
+              variant="primary"
+              fullWidth
+              size="md"
+              onClick={handleProceedToPayment}
+              disabled={processing}
+            >
+              {processing ? (
+                <span className="flex items-center gap-2">
+                  <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                  </svg>
+                  {processingMessage || 'Processing...'}
+                </span>
+              ) : (
+                <span className="text-sm">{`Proceed to Payment: $${total.toFixed(2)}`}</span>
               )}
-              <p className="text-sm text-stone-500 mt-1">
-                {state.mode === 'self'
-                  ? 'Shipping to you'
-                  : `Shipping to ${state.recipients.length} friend${state.recipients.length !== 1 ? 's' : ''}`}
-              </p>
-            </div>
-          </div>
-          <div className="border-t border-stone-100 mt-3 pt-3">
-            <div className="flex justify-between text-sm text-stone-600">
-              <span>{quantity} &times; ${unitPrice.toFixed(2)}</span>
-              <span>${total.toFixed(2)}</span>
-            </div>
-            <div className="flex justify-between text-sm text-stone-600">
-              <span>Shipping</span>
-              <span className="text-green-600">Free</span>
-            </div>
-            <div className="flex justify-between font-semibold text-stone-800 mt-1">
-              <span>Total</span>
-              <span>${total.toFixed(2)}</span>
-            </div>
-          </div>
-        </div>
+            </Button>
 
-        {/* Email */}
-        <div className="mb-6">
-          <Input
-            label="Email address"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            error={emailError}
-            placeholder="you@example.com"
-          />
-          <p className="text-xs text-stone-400 mt-1">For order confirmation and shipping updates</p>
-        </div>
-
-        {/* CTA Button */}
-        <Button
-          variant="primary"
-          fullWidth
-          size="md"
-          onClick={handleProceedToPayment}
-          disabled={processing}
-        >
-          {processing ? (
-            <span className="flex items-center gap-2">
-              <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+            {/* Stripe badge */}
+            <div className="flex items-center justify-center gap-1.5 mt-4 text-stone-400">
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                <path d="M7 11V7a5 5 0 0110 0v4" />
               </svg>
-              {processingMessage || 'Processing...'}
-            </span>
-          ) : (
-            <span className="text-sm">{`Proceed to Payment: $${total.toFixed(2)}`}</span>
-          )}
-        </Button>
-
-        {/* Stripe badge */}
-        <div className="flex items-center justify-center gap-1.5 mt-4 text-stone-400">
-          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-            <path d="M7 11V7a5 5 0 0110 0v4" />
-          </svg>
-          <span className="text-xs font-[family-name:var(--font-inter)]">Secure payment by Stripe</span>
+              <span className="text-xs font-[family-name:var(--font-inter)]">Secure payment by Stripe</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>

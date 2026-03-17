@@ -80,7 +80,7 @@ export default function UploadPage() {
 
       <StepIndicator currentStep={0} />
 
-      <div className="px-6 pb-12 max-w-xl mx-auto">
+      <div className="px-6 pb-12 max-w-xl md:max-w-2xl mx-auto">
 
         {!preview ? (
           <div className="flex flex-col items-center">
@@ -97,7 +97,7 @@ export default function UploadPage() {
               onDragLeave={() => setDragActive(false)}
               onDrop={handleDrop}
               onClick={() => fileInputRef.current?.click()}
-              className={`w-full rounded-3xl p-10 sm:p-14 text-center transition-all duration-300 cursor-pointer ${
+              className={`w-full rounded-3xl p-10 sm:p-14 md:p-20 text-center transition-all duration-300 cursor-pointer ${
                 dragActive
                   ? 'bg-blue-50 border-2 border-[#0066FF] shadow-lg'
                   : 'bg-[#F5F7FF] hover:bg-[#EEF1FF] border-2 border-transparent'
@@ -111,7 +111,8 @@ export default function UploadPage() {
               </div>
 
               <p className="text-stone-700 font-semibold text-base sm:text-lg mb-1">
-                Tap to choose a photo
+                <span className="md:hidden">Tap to choose a photo</span>
+                <span className="hidden md:inline">Click to choose a photo</span>
               </p>
               <p className="text-stone-400 text-sm">
                 or drag and drop here

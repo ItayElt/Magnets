@@ -127,7 +127,7 @@ function ConfirmationContent() {
         </span>
       </nav>
 
-      <div className="px-6 pb-12 max-w-xl mx-auto text-center">
+      <div className="px-6 pb-12 max-w-xl md:max-w-2xl mx-auto text-center">
         <div className="mt-8 mb-6">
           <div className="w-20 h-20 mx-auto bg-green-100 rounded-full flex items-center justify-center animate-[scale-in_0.3s_ease-out]">
             <svg className="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">

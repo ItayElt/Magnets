@@ -172,8 +172,8 @@ export default function LandingPage() {
         <motion.div
           className="fixed pointer-events-none z-[1]"
           style={{
-            top: '65%',
-            left: '60%',
+            top: '461px',
+            left: 'calc(50% + 340px)',
             x: '-50%',
             y: '-50%',
             scale: blobScale,
@@ -198,42 +198,42 @@ export default function LandingPage() {
 
             {/* Left — Copy */}
             <div className="max-w-xl animate-fade-up order-1 text-center lg:text-left">
-              <h1 className="text-[2.1rem] sm:text-5xl lg:text-[3.5rem] font-extrabold text-white leading-[1.05] tracking-[-0.03em]">
+              <h1 className="text-[2.1rem] sm:text-5xl lg:text-[4rem] xl:text-[4.5rem] font-extrabold text-white leading-[1.05] tracking-[-0.03em]">
                 Bring your<br />memories <span className="italic font-semibold" style={{ fontFamily: 'var(--font-playfair)' }}>to life</span>
               </h1>
-              <p className="mt-4 sm:mt-5 text-[14px] sm:text-lg text-blue-100/90 leading-[1.5] mx-auto lg:mx-0 px-2 sm:px-0 sm:max-w-md">
+              <p className="mt-4 sm:mt-5 text-[14px] sm:text-lg lg:text-[1.35rem] text-blue-100/90 leading-[1.5] mx-auto lg:mx-0 px-2 sm:px-0 sm:max-w-md lg:max-w-lg">
                 Your camera roll has 4,000 photos, your fridge has zero. Fix that in under 60 seconds.
               </p>
               <div className="mt-7 sm:mt-9 flex flex-col items-center lg:items-start">
                 <Link
                   href="/upload"
-                  className="inline-flex items-center justify-center px-8 py-4 sm:px-9 sm:py-4 text-sm sm:text-base font-semibold bg-white rounded-full shadow-lg hover:shadow-xl hover:scale-[1.03] transition-all duration-200 group"
+                  className="inline-flex items-center justify-center px-8 py-4 sm:px-9 sm:py-4 lg:px-10 lg:py-[18px] text-sm sm:text-base lg:text-lg font-semibold bg-white rounded-full shadow-lg hover:shadow-xl hover:scale-[1.03] transition-all duration-200 group"
                   style={{ color: '#0066FF' }}
                 >
                   Pick a photo
-                  <svg className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="ml-2 w-4 h-4 lg:w-5 lg:h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
                 </Link>
-                <p className="mt-4 text-[10px] sm:text-xs text-blue-200/70 tracking-wide whitespace-nowrap">
-                  Free shipping · Ships in 3–7 days · <span className="font-bold text-white">From $6.99</span> · USA made
+                <p className="mt-4 text-xs sm:text-sm lg:text-base text-blue-200/80 tracking-wide whitespace-nowrap">
+                  Free shipping · Ships in 3–7 days · <span className="font-bold text-white">From $4.99</span> · USA made
                 </p>
               </div>
             </div>
 
             {/* Right — Magnets fanned out like polaroids */}
             {/* Mobile/tablet: flexbox row. Desktop: absolute positioned scatter */}
-            <div className="animate-fade-up-delay-1 order-2 flex justify-center items-end gap-3 sm:gap-4 -mx-4 sm:mx-0 mt-10 sm:mt-12 lg:mt-0 lg:relative lg:mx-auto lg:w-[480px] lg:h-[380px] lg:block">
+            <div className="animate-fade-up-delay-1 order-2 flex justify-center items-end gap-3 sm:gap-4 -mx-4 sm:mx-0 mt-10 sm:mt-12 lg:mt-0 lg:relative lg:w-full lg:h-[570px] lg:block">
 
-              {/* Magnet 1 — Left, tilted */}
+              {/* Magnet 1 — Top-left, vintage */}
               <div
-                className="animate-float-1 transition-transform duration-500 hover:!-translate-y-2 hover:z-40 shrink-0 lg:!absolute lg:!left-0 lg:!top-[40px]"
+                className="animate-float-1 transition-transform duration-500 hover:!-translate-y-2 hover:z-40 shrink-0 lg:!absolute lg:!left-[80px] lg:!top-[116px]"
                 style={{
-                  transform: 'rotate(-8deg) translateY(8px)',
+                  transform: 'rotate(-3deg) translateY(8px)',
                   zIndex: 10,
                 }}
               >
-                <div className="bg-white p-1.5 pb-1.5 sm:p-2 sm:pb-2 rounded-lg magnet-shadow w-[105px] sm:w-[135px] lg:w-[190px]">
+                <div className="bg-white p-1.5 pb-1.5 sm:p-2 sm:pb-2 rounded-lg magnet-shadow w-[105px] sm:w-[135px] lg:w-[225px]">
                   <div className="rounded-md overflow-hidden aspect-[4/3] relative">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src="/examples/taj-mahal.jpg" alt="India" className="w-full h-full object-cover" style={{ filter: 'saturate(0.55) contrast(0.85) brightness(1.08) sepia(0.35)' }} />
@@ -243,15 +243,15 @@ export default function LandingPage() {
                 </div>
               </div>
 
-              {/* Magnet 2 — Center front, the hero card */}
+              {/* Magnet 2 — Top-right, the hero card (largest) */}
               <div
-                className="animate-float-3 transition-transform duration-500 hover:!-translate-y-2 shrink-0 lg:!absolute lg:!left-1/2 lg:!top-0 lg:!-translate-x-1/2"
+                className="animate-float-3 transition-transform duration-500 hover:!-translate-y-2 shrink-0 lg:!absolute lg:!left-[350px] lg:!top-[116px]"
                 style={{
                   transform: 'rotate(2deg) translateY(-4px)',
                   zIndex: 20,
                 }}
               >
-                <div className="bg-white p-1.5 pb-1.5 sm:p-2 sm:pb-2 rounded-lg magnet-shadow w-[115px] sm:w-[150px] lg:w-[200px]">
+                <div className="bg-white p-1.5 pb-1.5 sm:p-2 sm:pb-2 rounded-lg magnet-shadow w-[115px] sm:w-[150px] lg:w-[240px]">
                   <div className="rounded-md overflow-hidden aspect-[4/3] relative">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src="/examples/group-party.jpg" alt="Halloween" className="w-full h-full object-cover" />
@@ -261,15 +261,15 @@ export default function LandingPage() {
                 </div>
               </div>
 
-              {/* Magnet 3 — Right, tilted the other way */}
+              {/* Magnet 3 — Bottom-center, B&W */}
               <div
-                className="animate-float-2 transition-transform duration-500 hover:!-translate-y-2 hover:z-40 shrink-0 lg:!absolute lg:!ml-0 lg:!right-0 lg:!top-[30px]"
+                className="animate-float-2 transition-transform duration-500 hover:!-translate-y-2 hover:z-40 shrink-0 lg:!absolute lg:!left-[220px] lg:!top-[366px]"
                 style={{
-                  transform: 'rotate(6deg) translateY(12px)',
+                  transform: 'rotate(-1deg) translateY(12px)',
                   zIndex: 15,
                 }}
               >
-                <div className="bg-white p-1.5 pb-1.5 sm:p-2 sm:pb-2 rounded-lg magnet-shadow w-[105px] sm:w-[135px] lg:w-[190px]">
+                <div className="bg-white p-1.5 pb-1.5 sm:p-2 sm:pb-2 rounded-lg magnet-shadow w-[105px] sm:w-[135px] lg:w-[225px]">
                   <div className="rounded-md overflow-hidden aspect-[4/3] relative">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src="/examples/formal-night.jpg" alt="Gala" className="w-full h-full object-cover" style={{ filter: 'grayscale(1) contrast(1.1) brightness(1.02)' }} />
@@ -430,7 +430,7 @@ export default function LandingPage() {
 
           <div className="grid grid-cols-3 gap-3 sm:gap-6 max-w-3xl mx-auto">
             {[
-              { qty: '1', label: 'magnet', price: '6.99', tagline: 'Just for you', best: false },
+              { qty: '1', label: 'magnet', price: '4.99', tagline: 'Just for you', best: false },
               { qty: '3', label: 'magnets', price: '5.99', tagline: 'Most popular', best: true },
               { qty: '5', label: 'magnets', price: '4.99', tagline: 'Best value', best: false },
             ].map((tier) => (
@@ -460,7 +460,7 @@ export default function LandingPage() {
         <motion.div
           className="absolute pointer-events-none"
           style={{
-            top: '-30%',
+            top: '-50%',
             left: '-20%',
             width: '140%',
             y: bottomBlobY,
@@ -470,7 +470,7 @@ export default function LandingPage() {
         >
           <svg className="w-full h-auto" viewBox="0 0 900 500" fill="none" preserveAspectRatio="none">
             <path
-              d="M0 0 L900 0 L900 80 Q720 280 450 180 Q200 90 50 240 Q0 290 0 200 Z"
+              d="M0 0 L900 0 L900 60 Q720 200 450 130 Q200 60 50 180 Q0 220 0 150 Z"
               fill="white"
             />
           </svg>
@@ -523,10 +523,10 @@ export default function LandingPage() {
 
       {/* ════════════ NEWSLETTER / STAY TUNED ════════════ */}
       <section className="relative z-[2] py-12 md:py-16 px-5 md:px-10">
-        <div className="max-w-5xl mx-auto rounded-3xl p-6 md:p-12 flex flex-col md:flex-row items-center gap-6 md:gap-8" style={{ background: '#001A4A' }}>
-          <div className="flex-1 text-center md:text-left">
+        <div className="max-w-5xl mx-auto rounded-3xl p-6 md:p-12 flex flex-col md:flex-row md:items-center gap-6 md:gap-10" style={{ background: '#001A4A' }}>
+          <div className="md:shrink-0 text-center md:text-left">
             <h3 className="text-xl md:text-3xl font-bold text-white mb-2">Stay tuned!</h3>
-            <p className="text-blue-200 text-sm leading-relaxed">Get exclusive offers and discover new styles before everyone else!</p>
+            <p className="text-blue-200 text-sm md:text-base leading-relaxed md:whitespace-nowrap">Get exclusive offers and discover new styles before everyone else!</p>
           </div>
           <div className="flex-1 w-full">
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
