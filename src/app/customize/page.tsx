@@ -59,7 +59,7 @@ function MagnetPreview({
         <img
           src={image}
           alt="Your magnet"
-          className={`block ${isLarge ? 'max-h-44 sm:max-h-72 md:max-h-80' : 'h-20'} w-auto rounded-[1px]`}
+          className={`block ${isLarge ? 'max-h-32 sm:max-h-44 md:max-h-80' : 'h-20'} w-auto rounded-[1px]`}
           style={{
             aspectRatio: '4/3',
             objectFit: 'cover',
@@ -159,7 +159,7 @@ export default function CustomizePage() {
   if (!state.croppedImage) return null;
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="h-screen flex flex-col overflow-hidden md:min-h-screen md:h-auto md:block md:overflow-visible bg-white">
       <nav className="flex items-center justify-between px-6 py-4 max-w-3xl md:max-w-4xl mx-auto">
         <button onClick={() => router.push('/crop')} className="text-stone-500 hover:text-stone-700 text-sm font-medium">
           ← Back
@@ -172,12 +172,12 @@ export default function CustomizePage() {
 
       <StepIndicator currentStep={2} />
 
-      <div className="px-6 pb-10 max-w-xl md:max-w-4xl mx-auto">
-        <h1 className="text-2xl sm:text-3xl font-bold text-stone-900 text-center tracking-tight mb-0.5">
+      <div className="px-6 pb-4 md:pb-10 max-w-xl md:max-w-4xl mx-auto flex-1 flex flex-col min-h-0 md:block">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-stone-900 text-center tracking-tight mb-0.5">
           Customize your magnet
         </h1>
         <p
-          className="text-center text-[#0066FF] mb-4 md:mb-8"
+          className="text-center text-[#0066FF] mb-2 md:mb-8"
           style={{ fontFamily: 'var(--font-caveat), cursive', fontSize: '1.1rem' }}
         >
           pick a style and add a caption
@@ -186,7 +186,7 @@ export default function CustomizePage() {
         {/* Desktop: side-by-side, Mobile: stacked */}
         <div className="md:flex md:gap-10 md:items-start">
           {/* Live preview */}
-          <div className="bg-[#F5F7FF] rounded-3xl p-4 sm:p-6 md:p-8 mb-4 md:mb-0 md:flex-1 md:sticky md:top-24">
+          <div className="bg-[#F5F7FF] rounded-3xl p-3 sm:p-4 md:p-8 mb-3 md:mb-0 md:flex-1 md:sticky md:top-24">
             <div className="flex justify-center">
               <div className="transform -rotate-2 hover:rotate-0 transition-transform duration-300">
                 <MagnetPreview

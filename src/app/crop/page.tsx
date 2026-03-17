@@ -53,7 +53,7 @@ export default function CropPage() {
 
   return (
     <div className="min-h-screen">
-      <nav className="flex items-center justify-between px-6 py-4 max-w-3xl mx-auto">
+      <nav className="flex items-center justify-between px-6 py-4 md:py-3 max-w-xl md:max-w-2xl mx-auto">
         <button onClick={() => router.push('/upload')} className="text-stone-500 hover:text-stone-700">
           ← Back
         </button>
@@ -65,11 +65,11 @@ export default function CropPage() {
 
       <StepIndicator currentStep={1} />
 
-      <div className="px-6 pb-12 max-w-xl md:max-w-2xl mx-auto">
-        <h1 className="text-2xl font-bold text-stone-900 text-center tracking-tight mb-2">
+      <div className="px-6 pb-12 max-w-xl md:max-w-2xl mx-auto md:pb-6">
+        <h1 className="text-2xl font-bold text-stone-900 text-center tracking-tight mb-1 md:mb-1">
           Crop your photo
         </h1>
-        <p className="text-center text-stone-500 mb-6">Adjust to fit your 4&quot; × 3&quot; magnet</p>
+        <p className="text-center text-stone-500 mb-4 md:mb-3">Adjust to fit your 4&quot; × 3&quot; magnet</p>
 
         <div className="crop-container mb-4">
           <Cropper
@@ -84,7 +84,7 @@ export default function CropPage() {
         </div>
 
         {/* Zoom slider */}
-        <div className="flex items-center gap-3 mb-6">
+        <div className="flex items-center gap-3 mb-4 md:mb-3">
           <span className="text-sm text-stone-500">Zoom</span>
           <input
             type="range"

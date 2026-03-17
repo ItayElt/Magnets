@@ -54,6 +54,13 @@ body {
   overflow: hidden;
 }
 
+@media (min-width: 768px) {
+  .crop-container {
+    aspect-ratio: unset;
+    height: 45vh;
+  }
+}
+
 /* ─── Animations ─────────────────────────────────────────── */
 
 @keyframes float-1 {
