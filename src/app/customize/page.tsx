@@ -59,7 +59,7 @@ function MagnetPreview({
         <img
           src={image}
           alt="Your magnet"
-          className={`block ${isLarge ? 'max-h-32 sm:max-h-44 md:max-h-80' : 'h-20'} w-auto rounded-[1px]`}
+          className={`block ${isLarge ? 'max-h-32 sm:max-h-44 md:max-h-96' : 'h-20'} w-auto rounded-[1px]`}
           style={{
             aspectRatio: '4/3',
             objectFit: 'cover',
@@ -160,7 +160,7 @@ export default function CustomizePage() {
 
   return (
     <div className="h-screen flex flex-col overflow-hidden md:min-h-screen md:h-auto md:block md:overflow-visible bg-white">
-      <nav className="flex items-center justify-between px-6 py-4 max-w-3xl md:max-w-4xl mx-auto">
+      <nav className="flex items-center justify-between px-6 py-4 max-w-3xl md:max-w-5xl mx-auto">
         <button onClick={() => router.push('/crop')} className="text-stone-500 hover:text-stone-700 text-sm font-medium">
           ← Back
         </button>
@@ -172,7 +172,7 @@ export default function CustomizePage() {
 
       <StepIndicator currentStep={2} />
 
-      <div className="px-6 pb-4 md:pb-10 max-w-xl md:max-w-4xl mx-auto flex-1 flex flex-col min-h-0 md:block">
+      <div className="px-6 pb-4 md:pb-10 max-w-xl md:max-w-5xl mx-auto flex-1 flex flex-col min-h-0 md:block">
         <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-stone-900 text-center tracking-tight mb-0.5">
           Customize your magnet
         </h1>
@@ -184,9 +184,9 @@ export default function CustomizePage() {
         </p>
 
         {/* Desktop: side-by-side, Mobile: stacked */}
-        <div className="md:flex md:gap-10 md:items-start">
+        <div className="md:flex md:gap-12 md:items-start">
           {/* Live preview */}
-          <div className="bg-[#F5F7FF] rounded-3xl p-3 sm:p-4 md:p-8 mb-3 md:mb-0 md:flex-1 md:sticky md:top-24">
+          <div className="bg-[#F5F7FF] rounded-3xl p-3 sm:p-4 md:p-10 mb-3 md:mb-0 md:flex-1 md:sticky md:top-24">
             <div className="flex justify-center">
               <div className="transform -rotate-2 hover:rotate-0 transition-transform duration-300">
                 <MagnetPreview
@@ -201,25 +201,25 @@ export default function CustomizePage() {
           </div>
 
           {/* Controls */}
-          <div className="md:flex-1 md:max-w-sm">
+          <div className="md:flex-1 md:max-w-md">
             {/* Photo style — pick one */}
-            <div className="mb-3 md:mb-5">
-              <label className="text-sm font-semibold text-stone-500 uppercase tracking-wider mb-2 block">Choose a style</label>
-              <div className="flex gap-2">
+            <div className="mb-3 md:mb-6">
+              <label className="text-sm md:text-base font-semibold text-stone-500 uppercase tracking-wider mb-2 md:mb-3 block">Choose a style</label>
+              <div className="flex gap-2 md:gap-3">
                 {PHOTO_STYLES.map((ps) => {
                   const isSelected = state.selectedFrame === ps.id;
                   return (
                     <button
                       key={ps.id}
                       onClick={() => dispatch({ type: 'SET_FRAME', payload: ps.id })}
-                      className={`flex-1 py-2.5 px-2 rounded-xl transition-all text-center border-2 ${
+                      className={`flex-1 py-2.5 md:py-3.5 px-2 md:px-3 rounded-xl transition-all text-center border-2 ${
                         isSelected
                           ? 'border-[#0066FF] bg-[#F0F4FF] shadow-sm'
                           : 'border-transparent bg-[#F5F7FF] hover:bg-[#EEF1FF]'
                       }`}
                     >
-                      <p className={`text-sm font-semibold ${isSelected ? 'text-[#0066FF]' : 'text-stone-600'}`}>{ps.name}</p>
-                      <p className={`text-xs leading-tight mt-0.5 ${isSelected ? 'text-[#0066FF]/60' : 'text-stone-400'}`}>{ps.description}</p>
+                      <p className={`text-sm md:text-base font-semibold ${isSelected ? 'text-[#0066FF]' : 'text-stone-600'}`}>{ps.name}</p>
+                      <p className={`text-xs md:text-sm leading-tight mt-0.5 ${isSelected ? 'text-[#0066FF]/60' : 'text-stone-400'}`}>{ps.description}</p>
                     </button>
                   );
                 })}
@@ -227,8 +227,8 @@ export default function CustomizePage() {
             </div>
 
             {/* Caption input */}
-            <div className="mb-4 md:mb-6">
-              <label className="text-sm font-semibold text-stone-500 uppercase tracking-wider mb-1.5 block">
+            <div className="mb-4 md:mb-8">
+              <label className="text-sm md:text-base font-semibold text-stone-500 uppercase tracking-wider mb-1.5 md:mb-2 block">
                 Caption <span className="normal-case font-normal">(optional)</span>
               </label>
               <div className="relative">
@@ -242,7 +242,7 @@ export default function CustomizePage() {
                     }
                   }}
                   placeholder="e.g. Summer 2025"
-                  className="w-full px-4 py-3 rounded-xl bg-[#F5F7FF] text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-[#0066FF] border-none text-base"
+                  className="w-full px-4 md:px-5 py-3 md:py-3.5 rounded-xl bg-[#F5F7FF] text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-[#0066FF] border-none text-base md:text-lg"
                   style={{ fontFamily: 'var(--font-garamond), Georgia, serif', fontStyle: 'italic' }}
                   maxLength={MAX_CAPTION_LENGTH}
                 />
@@ -255,10 +255,10 @@ export default function CustomizePage() {
             <Button
               variant="primary"
               fullWidth
-              size="md"
+              size="lg"
               onClick={() => router.push('/recipients')}
             >
-              <span className="text-base">Continue</span>
+              <span className="text-base md:text-lg">Continue</span>
             </Button>
           </div>
         </div>
