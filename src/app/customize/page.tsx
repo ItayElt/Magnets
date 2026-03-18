@@ -204,7 +204,7 @@ export default function CustomizePage() {
           <div className="md:flex-1 md:max-w-sm">
             {/* Photo style — pick one */}
             <div className="mb-3 md:mb-5">
-              <label className="text-xs font-semibold text-stone-500 uppercase tracking-wider mb-2 block">Choose a style</label>
+              <label className="text-sm font-semibold text-stone-500 uppercase tracking-wider mb-2 block">Choose a style</label>
               <div className="flex gap-2">
                 {PHOTO_STYLES.map((ps) => {
                   const isSelected = state.selectedFrame === ps.id;
@@ -212,14 +212,14 @@ export default function CustomizePage() {
                     <button
                       key={ps.id}
                       onClick={() => dispatch({ type: 'SET_FRAME', payload: ps.id })}
-                      className={`flex-1 py-2 px-1.5 rounded-xl transition-all text-center border-2 ${
+                      className={`flex-1 py-2.5 px-2 rounded-xl transition-all text-center border-2 ${
                         isSelected
                           ? 'border-[#0066FF] bg-[#F0F4FF] shadow-sm'
                           : 'border-transparent bg-[#F5F7FF] hover:bg-[#EEF1FF]'
                       }`}
                     >
-                      <p className={`text-xs font-semibold ${isSelected ? 'text-[#0066FF]' : 'text-stone-600'}`}>{ps.name}</p>
-                      <p className={`text-[10px] leading-tight mt-0.5 ${isSelected ? 'text-[#0066FF]/60' : 'text-stone-400'}`}>{ps.description}</p>
+                      <p className={`text-sm font-semibold ${isSelected ? 'text-[#0066FF]' : 'text-stone-600'}`}>{ps.name}</p>
+                      <p className={`text-xs leading-tight mt-0.5 ${isSelected ? 'text-[#0066FF]/60' : 'text-stone-400'}`}>{ps.description}</p>
                     </button>
                   );
                 })}
@@ -228,7 +228,7 @@ export default function CustomizePage() {
 
             {/* Caption input */}
             <div className="mb-4 md:mb-6">
-              <label className="text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1.5 block">
+              <label className="text-sm font-semibold text-stone-500 uppercase tracking-wider mb-1.5 block">
                 Caption <span className="normal-case font-normal">(optional)</span>
               </label>
               <div className="relative">
@@ -242,11 +242,11 @@ export default function CustomizePage() {
                     }
                   }}
                   placeholder="e.g. Summer 2025"
-                  className="w-full px-4 py-2.5 rounded-xl bg-[#F5F7FF] text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-[#0066FF] border-none text-sm"
+                  className="w-full px-4 py-3 rounded-xl bg-[#F5F7FF] text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-[#0066FF] border-none text-base"
                   style={{ fontFamily: 'var(--font-garamond), Georgia, serif', fontStyle: 'italic' }}
                   maxLength={MAX_CAPTION_LENGTH}
                 />
-                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-stone-400">
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-stone-400">
                   {state.caption.length}/{MAX_CAPTION_LENGTH}
                 </span>
               </div>
@@ -258,7 +258,7 @@ export default function CustomizePage() {
               size="md"
               onClick={() => router.push('/recipients')}
             >
-              <span className="text-sm">Continue</span>
+              <span className="text-base">Continue</span>
             </Button>
           </div>
         </div>
