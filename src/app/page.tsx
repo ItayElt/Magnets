@@ -523,15 +523,15 @@ export default function LandingPage() {
 
       {/* ════════════ NEWSLETTER / STAY TUNED ════════════ */}
       <section className="relative z-[2] py-12 md:py-16 px-5 md:px-10">
-        <div className="max-w-5xl mx-auto rounded-3xl p-6 md:p-12 flex flex-col md:flex-row md:items-center gap-6 md:gap-10" style={{ background: '#001A4A' }}>
-          <div className="md:shrink-0 text-center md:text-left">
+        <div className="max-w-5xl mx-auto rounded-3xl p-6 md:p-10 overflow-hidden flex flex-col md:flex-row md:items-center gap-6 md:gap-8" style={{ background: '#001A4A' }}>
+          <div className="md:shrink-0 md:max-w-[45%] text-center md:text-left">
             <h3 className="text-xl md:text-3xl font-bold text-white mb-2">Stay tuned!</h3>
             <p className="text-blue-200 text-sm md:text-base leading-relaxed">Get exclusive offers and discover new styles before everyone else!</p>
           </div>
-          <div className="flex-1 w-full min-w-0">
+          <div className="flex-1 min-w-0">
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-              <input type="email" placeholder="Your email" className="flex-1 px-4 sm:px-5 py-3 sm:py-3.5 rounded-full bg-white/10 border border-white/20 text-white placeholder:text-blue-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
-              <button className="px-5 sm:px-6 py-3 sm:py-3.5 bg-white rounded-full text-sm font-semibold transition-all hover:shadow-lg cursor-pointer whitespace-nowrap" style={{ color: '#002B71' }}>Subscribe</button>
+              <input type="email" placeholder="Your email" className="flex-1 min-w-0 px-4 sm:px-5 py-3 sm:py-3.5 rounded-full bg-white/10 border border-white/20 text-white placeholder:text-blue-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+              <button className="px-5 sm:px-6 py-3 sm:py-3.5 bg-white rounded-full text-sm font-semibold transition-all hover:shadow-lg cursor-pointer whitespace-nowrap shrink-0" style={{ color: '#002B71' }}>Subscribe</button>
             </div>
             <p className="text-xs text-blue-300 mt-3">View our <Link href="/privacy" className="underline hover:text-white transition-colors">privacy policy</Link></p>
           </div>
