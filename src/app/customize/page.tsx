@@ -160,7 +160,7 @@ export default function CustomizePage() {
 
   return (
     <div className="h-screen flex flex-col overflow-hidden md:min-h-screen md:h-auto md:block md:overflow-visible bg-white">
-      <nav className="w-full flex items-center justify-between px-6 py-4 max-w-3xl md:max-w-5xl mx-auto">
+      <nav className="w-full flex items-center justify-between px-6 py-4 max-w-3xl md:max-w-6xl mx-auto">
         <button onClick={() => router.push('/crop')} className="text-stone-500 hover:text-stone-700 text-sm font-medium">
           ← Back
         </button>
@@ -172,8 +172,8 @@ export default function CustomizePage() {
 
       <StepIndicator currentStep={2} />
 
-      <div className="px-6 pb-4 md:pb-10 max-w-xl md:max-w-5xl mx-auto flex-1 flex flex-col min-h-0 md:block">
-        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-stone-900 text-center tracking-tight mb-0.5">
+      <div className="px-6 pb-4 md:pb-10 max-w-xl md:max-w-6xl mx-auto flex-1 flex flex-col min-h-0 md:block">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-stone-900 text-center tracking-tight mb-0.5">
           Customize your magnet
         </h1>
         <p

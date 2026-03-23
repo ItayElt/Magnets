@@ -150,7 +150,7 @@ export default function CheckoutPage() {
 
   return (
     <div className="min-h-screen">
-      <nav className="flex items-center justify-between px-6 py-4 max-w-3xl mx-auto">
+      <nav className="flex items-center justify-between px-6 py-4 max-w-3xl md:max-w-6xl mx-auto">
         <button onClick={() => router.push('/recipients')} className="text-stone-500 hover:text-stone-700">
           &larr; Back
         </button>
@@ -162,13 +162,13 @@ export default function CheckoutPage() {
 
       <StepIndicator currentStep={4} />
 
-      <div className="px-6 pb-12 max-w-xl md:max-w-3xl mx-auto">
-        <h1 className="text-2xl font-bold text-stone-900 text-center tracking-tight mb-8">
+      <div className="px-6 pb-12 max-w-xl md:max-w-6xl mx-auto">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-stone-900 text-center tracking-tight mb-8 md:mb-10">
           Checkout
         </h1>
 
         {/* Desktop: side-by-side, Mobile: stacked */}
-        <div className="md:flex md:gap-10 md:items-start">
+        <div className="md:flex md:gap-16 md:items-start">
           {/* Order summary */}
           <div className="bg-white rounded-2xl p-4 md:p-6 border border-stone-200 mb-6 md:mb-0 md:flex-1 md:sticky md:top-24">
             <div className="flex gap-4">
@@ -216,7 +216,7 @@ export default function CheckoutPage() {
           </div>
 
           {/* Payment section */}
-          <div className="md:flex-1 md:max-w-md">
+          <div className="md:flex-1 md:max-w-lg">
             {/* Email */}
             <div className="mb-6">
               <Input

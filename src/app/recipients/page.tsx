@@ -514,7 +514,7 @@ export default function RecipientsPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <nav className="flex items-center justify-between px-6 py-4 max-w-3xl mx-auto">
+      <nav className="flex items-center justify-between px-6 py-4 max-w-3xl md:max-w-6xl mx-auto">
         <button onClick={() => router.push('/customize')} className="text-stone-500 hover:text-stone-700 text-sm font-medium">
           ← Back
         </button>
@@ -526,8 +526,8 @@ export default function RecipientsPage() {
 
       <StepIndicator currentStep={3} />
 
-      <div className="px-6 pb-12 max-w-xl md:max-w-2xl mx-auto">
-        <h1 className="text-2xl sm:text-3xl font-bold text-stone-900 text-center tracking-tight mb-1">
+      <div className="px-6 pb-12 max-w-xl md:max-w-4xl mx-auto">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-stone-900 text-center tracking-tight mb-1">
           Where should we send it?
         </h1>
         <p

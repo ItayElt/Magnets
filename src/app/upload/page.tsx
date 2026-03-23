@@ -68,7 +68,7 @@ export default function UploadPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <nav className="flex items-center justify-between px-6 py-4 max-w-3xl md:max-w-3xl mx-auto">
+      <nav className="flex items-center justify-between px-6 py-4 max-w-3xl md:max-w-6xl mx-auto">
         <button onClick={() => router.push('/')} className="text-stone-500 hover:text-stone-700 text-sm font-medium">
           ← Back
         </button>
