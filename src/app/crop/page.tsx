@@ -65,7 +65,7 @@ export default function CropPage() {
 
       <StepIndicator currentStep={1} />
 
-      <div className="px-6 pb-12 max-w-xl md:max-w-4xl mx-auto md:pb-6">
+      <div className="px-6 pb-12 max-w-xl md:max-w-3xl mx-auto md:pb-6">
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-stone-900 text-center tracking-tight mb-1 md:mb-1">
           Crop your photo
         </h1>
@@ -80,6 +80,7 @@ export default function CropPage() {
             onCropChange={setCrop}
             onZoomChange={setZoom}
             onCropComplete={onCropComplete}
+            style={{ containerStyle: { background: '#e8e8e8' } }}
           />
         </div>
 
