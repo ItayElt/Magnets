@@ -676,7 +676,7 @@ export default function RecipientsPage() {
         {totalQty > 0 && (
           <div className="flex items-center justify-center gap-2 mb-3 text-xs">
             <span className={`px-2.5 py-1 rounded-full transition-colors ${totalQty >= 1 && totalQty < 3 ? 'bg-[#0066FF] text-white font-semibold' : 'bg-stone-100 text-stone-400'}`}>
-              1+ $4.99/ea
+              1+ $6.99/ea
             </span>
             <span className={`px-2.5 py-1 rounded-full transition-colors ${totalQty >= 3 && totalQty < 5 ? 'bg-[#0066FF] text-white font-semibold' : 'bg-stone-100 text-stone-400'}`}>
               3+ $5.99/ea

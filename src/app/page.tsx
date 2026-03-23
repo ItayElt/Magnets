@@ -430,7 +430,7 @@ export default function LandingPage() {
 
           <div className="grid grid-cols-3 gap-3 sm:gap-6 max-w-3xl mx-auto">
             {[
-              { qty: '1', label: 'magnet', price: '4.99', tagline: 'Just for you', best: false },
+              { qty: '1', label: 'magnet', price: '6.99', tagline: 'Just for you', best: false },
               { qty: '3', label: 'magnets', price: '5.99', tagline: 'Most popular', best: true },
               { qty: '5', label: 'magnets', price: '4.99', tagline: 'Best value', best: false },
             ].map((tier) => (

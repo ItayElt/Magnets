@@ -12,7 +12,7 @@ export const FRAMES = PHOTO_STYLES;
 export const PRICING_TIERS = [
   { minQty: 5, pricePerUnit: 4.99 },
   { minQty: 3, pricePerUnit: 5.99 },
-  { minQty: 1, pricePerUnit: 4.99 },
+  { minQty: 1, pricePerUnit: 6.99 },
 ];
 
 export const QUICK_QUANTITIES = [1, 3, 5, 10];
@@ -45,8 +45,8 @@ export function getUnitPrice(quantity: number): number {
 
 export function getTotalPrice(quantity: number): number {
   // Fixed bundle prices for exact tier quantities
-  if (quantity === 3) return 17.99;
-  if (quantity === 5) return 24.99;
+  if (quantity === 3) return 17.97;
+  if (quantity === 5) return 24.95;
   return +(getUnitPrice(quantity) * quantity).toFixed(2);
 }
 

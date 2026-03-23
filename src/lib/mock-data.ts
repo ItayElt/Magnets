@@ -26,7 +26,7 @@ function generateMockOrders(count: number): CompletedOrder[] {
     const isSelf = qty <= 2 && Math.random() > 0.3;
     const frame = randomFrom(frames);
     const caption = Math.random() > 0.4 ? randomFrom(captions.filter(c => c)) : '';
-    const unitPrice = qty >= 5 ? 4.49 : qty >= 3 ? 4.99 : 5.99;
+    const unitPrice = qty >= 5 ? 4.99 : qty >= 3 ? 5.99 : 6.99;
 
     const idx = Math.floor(Math.random() * cities.length);
     const address = {

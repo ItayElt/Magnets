@@ -68,7 +68,7 @@ export default function UploadPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <nav className="flex items-center justify-between px-6 py-4 max-w-3xl mx-auto">
+      <nav className="flex items-center justify-between px-6 py-4 max-w-3xl md:max-w-3xl mx-auto">
         <button onClick={() => router.push('/')} className="text-stone-500 hover:text-stone-700 text-sm font-medium">
           ← Back
         </button>
@@ -80,14 +80,14 @@ export default function UploadPage() {
 
       <StepIndicator currentStep={0} />
 
-      <div className="px-6 pb-12 max-w-xl md:max-w-2xl mx-auto">
+      <div className="px-6 pb-12 max-w-xl md:max-w-3xl mx-auto">
 
         {!preview ? (
           <div className="flex flex-col items-center">
-            <h1 className="text-2xl sm:text-3xl font-bold text-stone-900 text-center tracking-tight mb-2">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-stone-900 text-center tracking-tight mb-2 md:mb-3">
               Upload your photo
             </h1>
-            <p className="text-stone-400 text-sm text-center mb-8">
+            <p className="text-stone-400 text-sm md:text-base text-center mb-8 md:mb-10">
               Pick a memory you love
             </p>
 
@@ -110,11 +110,11 @@ export default function UploadPage() {
                 </svg>
               </div>
 
-              <p className="text-stone-700 font-semibold text-base sm:text-lg mb-1">
+              <p className="text-stone-700 font-semibold text-base sm:text-lg md:text-xl mb-1">
                 <span className="md:hidden">Tap to choose a photo</span>
                 <span className="hidden md:inline">Click to choose a photo</span>
               </p>
-              <p className="text-stone-400 text-sm">
+              <p className="text-stone-400 text-sm md:text-base">
                 or drag and drop here
               </p>
             </div>
@@ -122,7 +122,7 @@ export default function UploadPage() {
             {/* Camera option — subtle pill */}
             <button
               onClick={() => cameraInputRef.current?.click()}
-              className="mt-5 flex items-center gap-2.5 px-6 py-3 rounded-full text-sm font-medium text-stone-600 bg-stone-100 hover:bg-stone-200 hover:text-stone-800 transition-all cursor-pointer"
+              className="mt-5 md:mt-7 flex items-center gap-2.5 px-6 py-3 md:py-3.5 rounded-full text-sm md:text-base font-medium text-stone-600 bg-stone-100 hover:bg-stone-200 hover:text-stone-800 transition-all cursor-pointer"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
@@ -150,15 +150,15 @@ export default function UploadPage() {
           </div>
         ) : (
           <div className="space-y-6">
-            <h1 className="text-2xl font-bold text-stone-900 text-center tracking-tight mb-2">
+            <h1 className="text-2xl md:text-3xl font-bold text-stone-900 text-center tracking-tight mb-2">
               Looking good!
             </h1>
 
-            <div className="bg-[#F5F7FF] rounded-3xl p-4 sm:p-5">
+            <div className="bg-[#F5F7FF] rounded-3xl p-4 sm:p-5 md:p-8">
               <img
                 src={preview}
                 alt="Preview"
-                className="w-full rounded-2xl object-contain max-h-80"
+                className="w-full rounded-2xl object-contain max-h-80 md:max-h-96"
               />
               <p className="mt-3 text-xs text-stone-400 text-center truncate">
                 {fileName}

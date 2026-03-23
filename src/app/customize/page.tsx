@@ -160,7 +160,7 @@ export default function CustomizePage() {
 
   return (
     <div className="h-screen flex flex-col overflow-hidden md:min-h-screen md:h-auto md:block md:overflow-visible bg-white">
-      <nav className="flex items-center justify-between px-6 py-4 max-w-3xl md:max-w-5xl mx-auto">
+      <nav className="w-full flex items-center justify-between px-6 py-4 max-w-3xl md:max-w-5xl mx-auto">
         <button onClick={() => router.push('/crop')} className="text-stone-500 hover:text-stone-700 text-sm font-medium">
           ← Back
         </button>
