@@ -177,7 +177,7 @@ export default function CheckoutPage() {
                   <img
                     src={state.croppedImage}
                     alt="Your magnet"
-                    className="w-20 md:w-32 h-auto rounded-sm"
+                    className="w-16 sm:w-20 md:w-28 h-auto rounded-sm"
                     style={{ aspectRatio: '4/3', objectFit: 'cover' }}
                   />
                 </div>
@@ -257,7 +257,7 @@ export default function CheckoutPage() {
                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
                 <path d="M7 11V7a5 5 0 0110 0v4" />
               </svg>
-              <span className="text-xs font-[family-name:var(--font-inter)]">Secure payment by Stripe</span>
+              <span className="text-xs">Secure payment by Stripe</span>
             </div>
           </div>
         </div>

@@ -1,4 +1,11 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
+
+export const metadata: Metadata = {
+  title: 'Privacy Policy',
+  description: 'How Memora collects, uses, and protects your personal information and photos.',
+  alternates: { canonical: '/privacy' },
+};
 
 export default function PrivacyPolicyPage() {
   return (

@@ -1,5 +1,6 @@
 'use client';
 
+import { Fragment } from 'react';
 import { STEP_LABELS } from '@/lib/constants';
 
 interface StepIndicatorProps {
@@ -7,41 +8,41 @@ interface StepIndicatorProps {
 }
 
 export default function StepIndicator({ currentStep }: StepIndicatorProps) {
+  const steps = STEP_LABELS.slice(0, 5);
+
   return (
-    <div className="w-full max-w-lg mx-auto px-4 py-4">
-      <div className="flex items-center justify-between">
-        {STEP_LABELS.slice(0, 5).map((label, i) => (
-          <div key={label} className="flex items-center">
-            <div className="flex flex-col items-center">
+    <div
+      className="w-full max-w-md mx-auto px-6 pt-2 pb-6"
+      role="progressbar"
+      aria-valuemin={1}
+      aria-valuemax={steps.length}
+      aria-valuenow={currentStep + 1}
+      aria-valuetext={steps[currentStep]}
+    >
+      <div className="flex items-center justify-center">
+        {steps.map((label, i) => (
+          <Fragment key={label}>
+            {i > 0 && (
               <div
-                className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
-                  i < currentStep
-                    ? 'bg-[#0066FF] text-white'
-                    : i === currentStep
-                    ? 'bg-[#0066FF] text-white ring-2 ring-blue-200'
-                    : 'bg-stone-200 text-stone-500'
-                }`}
-              >
-                {i < currentStep ? (
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                ) : (
-                  i + 1
-                )}
-              </div>
-              <span className={`text-xs mt-1 hidden sm:block ${i <= currentStep ? 'text-stone-700' : 'text-stone-400'}`}>
-                {label}
-              </span>
-            </div>
-            {i < 4 && (
-              <div
-                className={`w-8 sm:w-12 h-0.5 mx-1 ${
-                  i < currentStep ? 'bg-[#0066FF]' : 'bg-stone-200'
+                className={`flex-1 h-[2px] mx-1.5 rounded-full transition-colors duration-300 ${
+                  i <= currentStep ? 'bg-[#0066FF]' : 'bg-stone-200'
                 }`}
               />
             )}
-          </div>
+            {i === currentStep ? (
+              <span className="px-3.5 py-1.5 rounded-full text-xs font-semibold text-white bg-[#0066FF] shadow-sm whitespace-nowrap">
+                {label}
+              </span>
+            ) : i < currentStep ? (
+              <span className="w-5 h-5 rounded-full bg-[#0066FF] flex items-center justify-center shrink-0" aria-hidden="true">
+                <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+              </span>
+            ) : (
+              <span className="w-2.5 h-2.5 rounded-full bg-stone-200 shrink-0" aria-hidden="true" />
+            )}
+          </Fragment>
         ))}
       </div>
     </div>

@@ -1,4 +1,11 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
+
+export const metadata: Metadata = {
+  title: 'Shipping Info',
+  description: 'Free US shipping on every Memora order. Photo magnets are printed and delivered in 3-7 days.',
+  alternates: { canonical: '/shipping' },
+};
 
 export default function ShippingPolicyPage() {
   return (

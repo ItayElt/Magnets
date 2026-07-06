@@ -56,7 +56,7 @@ function StateAutocomplete({
       const spaceBelow = window.innerHeight - rect.bottom;
       const spaceAbove = rect.top;
       const flipAbove = spaceBelow < dropdownHeight && spaceAbove > spaceBelow;
-      const dropdownWidth = Math.min(window.innerWidth - 32, 220);
+      const dropdownWidth = Math.min(window.innerWidth - 32, 280);
       setDropdownPos({
         top: flipAbove ? rect.top - 4 : rect.bottom + 4,
         left: Math.min(rect.left, window.innerWidth - dropdownWidth - 8),
@@ -149,7 +149,7 @@ function StateAutocomplete({
             top: dropdownPos.flipped ? undefined : dropdownPos.top,
             bottom: dropdownPos.flipped ? `${window.innerHeight - dropdownPos.top}px` : undefined,
             left: dropdownPos.left,
-            width: Math.min(window.innerWidth - 32, 220),
+            width: Math.min(window.innerWidth - 32, 280),
           }}
         >
           {filtered.map((s, i) => (
@@ -177,7 +177,7 @@ function StateAutocomplete({
             top: dropdownPos.flipped ? undefined : dropdownPos.top,
             bottom: dropdownPos.flipped ? `${window.innerHeight - dropdownPos.top}px` : undefined,
             left: dropdownPos.left,
-            width: Math.min(window.innerWidth - 32, 220),
+            width: Math.min(window.innerWidth - 32, 280),
           }}
         >
           No matching state
@@ -265,7 +265,7 @@ function AddressForm({
       />
 
       {/* ZIP first, then City & State — ZIP auto-fills the others */}
-      <div className="grid grid-cols-5 gap-3">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
         <div className="col-span-2">
           <div className="relative">
             <Input
@@ -531,8 +531,8 @@ export default function RecipientsPage() {
           Where should we send it?
         </h1>
         <p
-          className="text-center text-[#0066FF] mb-8"
-          style={{ fontFamily: 'var(--font-caveat), cursive', fontSize: '1.1rem' }}
+          className="text-center text-[#0066FF] mb-8 text-lg"
+          style={{ fontFamily: 'var(--font-caveat), cursive' }}
         >
           add addresses and choose quantity
         </p>

@@ -35,35 +35,7 @@ function useSmartHeader() {
   return visible;
 }
 
-/* ─── Trust Icon SVGs ──────────────────────────────────────── */
-function LockIcon() {
-  return (
-    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#0066FF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-      <path d="M7 11V7a5 5 0 0110 0v4" />
-    </svg>
-  );
-}
-
-function TruckIcon() {
-  return (
-    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#0066FF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M1 3h15v13H1zM16 8h4l3 3v5h-7V8z" />
-      <circle cx="5.5" cy="18.5" r="2.5" />
-      <circle cx="18.5" cy="18.5" r="2.5" />
-    </svg>
-  );
-}
-
-function TrackIcon() {
-  return (
-    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#0066FF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M12 22s-8-4.5-8-11.8A8 8 0 0112 2a8 8 0 018 8.2c0 7.3-8 11.8-8 11.8z" />
-      <circle cx="12" cy="10" r="3" />
-    </svg>
-  );
-}
-
+/* ─── Payment Icon SVGs ────────────────────────────────────── */
 function VisaIcon() {
   return (
     <svg width="48" height="32" viewBox="0 0 48 32" fill="none">
@@ -94,6 +66,128 @@ function PaypalIcon() {
   );
 }
 
+/* ─── Newsletter form — wired to /api/subscribe ────────────── */
+function NewsletterForm() {
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+  const [message, setMessage] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.trim() || status === 'sending') return;
+    setStatus('sending');
+    try {
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Something went wrong');
+      setStatus('success');
+      setMessage(data.message || "You're in! We'll keep you posted.");
+      setEmail('');
+    } catch (err) {
+      setStatus('error');
+      setMessage(err instanceof Error ? err.message : 'Something went wrong. Try again?');
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} noValidate>
+      <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => { setEmail(e.target.value); if (status !== 'idle') setStatus('idle'); }}
+          placeholder="Your email"
+          aria-label="Email address"
+          className="flex-1 min-w-0 px-4 sm:px-5 py-3 sm:py-3.5 rounded-full bg-white/10 border border-white/20 text-white placeholder:text-blue-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+        <button
+          type="submit"
+          disabled={status === 'sending'}
+          className="px-5 sm:px-6 py-3 sm:py-3.5 bg-white rounded-full text-sm font-semibold transition-all hover:shadow-lg cursor-pointer whitespace-nowrap shrink-0 disabled:opacity-60"
+          style={{ color: '#002B71' }}
+        >
+          {status === 'sending' ? 'Subscribing…' : 'Subscribe'}
+        </button>
+      </div>
+      {status === 'success' && <p className="text-xs text-emerald-300 mt-3">{message}</p>}
+      {status === 'error' && <p className="text-xs text-rose-300 mt-3">{message}</p>}
+      {status !== 'success' && status !== 'error' && (
+        <p className="text-xs text-blue-300 mt-3">View our <Link href="/privacy" className="underline hover:text-white transition-colors">privacy policy</Link></p>
+      )}
+    </form>
+  );
+}
+
+/* ─── FAQ content — also rendered as FAQPage structured data ── */
+const FAQS = [
+  {
+    q: 'What size are the magnets?',
+    a: 'Each magnet is 4" × 3" — big enough to show off the photo, small enough to collect. They\'re thick, durable, and hold strong on any fridge.',
+  },
+  {
+    q: 'How long does delivery take?',
+    a: 'Your magnets are printed and shipped within days, and delivered in 3–7 business days. Shipping is free on every US order.',
+  },
+  {
+    q: 'What kind of photos work best?',
+    a: 'Any JPG, PNG, or HEIC straight from your phone. Photos at least 1000px wide print crisply — most phone photos are 3–4× that, so you\'re covered.',
+  },
+  {
+    q: 'Can I send magnets to someone else?',
+    a: 'Yes! Enter any US address at checkout and we\'ll ship straight to their door — perfect for grandparents, best friends, or anyone who was in the photo.',
+  },
+  {
+    q: "What if I don't love it?",
+    a: "We'll make it right with a reprint or a refund — no hoops, no fine print. Your memories deserve to look perfect.",
+  },
+  {
+    q: 'Where are the magnets made?',
+    a: 'Every magnet is printed, packed, and shipped in the USA.',
+  },
+];
+
+const STRUCTURED_DATA = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': 'https://memoramagnet.shop/#organization',
+      name: 'Memora',
+      url: 'https://memoramagnet.shop',
+      email: 'support@memoramagnet.shop',
+      logo: 'https://memoramagnet.shop/icon.svg',
+    },
+    {
+      '@type': 'Product',
+      name: 'Custom Photo Magnet',
+      description:
+        'Turn your favorite photo into a premium 4" × 3" fridge magnet. Available in classic, vintage, and black & white styles. Free US shipping.',
+      brand: { '@id': 'https://memoramagnet.shop/#organization' },
+      image: 'https://memoramagnet.shop/examples/fridge-magnets.jpg',
+      offers: {
+        '@type': 'AggregateOffer',
+        priceCurrency: 'USD',
+        lowPrice: '4.99',
+        highPrice: '6.99',
+        availability: 'https://schema.org/InStock',
+        url: 'https://memoramagnet.shop/upload',
+      },
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: FAQS.map((faq) => ({
+        '@type': 'Question',
+        name: faq.q,
+        acceptedAnswer: { '@type': 'Answer', text: faq.a },
+      })),
+    },
+  ],
+};
+
 /* ─── Landing Page ──────────────────────────────────────────── */
 export default function LandingPage() {
   const headerVisible = useSmartHeader();
@@ -117,6 +211,10 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-white overflow-x-hidden" style={{ color: '#262836' }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(STRUCTURED_DATA) }}
+      />
 
       {/* ════════════ SMART STICKY HEADER ════════════ */}
       <nav
@@ -129,16 +227,17 @@ export default function LandingPage() {
             <Link href="/" className="text-2xl font-bold tracking-tight" style={{ color: '#0066FF' }}>
               Memora
             </Link>
-            <div className="hidden md:flex items-center gap-6 text-sm font-medium text-stone-600">
+            <div className="hidden lg:flex items-center gap-6 text-sm font-medium text-stone-600 whitespace-nowrap">
               <a href="#magnets" className="hover:text-[#0066FF] transition-colors">Our Magnets</a>
               <a href="#how-it-works" className="hover:text-[#0066FF] transition-colors">How It Works</a>
               <a href="#pricing" className="hover:text-[#0066FF] transition-colors">Pricing</a>
+              <a href="#faq" className="hover:text-[#0066FF] transition-colors">FAQ</a>
               <Link href="/contact" className="hover:text-[#0066FF] transition-colors">Support</Link>
             </div>
           </div>
           <Link
             href="/upload"
-            className="px-5 py-2.5 text-sm font-semibold text-white rounded-full transition-all duration-200 shadow-sm hover:shadow-lg hover:brightness-110"
+            className="px-5 py-2.5 text-sm font-semibold text-white rounded-full transition-all duration-200 shadow-sm hover:shadow-lg hover:brightness-110 whitespace-nowrap"
             style={{ background: '#0066FF' }}
           >
             Create a Magnet
@@ -150,7 +249,7 @@ export default function LandingPage() {
       <div className="h-[56px]" />
 
       {/* ════════════ HERO — Blue blob + expanding pink transition ════════════ */}
-      <section ref={heroRef} className="relative pb-0 md:min-h-[85vh] bg-white overflow-visible">
+      <section ref={heroRef} className="relative pb-0 lg:min-h-[85vh] bg-white overflow-visible">
 
         {/* Static blue blob in the hero — the main background shape */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -168,12 +267,12 @@ export default function LandingPage() {
           </svg>
         </div>
 
-        {/* Animated expanding blob (pink — transitions into next section) */}
+        {/* Animated expanding blob (pink — transitions into next section, desktop only) */}
         <motion.div
-          className="fixed pointer-events-none z-[1]"
+          className="fixed pointer-events-none z-[1] hidden lg:block"
           style={{
-            top: '461px',
-            left: 'calc(50% + 340px)',
+            top: 'min(461px, 50vh)',
+            left: 'calc(50% + min(340px, 22vw))',
             x: '-50%',
             y: '-50%',
             scale: blobScale,
@@ -215,7 +314,7 @@ export default function LandingPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
                 </Link>
-                <p className="mt-4 text-xs sm:text-sm lg:text-base text-blue-200/80 tracking-wide whitespace-nowrap">
+                <p className="mt-4 text-xs sm:text-sm lg:text-base text-blue-200/80 tracking-wide sm:whitespace-nowrap">
                   Free shipping · Ships in 3–7 days · <span className="font-bold text-white">From $4.99</span> · USA made
                 </p>
               </div>
@@ -236,7 +335,7 @@ export default function LandingPage() {
                 <div className="bg-white p-1.5 pb-1.5 sm:p-2 sm:pb-2 rounded-lg magnet-shadow w-[105px] sm:w-[135px] lg:w-[225px]">
                   <div className="rounded-md overflow-hidden aspect-[4/3] relative">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src="/examples/taj-mahal.jpg" alt="India" className="w-full h-full object-cover" style={{ filter: 'saturate(0.55) contrast(0.85) brightness(1.08) sepia(0.35)' }} />
+                    <img src="/examples/taj-mahal.jpg" alt="Taj Mahal travel photo as a vintage-style magnet" className="w-full h-full object-cover" fetchPriority="high" style={{ filter: 'saturate(0.55) contrast(0.85) brightness(1.08) sepia(0.35)' }} />
                     <div className="absolute inset-0 bg-amber-900/[0.14] mix-blend-multiply" />
                   </div>
                   <p className="text-center text-[9px] sm:text-xs text-stone-400 italic mt-1" style={{ fontFamily: 'var(--font-garamond), serif' }}>India &apos;26</p>
@@ -254,7 +353,7 @@ export default function LandingPage() {
                 <div className="bg-white p-1.5 pb-1.5 sm:p-2 sm:pb-2 rounded-lg magnet-shadow w-[115px] sm:w-[150px] lg:w-[240px]">
                   <div className="rounded-md overflow-hidden aspect-[4/3] relative">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src="/examples/group-party.jpg" alt="Halloween" className="w-full h-full object-cover" />
+                    <img src="/examples/group-party.jpg" alt="Friends at a Halloween party as a classic photo magnet" className="w-full h-full object-cover" fetchPriority="high" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/8 via-transparent to-amber-50/15 mix-blend-multiply" />
                   </div>
                   <p className="text-center text-[9px] sm:text-xs text-stone-400 italic mt-1" style={{ fontFamily: 'var(--font-garamond), serif' }}>Halloween &apos;25</p>
@@ -272,7 +371,7 @@ export default function LandingPage() {
                 <div className="bg-white p-1.5 pb-1.5 sm:p-2 sm:pb-2 rounded-lg magnet-shadow w-[105px] sm:w-[135px] lg:w-[225px]">
                   <div className="rounded-md overflow-hidden aspect-[4/3] relative">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src="/examples/formal-night.jpg" alt="Gala" className="w-full h-full object-cover" style={{ filter: 'grayscale(1) contrast(1.1) brightness(1.02)' }} />
+                    <img src="/examples/formal-night.jpg" alt="Formal night out as a black and white photo magnet" className="w-full h-full object-cover" style={{ filter: 'grayscale(1) contrast(1.1) brightness(1.02)' }} />
                     <div className="absolute inset-0" style={{ boxShadow: 'inset 0 0 30px rgba(0,0,0,0.08)' }} />
                   </div>
                   <p className="text-center text-[9px] sm:text-xs text-stone-400 italic mt-1" style={{ fontFamily: 'var(--font-garamond), serif' }}>HBS Gala &apos;25</p>
@@ -306,7 +405,7 @@ export default function LandingPage() {
                     <div className="bg-white p-1.5 pb-1.5 sm:p-2 sm:pb-2 rounded-lg magnet-shadow transform -rotate-2 group-hover:rotate-0 transition-transform duration-500">
                       <div className="w-36 sm:w-44 md:w-48 aspect-[4/3] rounded-md overflow-hidden">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={card.img} alt={card.title} className="w-full h-full object-cover" style={{ filter: card.filter, objectPosition: card.objectPosition || 'center' }} />
+                        <img src={card.img} alt={`Example of a ${card.title.toLowerCase().replace(/s$/, '')} made from a personal photo`} className="w-full h-full object-cover" loading="lazy" decoding="async" style={{ filter: card.filter, objectPosition: card.objectPosition || 'center' }} />
                       </div>
                       <p className="text-center text-[10px] sm:text-xs text-stone-400 italic mt-1" style={{ fontFamily: 'var(--font-garamond), serif' }}>{card.caption}</p>
                     </div>
@@ -343,9 +442,11 @@ export default function LandingPage() {
             <div className="rounded-3xl overflow-hidden shadow-2xl">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/examples/fridge-magnets.png"
-                alt="Photo magnets displayed on a retro fridge"
+                src="/examples/fridge-magnets.jpg"
+                alt="Custom photo magnets of travel and family memories displayed on a retro fridge"
                 className="w-full h-auto"
+                loading="lazy"
+                decoding="async"
               />
             </div>
 
@@ -428,7 +529,7 @@ export default function LandingPage() {
             Free shipping on every order.
           </p>
 
-          <div className="grid grid-cols-3 gap-3 sm:gap-6 max-w-3xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 max-w-3xl mx-auto">
             {[
               { qty: '1', label: 'magnet', price: '6.99', tagline: 'Just for you', best: false },
               { qty: '3', label: 'magnets', price: '5.99', tagline: 'Most popular', best: true },
@@ -446,10 +547,66 @@ export default function LandingPage() {
           </div>
 
           <div className="text-center mt-8 md:mt-10">
-            <Link href="/upload" className="inline-flex items-center justify-center px-8 py-3.5 sm:px-10 sm:py-4 text-sm sm:text-base font-semibold text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200" style={{ background: '#0066FF' }}>
-              Create
+            <Link href="/upload" className="inline-flex items-center justify-center gap-2 px-8 py-3.5 sm:px-10 sm:py-4 text-sm sm:text-base font-semibold text-white rounded-full shadow-lg hover:shadow-xl hover:scale-[1.03] transition-all duration-200" style={{ background: '#0066FF' }}>
+              Start your magnets
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
             </Link>
           </div>
+        </div>
+      </section>
+
+      {/* ════════════ FAQ ════════════ */}
+      <section id="faq" className="relative z-[2] py-16 md:py-24 px-5 md:px-10" style={{ background: '#FFF7FA' }}>
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center tracking-tight mb-3">
+            Questions? Answered.
+          </h2>
+          <p className="text-center text-stone-500 mb-8 md:mb-12 text-base md:text-lg">
+            Everything you need to know before your photos hit the fridge.
+          </p>
+          <div className="space-y-3">
+            {FAQS.map((faq) => (
+              <details
+                key={faq.q}
+                className="group bg-white rounded-2xl border border-stone-100 shadow-sm open:shadow-md transition-shadow"
+              >
+                <summary className="flex items-center justify-between gap-4 px-5 py-4 md:px-6 md:py-5 cursor-pointer list-none font-semibold text-sm md:text-base text-stone-800 select-none [&::-webkit-details-marker]:hidden">
+                  {faq.q}
+                  <svg
+                    className="w-5 h-5 shrink-0 transition-transform duration-200 group-open:rotate-45"
+                    style={{ color: '#0066FF' }}
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                  </svg>
+                </summary>
+                <div className="px-5 pb-4 md:px-6 md:pb-5 text-sm md:text-base text-stone-500 leading-relaxed">
+                  {faq.a}
+                  {faq.q === "What if I don't love it?" && (
+                    <>
+                      {' '}
+                      <Link href="/refund-policy" className="underline hover:text-stone-700 transition-colors">
+                        Read our refund policy
+                      </Link>
+                      .
+                    </>
+                  )}
+                </div>
+              </details>
+            ))}
+          </div>
+          <p className="text-center text-stone-400 text-sm mt-8">
+            Still curious?{' '}
+            <Link href="/contact" className="font-semibold underline hover:text-stone-600 transition-colors" style={{ color: '#0066FF' }}>
+              Ask us anything
+            </Link>
+          </p>
         </div>
       </section>
 
@@ -498,10 +655,11 @@ export default function LandingPage() {
       {/* ════════════ TRUST BAR — floats on the organic bg ════════════ */}
       <section className="relative z-[2] py-10 md:py-14 px-5 md:px-10">
         <div className="max-w-5xl mx-auto text-center text-white">
-          <div className="grid grid-cols-3 gap-4 sm:gap-10">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8">
             <div className="flex flex-col items-center">
               <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0110 0v4" /></svg>
               <h3 className="text-xs sm:text-base font-bold mt-2 sm:mt-3">Secure payment</h3>
+              <p className="text-[10px] sm:text-sm text-blue-200 leading-tight mt-0.5">Powered by Stripe</p>
             </div>
             <div className="flex flex-col items-center">
               <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M1 3h15v13H1zM16 8h4l3 3v5h-7V8z" /><circle cx="5.5" cy="18.5" r="2.5" /><circle cx="18.5" cy="18.5" r="2.5" /></svg>
@@ -512,6 +670,11 @@ export default function LandingPage() {
               <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0112 2a8 8 0 018 8.2c0 7.3-8 11.8-8 11.8z" /><circle cx="12" cy="10" r="3" /></svg>
               <h3 className="text-xs sm:text-base font-bold mt-2 sm:mt-3">Track it</h3>
               <p className="text-[10px] sm:text-sm text-blue-200 leading-tight mt-0.5">Real-time tracking</p>
+            </div>
+            <div className="flex flex-col items-center">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" /></svg>
+              <h3 className="text-xs sm:text-base font-bold mt-2 sm:mt-3">Love-it guarantee</h3>
+              <p className="text-[10px] sm:text-sm text-blue-200 leading-tight mt-0.5">Reprint or refund</p>
             </div>
           </div>
           {/* Payment icons — centered below all 3 columns */}
@@ -529,11 +692,7 @@ export default function LandingPage() {
             <p className="text-blue-200 text-sm md:text-base leading-relaxed">Get exclusive offers and discover new styles before everyone else!</p>
           </div>
           <div className="flex-1 min-w-0">
-            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-              <input type="email" placeholder="Your email" className="flex-1 min-w-0 px-4 sm:px-5 py-3 sm:py-3.5 rounded-full bg-white/10 border border-white/20 text-white placeholder:text-blue-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
-              <button className="px-5 sm:px-6 py-3 sm:py-3.5 bg-white rounded-full text-sm font-semibold transition-all hover:shadow-lg cursor-pointer whitespace-nowrap shrink-0" style={{ color: '#002B71' }}>Subscribe</button>
-            </div>
-            <p className="text-xs text-blue-300 mt-3">View our <Link href="/privacy" className="underline hover:text-white transition-colors">privacy policy</Link></p>
+            <NewsletterForm />
           </div>
         </div>
       </section>
@@ -541,7 +700,7 @@ export default function LandingPage() {
       {/* ════════════ FOOTER ════════════ */}
       <footer className="relative z-[2] py-10 md:py-14 px-5 md:px-10 text-white" style={{ background: '#0066FF' }}>
         <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-10 mb-10 md:mb-12">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-8 md:gap-10 mb-10 md:mb-12">
             <div>
               <h4 className="font-bold text-sm mb-3 md:mb-4">Our magnets</h4>
               <ul className="space-y-2 text-sm text-blue-100">

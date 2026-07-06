@@ -365,7 +365,7 @@ export default function AdminDashboard() {
         <h2 className="text-lg font-semibold text-stone-800 font-[family-name:var(--font-playfair)] mb-4">
           Revenue — Last 14 Days
         </h2>
-        <div className="h-64">
+        <div className="h-48 sm:h-64 lg:h-80">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={stats.revenueByDay}>
               <CartesianGrid strokeDasharray="3 3" stroke="#e7e5e4" />

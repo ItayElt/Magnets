@@ -1,4 +1,11 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
+
+export const metadata: Metadata = {
+  title: 'Terms of Service',
+  description: 'The terms and conditions for ordering custom photo magnets from Memora.',
+  alternates: { canonical: '/terms' },
+};
 
 export default function TermsOfServicePage() {
   return (

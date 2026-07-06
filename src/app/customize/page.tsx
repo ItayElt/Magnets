@@ -159,7 +159,7 @@ export default function CustomizePage() {
   if (!state.croppedImage) return null;
 
   return (
-    <div className="h-screen flex flex-col overflow-hidden md:min-h-screen md:h-auto md:block md:overflow-visible bg-white">
+    <div className="min-h-screen flex flex-col md:block bg-white">
       <nav className="w-full flex items-center justify-between px-6 py-4 max-w-3xl md:max-w-6xl mx-auto">
         <button onClick={() => router.push('/crop')} className="text-stone-500 hover:text-stone-700 text-sm font-medium">
           ← Back
@@ -177,8 +177,8 @@ export default function CustomizePage() {
           Customize your magnet
         </h1>
         <p
-          className="text-center text-[#0066FF] mb-2 md:mb-8"
-          style={{ fontFamily: 'var(--font-caveat), cursive', fontSize: '1.1rem' }}
+          className="text-center text-[#0066FF] mb-2 md:mb-8 text-lg"
+          style={{ fontFamily: 'var(--font-caveat), cursive' }}
         >
           pick a style and add a caption
         </p>

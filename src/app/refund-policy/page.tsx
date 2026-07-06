@@ -1,4 +1,11 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
+
+export const metadata: Metadata = {
+  title: 'Refund Policy',
+  description: 'Our love-it guarantee: how refunds and reprints work for Memora photo magnets.',
+  alternates: { canonical: '/refund-policy' },
+};
 
 export default function RefundPolicyPage() {
   return (

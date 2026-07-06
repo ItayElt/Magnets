@@ -49,6 +49,7 @@ body {
   position: relative;
   width: 100%;
   aspect-ratio: 4/3;
+  max-height: 60vh;
   background: #f0f0f0;
   border-radius: 12px;
   overflow: hidden;
@@ -57,7 +58,8 @@ body {
 @media (min-width: 768px) {
   .crop-container {
     aspect-ratio: unset;
-    height: 45vh;
+    height: min(45vh, 500px);
+    max-height: unset;
   }
 }
 
@@ -141,4 +143,28 @@ body {
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* Visible keyboard focus */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+summary:focus-visible {
+  outline: 2px solid #0066ff;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

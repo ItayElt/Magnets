@@ -86,7 +86,9 @@ export default function CropPage() {
 
         {/* Zoom slider */}
         <div className="flex items-center gap-3 mb-4 md:mb-3">
-          <span className="text-sm text-stone-500">Zoom</span>
+          <svg className="w-4 h-4 text-stone-400 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM13.5 10.5h-6" />
+          </svg>
           <input
             type="range"
             min={1}
@@ -94,8 +96,12 @@ export default function CropPage() {
             step={0.1}
             value={zoom}
             onChange={(e) => setZoom(Number(e.target.value))}
+            aria-label="Zoom"
             className="flex-1 accent-[#0066FF]"
           />
+          <svg className="w-4 h-4 text-stone-400 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6" />
+          </svg>
         </div>
 
         {showResWarning && (
