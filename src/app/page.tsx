@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, useMotionValue, useSpring, type MotionValue } from 'framer-motion';
 
 /* ─── Smart Sticky Header ──────────────────────────────────── */
 function useSmartHeader() {
@@ -63,6 +63,47 @@ function PaypalIcon() {
       <path d="M18.5 25.5h-3l.2-1.2 2-12.3h4.3c2.8 0 4 1.5 3.7 3.7-.4 3-2.8 4.5-5.5 4.5h-2l-.7 5.3zm2.8-7.5h1.5c1.3 0 2.3-.7 2.5-2.1.1-1-.5-1.5-1.7-1.5h-1.5l-.8 3.6z" fill="#003087" />
       <path d="M30.5 14c-.1.6-.3 1.2-.5 1.7-1.1 2.5-3.3 3.5-5.8 3.5h-.5l-.8 5h-2.5l.1-.5 1.2-7.2h2.5c3.5 0 6-1.5 6.3-4.5v2z" fill="#0070E0" />
     </svg>
+  );
+}
+
+/* ─── Hero magnet — spring entrance + gentle mouse parallax ── */
+function ParallaxMagnet({
+  mx,
+  my,
+  depth,
+  rotate,
+  restY,
+  delay,
+  floatClass,
+  className,
+  z,
+  children,
+}: {
+  mx: MotionValue<number>;
+  my: MotionValue<number>;
+  depth: number;
+  rotate: number;
+  restY: number;
+  delay: number;
+  floatClass: string;
+  className?: string;
+  z: number;
+  children: React.ReactNode;
+}) {
+  const x = useTransform(mx, (v) => v * depth);
+  const y = useTransform(my, (v) => v * depth * 0.6);
+  return (
+    <motion.div
+      className={className}
+      style={{ zIndex: z }}
+      initial={{ opacity: 0, y: restY + 40, rotate: rotate * 2.5, scale: 0.94 }}
+      animate={{ opacity: 1, y: restY, rotate, scale: 1 }}
+      transition={{ type: 'spring', stiffness: 80, damping: 15, delay }}
+    >
+      <motion.div style={{ x, y }}>
+        <div className={`${floatClass} transition-transform duration-500 hover:!-translate-y-2`}>{children}</div>
+      </motion.div>
+    </motion.div>
   );
 }
 
@@ -192,6 +233,21 @@ const STRUCTURED_DATA = {
 export default function LandingPage() {
   const headerVisible = useSmartHeader();
   const heroRef = useRef<HTMLDivElement>(null);
+
+  // Gentle mouse parallax for the hero magnets (desktop pointers only)
+  const heroMx = useMotionValue(0);
+  const heroMy = useMotionValue(0);
+  const smoothMx = useSpring(heroMx, { stiffness: 60, damping: 18 });
+  const smoothMy = useSpring(heroMy, { stiffness: 60, damping: 18 });
+  const handleHeroMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    heroMx.set(((e.clientX - r.left) / r.width - 0.5) * 2);
+    heroMy.set(((e.clientY - r.top) / r.height - 0.5) * 2);
+  };
+  const resetHeroMouse = () => {
+    heroMx.set(0);
+    heroMy.set(0);
+  };
   // Scroll-driven blob expansion — starts expanding immediately on scroll
   const { scrollY } = useScroll();
   const blobScale = useTransform(scrollY, [0, 800], [0.6, 14], { clamp: true });
@@ -249,7 +305,12 @@ export default function LandingPage() {
       <div className="h-[56px]" />
 
       {/* ════════════ HERO — Blue blob + expanding pink transition ════════════ */}
-      <section ref={heroRef} className="relative pb-0 lg:min-h-[85vh] bg-white overflow-visible">
+      <section
+        ref={heroRef}
+        onMouseMove={handleHeroMouseMove}
+        onMouseLeave={resetHeroMouse}
+        className="relative pb-0 lg:min-h-[85vh] bg-white overflow-visible"
+      >
 
         {/* Static blue blob in the hero — the main background shape */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -296,14 +357,59 @@ export default function LandingPage() {
           <div className="flex flex-col lg:grid lg:grid-cols-2 gap-6 lg:gap-6 items-center">
 
             {/* Left — Copy */}
-            <div className="max-w-xl animate-fade-up order-1 text-center lg:text-left">
+            <div className="max-w-xl order-1 text-center lg:text-left">
               <h1 className="text-[2.1rem] sm:text-5xl lg:text-[4rem] xl:text-[4.5rem] font-extrabold text-white leading-[1.05] tracking-[-0.03em]">
-                Bring your<br />memories <span className="italic font-semibold" style={{ fontFamily: 'var(--font-playfair)' }}>to life</span>
+                <motion.span
+                  className="block"
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  Bring your
+                </motion.span>
+                <motion.span
+                  className="block"
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.7, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  memories{' '}
+                  <span className="relative inline-block italic font-semibold" style={{ fontFamily: 'var(--font-playfair)' }}>
+                    to life
+                    <motion.svg
+                      className="absolute left-0 -bottom-1.5 sm:-bottom-2.5 w-full h-2.5 sm:h-3 pointer-events-none"
+                      viewBox="0 0 120 12"
+                      fill="none"
+                      preserveAspectRatio="none"
+                      aria-hidden="true"
+                    >
+                      <motion.path
+                        d="M3 8.5 Q 60 13.5 117 3.5"
+                        stroke="white"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                        initial={{ pathLength: 0, opacity: 0 }}
+                        animate={{ pathLength: 1, opacity: 0.9 }}
+                        transition={{ delay: 0.9, duration: 0.7, ease: 'easeOut' }}
+                      />
+                    </motion.svg>
+                  </span>
+                </motion.span>
               </h1>
-              <p className="mt-4 sm:mt-5 text-[14px] sm:text-lg lg:text-[1.35rem] text-blue-100/90 leading-[1.5] mx-auto lg:mx-0 px-2 sm:px-0 sm:max-w-md lg:max-w-lg">
+              <motion.p
+                className="mt-4 sm:mt-5 text-[14px] sm:text-lg lg:text-[1.35rem] text-blue-100/90 leading-[1.5] mx-auto lg:mx-0 px-2 sm:px-0 sm:max-w-md lg:max-w-lg"
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.28, ease: [0.22, 1, 0.36, 1] }}
+              >
                 Your camera roll has 4,000 photos, your fridge has zero. Fix that in under 60 seconds.
-              </p>
-              <div className="mt-7 sm:mt-9 flex flex-col items-center lg:items-start">
+              </motion.p>
+              <motion.div
+                className="mt-7 sm:mt-9 flex flex-col items-center lg:items-start"
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.42, ease: [0.22, 1, 0.36, 1] }}
+              >
                 <Link
                   href="/upload"
                   className="inline-flex items-center justify-center px-8 py-4 sm:px-9 sm:py-4 lg:px-10 lg:py-[18px] text-sm sm:text-base lg:text-lg font-semibold bg-white rounded-full shadow-lg hover:shadow-xl hover:scale-[1.03] transition-all duration-200 group"
@@ -317,20 +423,24 @@ export default function LandingPage() {
                 <p className="mt-4 text-[11px] sm:text-sm lg:text-base text-blue-200/80 tracking-wide whitespace-nowrap">
                   Free shipping · Ships 3–7 days · <span className="font-bold text-white">From $4.99</span> · USA made
                 </p>
-              </div>
+              </motion.div>
             </div>
 
             {/* Right — Magnets fanned out like polaroids */}
-            {/* Mobile/tablet: flexbox row. Desktop: absolute positioned scatter */}
-            <div className="animate-fade-up-delay-1 order-2 flex justify-center items-end gap-3 sm:gap-4 -mx-4 sm:mx-0 mt-10 sm:mt-12 lg:mt-0 lg:relative lg:w-full lg:h-[570px] lg:block">
+            {/* Mobile/tablet: flexbox row. Desktop: absolute positioned scatter with mouse parallax */}
+            <div className="order-2 flex justify-center items-end gap-3 sm:gap-4 -mx-4 sm:mx-0 mt-10 sm:mt-12 lg:mt-0 lg:relative lg:w-full lg:h-[570px] lg:block">
 
               {/* Magnet 1 — Top-left, vintage */}
-              <div
-                className="animate-float-1 transition-transform duration-500 hover:!-translate-y-2 hover:z-40 shrink-0 lg:!absolute lg:!left-[80px] lg:!top-[116px]"
-                style={{
-                  transform: 'rotate(-3deg) translateY(8px)',
-                  zIndex: 10,
-                }}
+              <ParallaxMagnet
+                mx={smoothMx}
+                my={smoothMy}
+                depth={10}
+                rotate={-3}
+                restY={8}
+                delay={0.45}
+                z={10}
+                floatClass="animate-float-1"
+                className="shrink-0 lg:!absolute lg:!left-[80px] lg:!top-[116px]"
               >
                 <div className="bg-white p-1.5 pb-1.5 sm:p-2 sm:pb-2 rounded-lg magnet-shadow w-[105px] sm:w-[135px] lg:w-[225px]">
                   <div className="rounded-md overflow-hidden aspect-[4/3] relative">
@@ -340,15 +450,19 @@ export default function LandingPage() {
                   </div>
                   <p className="text-center text-[9px] sm:text-xs text-stone-400 italic mt-1" style={{ fontFamily: 'var(--font-garamond), serif' }}>India &apos;26</p>
                 </div>
-              </div>
+              </ParallaxMagnet>
 
               {/* Magnet 2 — Top-right, the hero card (largest) */}
-              <div
-                className="animate-float-3 transition-transform duration-500 hover:!-translate-y-2 shrink-0 lg:!absolute lg:!left-[350px] lg:!top-[116px]"
-                style={{
-                  transform: 'rotate(2deg) translateY(-4px)',
-                  zIndex: 20,
-                }}
+              <ParallaxMagnet
+                mx={smoothMx}
+                my={smoothMy}
+                depth={16}
+                rotate={2}
+                restY={-4}
+                delay={0.6}
+                z={20}
+                floatClass="animate-float-3"
+                className="shrink-0 lg:!absolute lg:!left-[350px] lg:!top-[116px]"
               >
                 <div className="bg-white p-1.5 pb-1.5 sm:p-2 sm:pb-2 rounded-lg magnet-shadow w-[115px] sm:w-[150px] lg:w-[240px]">
                   <div className="rounded-md overflow-hidden aspect-[4/3] relative">
@@ -358,15 +472,19 @@ export default function LandingPage() {
                   </div>
                   <p className="text-center text-[9px] sm:text-xs text-stone-400 italic mt-1" style={{ fontFamily: 'var(--font-garamond), serif' }}>Halloween &apos;25</p>
                 </div>
-              </div>
+              </ParallaxMagnet>
 
               {/* Magnet 3 — Bottom-center, B&W */}
-              <div
-                className="animate-float-2 transition-transform duration-500 hover:!-translate-y-2 hover:z-40 shrink-0 lg:!absolute lg:!left-[220px] lg:!top-[366px]"
-                style={{
-                  transform: 'rotate(-1deg) translateY(12px)',
-                  zIndex: 15,
-                }}
+              <ParallaxMagnet
+                mx={smoothMx}
+                my={smoothMy}
+                depth={13}
+                rotate={-1}
+                restY={12}
+                delay={0.75}
+                z={15}
+                floatClass="animate-float-2"
+                className="shrink-0 lg:!absolute lg:!left-[220px] lg:!top-[366px]"
               >
                 <div className="bg-white p-1.5 pb-1.5 sm:p-2 sm:pb-2 rounded-lg magnet-shadow w-[105px] sm:w-[135px] lg:w-[225px]">
                   <div className="rounded-md overflow-hidden aspect-[4/3] relative">
@@ -376,7 +494,7 @@ export default function LandingPage() {
                   </div>
                   <p className="text-center text-[9px] sm:text-xs text-stone-400 italic mt-1" style={{ fontFamily: 'var(--font-garamond), serif' }}>HBS Gala &apos;25</p>
                 </div>
-              </div>
+              </ParallaxMagnet>
             </div>
           </div>
         </motion.div>
