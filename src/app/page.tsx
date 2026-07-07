@@ -314,8 +314,8 @@ export default function LandingPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
                 </Link>
-                <p className="mt-4 text-xs sm:text-sm lg:text-base text-blue-200/80 tracking-wide sm:whitespace-nowrap">
-                  Free shipping · Ships in 3–7 days · <span className="font-bold text-white">From $4.99</span> · USA made
+                <p className="mt-4 text-[11px] sm:text-sm lg:text-base text-blue-200/80 tracking-wide whitespace-nowrap">
+                  Free shipping · Ships 3–7 days · <span className="font-bold text-white">From $4.99</span> · USA made
                 </p>
               </div>
             </div>
