@@ -470,8 +470,57 @@ export default function LandingPage() {
       {/* ════════════ GIFT SECTION ════════════ */}
       <section className="relative z-[2] py-16 md:py-20" style={{ background: '#FFF5F5' }}>
         <div className="max-w-xl mx-auto px-5 text-center">
-          <span className="text-4xl">💌</span>
-          <h3 className="mt-4 text-2xl sm:text-3xl font-bold tracking-tight">
+
+          {/* A magnet rises out of its gift envelope as you scroll in */}
+          <div className="relative mx-auto w-44 h-32" aria-hidden="true">
+            {/* Tiny hearts float up once */}
+            {[
+              { left: '22%', delay: 0.9, drift: -6 },
+              { left: '50%', delay: 1.15, drift: 4 },
+              { left: '74%', delay: 1.4, drift: -3 },
+            ].map((h) => (
+              <motion.span
+                key={h.left}
+                className="absolute bottom-20"
+                style={{ left: h.left }}
+                initial={{ opacity: 0, y: 6, scale: 0.5 }}
+                whileInView={{ opacity: [0, 1, 0], y: -38, x: h.drift, scale: 1 }}
+                viewport={{ once: true, amount: 0.6 }}
+                transition={{ delay: h.delay, duration: 1.5, ease: 'easeOut' }}
+              >
+                <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="#FF6B8A"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" /></svg>
+              </motion.span>
+            ))}
+
+            {/* Polaroid magnet emerging from the envelope */}
+            <motion.div
+              className="absolute bottom-9 left-1/2 z-0"
+              style={{ x: '-50%' }}
+              initial={{ y: 42, rotate: -5, opacity: 0 }}
+              whileInView={{ y: 0, rotate: 3, opacity: 1 }}
+              viewport={{ once: true, amount: 0.6 }}
+              transition={{ type: 'spring', stiffness: 150, damping: 15, delay: 0.35 }}
+            >
+              <div className="animate-float-3 bg-white p-1.5 pb-1.5 rounded-md polaroid-shadow">
+                <div className="w-20 aspect-[4/3] rounded-sm overflow-hidden">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/examples/larry-itay-taj.jpg" alt="" loading="lazy" decoding="async" className="w-full h-full object-cover" style={{ objectPosition: 'center 72%' }} />
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Envelope front with heart seal */}
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 z-10 w-40 h-[70px] bg-white rounded-xl shadow-md border border-rose-100 overflow-hidden">
+              <svg className="absolute inset-0 w-full h-full text-rose-100" viewBox="0 0 160 70" fill="none" preserveAspectRatio="none">
+                <path d="M0 70 L80 26 L160 70" stroke="currentColor" strokeWidth="2" fill="none" />
+              </svg>
+              <span className="absolute top-[14px] left-1/2 -translate-x-1/2 w-6 h-6 rounded-full flex items-center justify-center shadow-sm" style={{ background: '#FF6B8A' }}>
+                <svg className="w-3 h-3" viewBox="0 0 24 24" fill="white"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" /></svg>
+              </span>
+            </div>
+          </div>
+
+          <h3 className="mt-5 text-2xl sm:text-3xl font-bold tracking-tight">
             Send as a gift
           </h3>
           <p className="mt-3 text-stone-500 text-base md:text-lg leading-relaxed">
@@ -493,7 +542,7 @@ export default function LandingPage() {
       </section>
 
       {/* ════════════ HOW IT WORKS ════════════ */}
-      <section id="how-it-works" className="relative z-[2] py-16 md:py-20" style={{ background: '#FAFBFF' }}>
+      <section id="how-it-works" className="relative z-[2] py-16 md:py-20 bg-white">
         <div className="max-w-5xl mx-auto px-5 md:px-10">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center tracking-tight mb-3">
             How it works
@@ -502,25 +551,122 @@ export default function LandingPage() {
             Spoiler: it&apos;s really easy.
           </p>
 
-          <div className="grid grid-cols-3 gap-3 md:gap-6">
-            {[
-              { step: '01', title: 'Upload', desc: 'Any photo, any format.', color: '#0066FF', icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" /><path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z" /></svg> },
-              { step: '02', title: 'Style it', desc: 'Classic, Vintage, or B&W.', color: '#FF6B6B', icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42" /></svg> },
-              { step: '03', title: 'Ship it', desc: 'Delivered in 3–7 days.', color: '#FFB347', icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" /></svg> },
-            ].map((item) => (
-              <div key={item.step} className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-stone-100 hover:shadow-lg transition-all duration-300 text-center">
-                <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center mx-auto mb-3" style={{ background: `${item.color}15`, color: item.color }}>{item.icon}</div>
-                <p className="text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-1.5" style={{ color: item.color }}>Step {item.step}</p>
-                <h3 className="text-sm sm:text-lg font-bold mb-1">{item.title}</h3>
-                <p className="text-stone-500 text-xs sm:text-sm leading-relaxed">{item.desc}</p>
+          {/* One photo's journey: camera roll → styled polaroid → in the mail */}
+          <div className="relative flex flex-col items-center md:grid md:grid-cols-3 md:gap-6">
+
+            {/* Dashed connector arcs — desktop only */}
+            <svg className="hidden md:block absolute left-[29%] top-14 w-[13%] h-10 text-stone-300 pointer-events-none" viewBox="0 0 100 40" fill="none" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M4 30 Q 50 -6 96 22" stroke="currentColor" strokeWidth="2.5" strokeDasharray="0.5 8" strokeLinecap="round" />
+            </svg>
+            <svg className="hidden md:block absolute left-[58%] top-14 w-[13%] h-10 text-stone-300 pointer-events-none" viewBox="0 0 100 40" fill="none" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M4 22 Q 50 -6 96 30" stroke="currentColor" strokeWidth="2.5" strokeDasharray="0.5 8" strokeLinecap="round" />
+            </svg>
+
+            {/* Step 1 — picked from the camera roll */}
+            <motion.div
+              className="flex flex-col items-center text-center"
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.5 }}
+            >
+              <div className="h-40 flex items-end justify-center mb-5">
+                <div className="grid grid-cols-2 gap-1.5 w-36">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/examples/taj-mahal.jpg" alt="" loading="lazy" decoding="async" className="aspect-square w-full object-cover rounded-lg opacity-70" />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/examples/acadia-hike.jpg" alt="" loading="lazy" decoding="async" className="aspect-square w-full object-cover rounded-lg opacity-70" />
+                  <div className="relative">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src="/examples/group-party.jpg" alt="A photo selected from the camera roll" loading="lazy" decoding="async" className="aspect-square w-full object-cover rounded-lg ring-[3px] ring-[#0066FF]" />
+                    <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-[#0066FF] flex items-center justify-center shadow-sm">
+                      <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                    </span>
+                  </div>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/examples/formal-night.jpg" alt="" loading="lazy" decoding="async" className="aspect-square w-full object-cover rounded-lg opacity-70" />
+                </div>
               </div>
-            ))}
+              <div className="flex items-center gap-2 mb-1.5">
+                <span className="w-6 h-6 rounded-full bg-[#0066FF] text-white text-xs font-bold flex items-center justify-center">1</span>
+                <h3 className="text-lg md:text-xl font-bold">Upload</h3>
+              </div>
+              <p className="text-stone-500 text-sm md:text-base max-w-[230px]">Straight from your camera roll — any photo works.</p>
+            </motion.div>
+
+            <div className="md:hidden my-4 h-8 border-l-2 border-dashed border-stone-300" aria-hidden="true" />
+
+            {/* Step 2 — styled as a polaroid magnet */}
+            <motion.div
+              className="flex flex-col items-center text-center"
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.5, delay: 0.12 }}
+            >
+              <div className="h-40 flex items-end justify-center mb-5">
+                <div className="bg-white p-2 pb-2 rounded-lg magnet-shadow -rotate-2">
+                  <div className="w-36 aspect-[4/3] rounded-md overflow-hidden relative">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src="/examples/group-party.jpg" alt="The same photo styled with a vintage filter in a magnet frame" loading="lazy" decoding="async" className="w-full h-full object-cover" style={{ filter: 'saturate(0.55) contrast(0.85) brightness(1.08) sepia(0.35)' }} />
+                    <div className="absolute inset-0 bg-amber-900/[0.14] mix-blend-multiply" />
+                  </div>
+                  <p className="text-center text-[10px] text-stone-400 italic mt-1" style={{ fontFamily: 'var(--font-garamond), serif' }}>Halloween &apos;25</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 mb-1.5">
+                <span className="w-6 h-6 rounded-full bg-[#0066FF] text-white text-xs font-bold flex items-center justify-center">2</span>
+                <h3 className="text-lg md:text-xl font-bold">Style it</h3>
+              </div>
+              <p className="text-stone-500 text-sm md:text-base max-w-[230px]">Classic, Vintage, or B&amp;W — plus a caption if you like.</p>
+            </motion.div>
+
+            <div className="md:hidden my-4 h-8 border-l-2 border-dashed border-stone-300" aria-hidden="true" />
+
+            {/* Step 3 — tucked into the mailer */}
+            <motion.div
+              className="flex flex-col items-center text-center"
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.5, delay: 0.24 }}
+            >
+              <div className="h-40 flex items-end justify-center mb-5">
+                <div className="relative w-44">
+                  {/* Polaroid peeking out of the mailer */}
+                  <div className="absolute bottom-14 left-1/2 -translate-x-1/2 rotate-3 bg-white p-1.5 rounded-md polaroid-shadow">
+                    <div className="w-24 aspect-[4/3] rounded-sm overflow-hidden relative">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src="/examples/group-party.jpg" alt="The finished magnet peeking out of its shipping envelope" loading="lazy" decoding="async" className="w-full h-full object-cover" style={{ filter: 'saturate(0.55) contrast(0.85) brightness(1.08) sepia(0.35)' }} />
+                      <div className="absolute inset-0 bg-amber-900/[0.14] mix-blend-multiply" />
+                    </div>
+                  </div>
+                  {/* Mailer front */}
+                  <div className="relative z-10 h-24 bg-white rounded-xl border border-stone-200 shadow-md p-3 text-left">
+                    <p className="text-[10px] font-bold tracking-tight" style={{ color: '#0066FF' }}>Memora</p>
+                    <div className="mt-2 space-y-1.5">
+                      <div className="h-1.5 w-20 rounded-full bg-stone-200" />
+                      <div className="h-1.5 w-24 rounded-full bg-stone-200" />
+                      <div className="h-1.5 w-14 rounded-full bg-stone-200" />
+                    </div>
+                    <div className="absolute top-2.5 right-2.5 w-7 h-8 rounded-[3px] flex items-center justify-center" style={{ background: '#EAF1FF', border: '1px dashed #A8C4F5' }}>
+                      <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="#0066FF" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" /></svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 mb-1.5">
+                <span className="w-6 h-6 rounded-full bg-[#0066FF] text-white text-xs font-bold flex items-center justify-center">3</span>
+                <h3 className="text-lg md:text-xl font-bold">Ship it</h3>
+              </div>
+              <p className="text-stone-500 text-sm md:text-base max-w-[230px]">Free shipping — at your door in 3–7 days.</p>
+            </motion.div>
           </div>
         </div>
       </section>
 
       {/* ════════════ PRICING ════════════ */}
-      <section id="pricing" className="relative z-[2] py-16 md:py-24 px-5 md:px-10 bg-white">
+      <section id="pricing" className="relative z-[2] py-16 md:py-24 px-5 md:px-10" style={{ background: '#F0F5FF' }}>
         <div className="max-w-5xl mx-auto">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center tracking-tight mb-3">
             Send more, save more
@@ -529,20 +675,95 @@ export default function LandingPage() {
             Free shipping on every order.
           </p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 max-w-3xl mx-auto">
+          {/* Quantities shown as the magnets themselves — tap a bundle to start */}
+          <div className="grid grid-cols-3 gap-2 sm:gap-6 max-w-3xl mx-auto items-end">
             {[
-              { qty: '1', label: 'magnet', price: '6.99', tagline: 'Just for you', best: false },
-              { qty: '3', label: 'magnets', price: '5.99', tagline: 'Most popular', best: true },
-              { qty: '5', label: 'magnets', price: '4.99', tagline: 'Best value', best: false },
+              {
+                qty: 1,
+                price: '6.99',
+                total: '6.99',
+                note: 'Just for you',
+                save: null,
+                popular: false,
+                photos: [
+                  { src: '/examples/group-party.jpg', rot: -2, dx: 0, filter: 'none' },
+                ],
+              },
+              {
+                qty: 3,
+                price: '5.99',
+                total: '17.97',
+                note: 'Mix any styles',
+                save: 'Save $3',
+                popular: true,
+                photos: [
+                  { src: '/examples/taj-mahal.jpg', rot: -10, dx: -20, filter: 'saturate(0.55) contrast(0.85) brightness(1.08) sepia(0.35)' },
+                  { src: '/examples/formal-night.jpg', rot: 10, dx: 20, filter: 'grayscale(1) contrast(1.1) brightness(1.02)' },
+                  { src: '/examples/group-party.jpg', rot: 0, dx: 0, filter: 'none' },
+                ],
+              },
+              {
+                qty: 5,
+                price: '4.99',
+                total: '24.95',
+                note: 'Best value',
+                save: 'Save $10',
+                popular: false,
+                photos: [
+                  { src: '/examples/acadia-hike.jpg', rot: -16, dx: -26, filter: 'saturate(0.55) contrast(0.85) brightness(1.08) sepia(0.35)' },
+                  { src: '/examples/formal-night.jpg', rot: 16, dx: 26, filter: 'grayscale(1) contrast(1.1) brightness(1.02)' },
+                  { src: '/examples/taj-mahal.jpg', rot: -8, dx: -13, filter: 'none' },
+                  { src: '/examples/larry-itay-taj.jpg', rot: 8, dx: 13, filter: 'none' },
+                  { src: '/examples/group-party.jpg', rot: 0, dx: 0, filter: 'none' },
+                ],
+              },
             ].map((tier) => (
-              <div key={tier.qty} className={`relative rounded-2xl sm:rounded-3xl p-4 sm:p-7 text-center transition-all duration-300 hover:scale-105 ${tier.best ? 'text-white shadow-2xl' : 'bg-white border border-stone-200 hover:shadow-lg'}`} style={tier.best ? { background: '#0066FF' } : {}}>
-                {tier.best && <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 px-3 py-0.5 sm:px-4 sm:py-1 bg-white text-[10px] sm:text-xs font-bold rounded-full shadow-lg" style={{ color: '#0066FF' }}>POPULAR</div>}
-                <p className="text-2xl sm:text-4xl font-extrabold mt-1">{tier.qty}</p>
-                <p className={`text-xs sm:text-sm ${tier.best ? 'text-blue-200' : 'text-stone-400'}`}>{tier.label}</p>
-                <div className={`my-3 sm:my-4 border-t ${tier.best ? 'border-white/20' : 'border-stone-100'}`} />
-                <p className="text-xl sm:text-3xl font-bold">${tier.price}<span className={`text-[8px] sm:text-xs font-normal ml-0.5 ${tier.best ? 'text-blue-200' : 'text-stone-400'}`}>each</span></p>
-                <p className={`text-[10px] sm:text-sm mt-1 sm:mt-2 ${tier.best ? 'text-blue-200' : 'text-stone-400'}`}>{tier.tagline}</p>
-              </div>
+              <Link
+                key={tier.qty}
+                href="/upload"
+                className={`group relative flex flex-col items-center text-center rounded-3xl px-1 pb-4 pt-6 sm:px-4 sm:pb-6 sm:pt-8 transition-all duration-200 ${
+                  tier.popular ? 'bg-white shadow-md' : 'hover:bg-white/70'
+                }`}
+              >
+                {tier.popular && (
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 text-[9px] sm:text-[11px] font-bold tracking-wide text-white rounded-full shadow-md whitespace-nowrap" style={{ background: '#0066FF' }}>
+                    MOST POPULAR
+                  </span>
+                )}
+
+                {/* The magnets themselves show the quantity */}
+                <div className="relative h-20 sm:h-24 w-full mb-3 sm:mb-4 transition-transform duration-300 group-hover:-translate-y-1">
+                  {tier.photos.map((p, i) => (
+                    <div
+                      key={i}
+                      className="absolute bottom-0 left-1/2 bg-white p-[3px] pb-[3px] sm:p-1 rounded-[4px] polaroid-shadow"
+                      style={{ transform: `translateX(calc(-50% + ${p.dx}px)) rotate(${p.rot}deg)`, zIndex: i }}
+                    >
+                      <div className="w-11 sm:w-14 aspect-[4/3] rounded-[2px] overflow-hidden">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={p.src} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover" style={{ filter: p.filter }} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <p className={`text-xl sm:text-3xl font-extrabold ${tier.popular ? 'text-[#0066FF]' : 'text-stone-900'}`}>
+                  ${tier.price}
+                  <span className="text-[10px] sm:text-sm font-medium text-stone-400">/ea</span>
+                </p>
+                <p className="text-[10px] sm:text-sm text-stone-500 mt-0.5 whitespace-nowrap">
+                  {tier.qty} magnet{tier.qty !== 1 ? 's' : ''} · ${tier.total}
+                </p>
+                <div className="mt-2 h-6 flex items-center">
+                  {tier.save ? (
+                    <span className="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-600 text-[10px] sm:text-xs font-semibold whitespace-nowrap">
+                      {tier.save}
+                    </span>
+                  ) : (
+                    <span className="text-[10px] sm:text-xs text-stone-400">{tier.note}</span>
+                  )}
+                </div>
+              </Link>
             ))}
           </div>
 
